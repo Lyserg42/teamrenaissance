@@ -6,12 +6,24 @@
   <display-name>Archetype Created Web Application</display-name>
 
   <servlet>
-    <servlet-name>ServletTest</servlet-name>
-    <servlet-class>fr.teamrenaissance.dar.ServletTest</servlet-class>
+    <servlet-name>CardServlet</servlet-name>
+    <servlet-class>fr.teamrenaissance.dar.servlets.CardServlet</servlet-class>
   </servlet>
+
+  <servlet>
+    <servlet-name>UserServlet</servlet-name>
+    <servlet-class>fr.teamrenaissance.dar.servlets.UserServlet</servlet-class>
+  </servlet>
+
+
   <servlet-mapping>
-    <servlet-name>ServletTest</servlet-name>
-    <url-pattern>/test/bonjour</url-pattern>
+    <servlet-name>CardServlet</servlet-name>
+    <url-pattern>/card</url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name>UserServlet</servlet-name>
+    <url-pattern>/user</url-pattern>
   </servlet-mapping>
 
 </web-app>
