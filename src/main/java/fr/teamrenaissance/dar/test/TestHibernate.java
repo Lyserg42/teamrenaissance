@@ -1,15 +1,23 @@
 package fr.teamrenaissance.dar.test;
 
+import fr.teamrenaissance.dar.entities.User;
 import fr.teamrenaissance.dar.managers.HibernateUtil;
 import fr.teamrenaissance.dar.managers.UserManager;
 
 public class TestHibernate {
 
     public static void main(String args[]) throws Exception {
-        UserManager manager = new UserManager();
-        manager.getUser(3);
-        //manager.insertUser("truc", "muche", "chouette", "machin", "chose", "c'est", "long!");
+        try {
+            UserManager manager = new UserManager();
+            User user = null;
+            user = manager.getUser(2);
+            System.out.println(user.getEmail());
+            //manager.insertUser("truc", "muche", "chouette", "machin4", "chose", "c'est", "long!");
+            user = manager.getUserByEmail("machin4");
+            System.out.println(user.getUserID());
 
-        HibernateUtil.getSessionFactory().close();
+        }finally{
+            HibernateUtil.getSessionFactory().close();
+        }
     }
 }
