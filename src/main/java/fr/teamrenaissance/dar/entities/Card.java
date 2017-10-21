@@ -2,7 +2,6 @@ package fr.teamrenaissance.dar.db;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class Card {
-
     private static final AtomicInteger count = new AtomicInteger(0);
 
     private int idCard;

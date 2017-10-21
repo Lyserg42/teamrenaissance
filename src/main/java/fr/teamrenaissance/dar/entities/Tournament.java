@@ -1,5 +1,4 @@
 package fr.teamrenaissance.dar.db;
-
 import java.util.Date;
 import java.util.concurrent.atomic.AtomicInteger;
 
