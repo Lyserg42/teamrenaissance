@@ -1,70 +1,59 @@
-package fr.teamrenaissance.dar.entities;
+package fr.teamrenaissance.dar.db;
 
-import org.hibernate.annotations.GenericGenerator;
+import java.util.concurrent.atomic.AtomicInteger;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
-
-@Entity
-@Table(name = "User")
 public class User {
+    private static final AtomicInteger count = new AtomicInteger(0);
 
-    @Id
-    @GeneratedValue(generator="increment")
-    @GenericGenerator(name="increment", strategy = "increment")
-    private Integer userID; //Long ?
-    private String name;
-    private String firstname;
-    private String username;
+    private int idUser;
+    private String nom;
+    private String prenom;
+    private String pseudo;
     private String email;
-    private String password; //?
-    private String address;
+    private String password;
+    private String adresse;
     private String avatar;
 
-    public User(String name, String firstname, String username, String email, String password, String address, String avatar){
-        this.name = name;
-        this.firstname = firstname;
-        this.username = username;
-        this.email = email;
-        this.password = password;
-        this.address = address;
-        this.avatar = avatar;
+    public User(String n, String p, String ps, String m, String pass, String ad, String av){
+        this.nom=n;
+        this.prenom=p;
+        this.pseudo=ps;
+        this.email=m;
+        this.password=pass;
+        this.adresse=ad;
+        this.avatar=av;
     }
 
-    public User(){}
-
-    public Integer getUserID() {
-        return userID;
+    public int getIdUser() {
+        return idUser;
     }
 
-    private void setUserID(Integer userID) {
-        this.userID = userID;
+    public void setIdUser(int idUser) {
+        this.idUser = idUser;
     }
 
-    public String getName() {
-        return name;
+    public String getNom() {
+        return nom;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setNom(String nom) {
+        this.nom = nom;
     }
 
-    public String getFirstname() {
-        return firstname;
+    public String getPrenom() {
+        return prenom;
     }
 
-    public void setFirstname(String firstname) {
-        this.firstname = firstname;
+    public void setPrenom(String prenom) {
+        this.prenom = prenom;
     }
 
-    public String getUsername() {
-        return username;
+    public String getPseudo() {
+        return pseudo;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setPseudo(String pseudo) {
+        this.pseudo = pseudo;
     }
 
     public String getEmail() {
@@ -83,12 +72,12 @@ public class User {
         this.password = password;
     }
 
-    public String getAddress() {
-        return address;
+    public String getAdresse() {
+        return adresse;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
+    public void setAdresse(String adresse) {
+        this.adresse = adresse;
     }
 
     public String getAvatar() {
