@@ -1,9 +1,15 @@
-package fr.teamrenaissance.dar.db;
-import java.util.Date;
-import java.util.concurrent.atomic.AtomicInteger;
+package fr.teamrenaissance.dar.entities;
+import org.hibernate.annotations.GenericGenerator;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import java.util.Date;
+
+@Entity
+@Table(name = "Tournament")
 public class Tournament {
-    private static final AtomicInteger count = new AtomicInteger(0);
 
     private enum Type{
         GP,PT,RPTQ,OTHER}
@@ -11,26 +17,30 @@ public class Tournament {
         Standard, Modern,Limited,Legacy,Constructed, TeamModern, TeamLimited,Other
     }
 
-    private int idTournament;
+    @Id
+    @GeneratedValue(generator="increment")
+    @GenericGenerator(name="increment", strategy = "increment")
+    private int tournamentID;
     private String place;
     private Date date;
     private Format format;
     private Type type;
 
     public Tournament(String p, Date d, Format f, Type t){
-        this.idTournament=count.incrementAndGet();
         this.place=p;
         this.date=d;
         this.format=f;
         this.type=t;
     }
 
-    public int getIdTournament() {
-        return idTournament;
+    public Tournament(){}
+
+    public int getTournamentID() {
+        return tournamentID;
     }
 
-    public void setIdTournament(int idTournament) {
-        this.idTournament = idTournament;
+    public void setTournamentID(int tournamentID) {
+        this.tournamentID = tournamentID;
     }
 
     public String getPlace() {
@@ -67,7 +77,7 @@ public class Tournament {
 
     @Override
     public String toString() {
-        return "Tournament{" + this.idTournament + "," + this.place +"," + this.date +"," + this.format +"," +this.type +"}";
+        return "Tournament{" + this.tournamentID + "," + this.place +"," + this.date +"," + this.format +"," +this.type +"}";
     }
 }
 

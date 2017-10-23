@@ -5,10 +5,12 @@
     <session-factory>
         <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
         <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
-        <property name="hibernate.connection.url">jdbc:mysql://vps465701.ovh.net:3306/teamrenaissance</property>
+        <property name="hibernate.connection.url">jdbc:mysql://teamrenaissance.fr:3306/teamrenaissance</property>
         <property name="hibernate.connection.username">teamrenaye</property>
         <property name="hibernate.connection.password">123Soleil</property>
         <property name="show_sql">true</property>
         <mapping class="fr.teamrenaissance.dar.entities.User"/>
+        <mapping class="fr.teamrenaissance.dar.entities.Card"/>
+        <mapping class="fr.teamrenaissance.dar.entities.Tournament"/>
     </session-factory>
 </hibernate-configuration>

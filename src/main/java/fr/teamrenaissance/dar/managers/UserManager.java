@@ -11,16 +11,18 @@ import java.util.List;
 public class UserManager {
 
     public User insertUser(String name, String firstname, String username, String email, String password,
-                           String address, String avatar) throws Exception {
+                           String address, String avatar, String dciNumber, String phoneNumber,
+                           String facebook, String twitter) throws Exception {
 
         Session session = HibernateUtil.getSessionFactory().openSession();
         User user = null;
         Transaction tx = null;
         try {
             tx = session.beginTransaction();
-            user = new User(name, firstname, username, email, password, address, avatar);
+            user = new User(name, firstname, username, email, password, address, avatar,
+                    dciNumber, phoneNumber, facebook, twitter);
             session.save(user);
-            session.flush();
+            //session.flush();
             tx.commit();
         } catch (Exception e) {
             if (tx != null) tx.rollback();
@@ -37,7 +39,7 @@ public class UserManager {
         Transaction tx = null;
         try {
             tx = session.beginTransaction();
-            user = (User) session.get(User.class, userID);
+            user = session.get(User.class, userID);
             Hibernate.initialize(user);
             tx.commit();
         } catch (Exception e) {

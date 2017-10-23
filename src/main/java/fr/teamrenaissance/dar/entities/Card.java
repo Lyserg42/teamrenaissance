@@ -1,18 +1,26 @@
-package fr.teamrenaissance.dar.db;
-import java.util.concurrent.atomic.AtomicInteger;
+package fr.teamrenaissance.dar.entities;
+import org.hibernate.annotations.GenericGenerator;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "Card")
 public class Card {
-    private static final AtomicInteger count = new AtomicInteger(0);
 
-    private int idCard;
+    @Id
+    @GeneratedValue(generator="increment")
+    @GenericGenerator(name="increment", strategy = "increment")
+    private int cardID;
     private String name;
     private String picture;
-    private byte isStandardLegal;
-    private byte isModernLegal;
-    private byte isLegacyLegal;
+    private boolean isStandardLegal;
+    private boolean isModernLegal;
+    private boolean isLegacyLegal;
 
-    public Card(String n, String p,byte s, byte m, byte l){
-        this.idCard = count.incrementAndGet();
+    public Card(String n, String p, boolean s, boolean m, boolean l){
         this.name=n;
         this.picture=p;
         this.isStandardLegal=s;
@@ -20,12 +28,14 @@ public class Card {
         this.isLegacyLegal=l;
     }
 
-    public int getIdCard() {
-        return idCard;
+    public Card(){}
+
+    public int getCardID() {
+        return cardID;
     }
 
-    public void setIdCard(int idCard) {
-        this.idCard = idCard;
+    public void setCardID(int cardID) {
+        this.cardID = cardID;
     }
 
     public String getName() {
@@ -44,32 +54,32 @@ public class Card {
         this.picture = picture;
     }
 
-    public byte getIsStandardLegal() {
+    public boolean getIsStandardLegal() {
         return isStandardLegal;
     }
 
-    public void setIsStandardLegal(byte isStandardLegal) {
+    public void setIsStandardLegal(boolean isStandardLegal) {
         this.isStandardLegal = isStandardLegal;
     }
 
-    public byte getIsModernLegal() {
+    public boolean getIsModernLegal() {
         return isModernLegal;
     }
 
-    public void setIsModernLegal(byte isModernLegal) {
+    public void setIsModernLegal(boolean isModernLegal) {
         this.isModernLegal = isModernLegal;
     }
 
-    public byte getIsLegacyLegal() {
+    public boolean getIsLegacyLegal() {
         return isLegacyLegal;
     }
 
-    public void setIsLegacyLegal(byte isLegacyLegal) {
+    public void setIsLegacyLegal(boolean isLegacyLegal) {
         this.isLegacyLegal = isLegacyLegal;
     }
 
     @Override
     public String toString() {
-        return "Card{" + this.idCard +"," +  this.name +"," + this.picture +", ("+this.isStandardLegal+","+this.isModernLegal+","+this.isLegacyLegal+") }";
+        return "Card{" + this.cardID +"," +  this.name +"," + this.picture +", ("+this.isStandardLegal+","+this.isModernLegal+","+this.isLegacyLegal+") }";
     }
 }
