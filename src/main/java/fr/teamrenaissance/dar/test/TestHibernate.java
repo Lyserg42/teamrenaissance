@@ -10,9 +10,9 @@ public class TestHibernate {
         try {
             UserManager manager = new UserManager();
 
-            manager.insertUser("Gamain", "Jeanne", "Naoko", "jeanne.gamain@gmail.com",
+            manager.insertUser(new User("Gamain", "Jeanne", "Naoko", "jeanne.gamain@gmail.com",
                     "hello", "azerty", null, null, "0777777777",
-                    null, null);
+                    null, null));
 
             User user = null;
             user = manager.getUser(1);
