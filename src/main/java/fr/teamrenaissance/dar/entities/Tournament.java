@@ -1,10 +1,7 @@
 package fr.teamrenaissance.dar.entities;
 import org.hibernate.annotations.GenericGenerator;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.Date;
 
 @Entity
@@ -22,8 +19,11 @@ public class Tournament {
     @GenericGenerator(name="increment", strategy = "increment")
     private int tournamentID;
     private String place;
+    @Temporal(TemporalType.TIME)
     private Date date;
+    @Enumerated(EnumType.STRING)
     private Format format;
+    @Enumerated(EnumType.STRING)
     private Type type;
 
     public Tournament(String p, Date d, Format f, Type t){
