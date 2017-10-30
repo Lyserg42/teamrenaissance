@@ -77,7 +77,7 @@ public class Loan {
     }
 
     @ManyToOne
-    @JoinColumn(name = "lenderID",
+    @JoinColumn(columnDefinition="integer", name = "lenderID",
             foreignKey = @ForeignKey(name = "FK_Loan_lender")
     )
     public User getLender() {
