@@ -9,7 +9,11 @@ public class TestHibernate {
     public static void main(String args[]) throws Exception {
         try {
             UserManager manager = new UserManager();
-
+/*
+            manager.insertUser(new User("Gamain", "Jeanne", "Naoko", "jeanne.gamain@gmail.com",
+                    "helloooo", "xxx", null, null, "+33612345678",
+                    null, null));
+*/
             manager.insertUser(new User("Gamain", "Jeanne", "test", "test@",
                     "helloooo", "xxx", null, null, "0777777777",
                     null, null));
