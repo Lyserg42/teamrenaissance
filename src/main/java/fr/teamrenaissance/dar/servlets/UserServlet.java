@@ -10,6 +10,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+import org.json.JSONObject;
+
 @WebServlet(name = "UserServlet")
 public class UserServlet extends HttpServlet {
 
@@ -21,6 +23,7 @@ public class UserServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        JSONObject json = new JSONObject();
         super.doGet(req, resp);
     }
 
