@@ -16,7 +16,7 @@ public class User {
     private static final int URL_LENGTH = 300;
     private static final int PHONE_LENGTH = 15;
 
-    private int userID;
+    private Integer userID;
     private String name;
     private String firstname;
     private String username;
@@ -60,7 +60,7 @@ public class User {
     @Column(name="userID")
     @GeneratedValue(generator="increment")
     @GenericGenerator(name="increment", strategy = "increment")
-    public int getUserID() {
+    public Integer getUserID() {
         return userID;
     }
 
@@ -218,7 +218,7 @@ public class User {
     @Override
     public boolean equals(Object obj) {
         if(obj instanceof User){
-            return this.userID == ((User) obj).userID;
+            return this.userID.equals(((User) obj).userID);
         }
         return false;
     }
