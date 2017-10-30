@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<htm lang="fr">
+<head>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+	<script src="../../shared/app.js"></script>
+	<script src="demandesController.js"></script>
+	<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="inded.css">
+<meta charset="utf-8">
+</head>
+
+<body ng-app="myApp" ng-controller="demandesCtrl">
+<div class="form-group" ng-repeat="d in demandes" >
+	<label>{{d.name}}</label>
+	<div ng-repeat="c in d.cards" ng-mouseenter="updateImg($parent.$index, $index)">{{c.qty+' '+c.cName}}</div>
+	<img src="{{imgDemandes[$index]}}"  height="250px">
+</div>
+
+</body>
+</html>
