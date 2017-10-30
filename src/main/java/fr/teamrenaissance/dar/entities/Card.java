@@ -1,18 +1,15 @@
 package fr.teamrenaissance.dar.entities;
 import org.hibernate.annotations.GenericGenerator;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "Card")
 public class Card {
 
-    @Id
-    @GeneratedValue(generator="increment")
-    @GenericGenerator(name="increment", strategy = "increment")
+    private static final int NAME_LENGTH = 30;
+    private static final int URL_LENGTH = 300;
+
     private int cardID;
     private String name;
     private String picture;
@@ -30,6 +27,10 @@ public class Card {
 
     public Card(){}
 
+    @Id
+    @Column(name="cardID")
+    @GeneratedValue(generator="increment")
+    @GenericGenerator(name="increment", strategy = "increment")
     public int getCardID() {
         return cardID;
     }
@@ -38,6 +39,7 @@ public class Card {
         this.cardID = cardID;
     }
 
+    @Column(name = "name", length = NAME_LENGTH, nullable = false)
     public String getName() {
         return name;
     }
@@ -46,6 +48,7 @@ public class Card {
         this.name = name;
     }
 
+    @Column(name = "picture", length = URL_LENGTH, nullable = false)
     public String getPicture() {
         return picture;
     }
@@ -54,6 +57,7 @@ public class Card {
         this.picture = picture;
     }
 
+    @Column(name = "isStandardLegal", nullable = false)
     public boolean getIsStandardLegal() {
         return isStandardLegal;
     }
@@ -62,6 +66,7 @@ public class Card {
         this.isStandardLegal = isStandardLegal;
     }
 
+    @Column(name = "isModernLegal", nullable = false)
     public boolean getIsModernLegal() {
         return isModernLegal;
     }
@@ -70,6 +75,7 @@ public class Card {
         this.isModernLegal = isModernLegal;
     }
 
+    @Column(name = "isLegacyLegal", nullable = false)
     public boolean getIsLegacyLegal() {
         return isLegacyLegal;
     }
@@ -81,5 +87,13 @@ public class Card {
     @Override
     public String toString() {
         return "Card{" + this.cardID +"," +  this.name +"," + this.picture +", ("+this.isStandardLegal+","+this.isModernLegal+","+this.isLegacyLegal+") }";
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj instanceof Card){
+            return this.cardID == ((Card) obj).cardID;
+        }
+        return false;
     }
 }

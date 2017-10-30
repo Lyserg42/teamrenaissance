@@ -8,22 +8,18 @@ import java.util.Date;
 @Table(name = "Tournament")
 public class Tournament {
 
+    private static final int MAX_LENGTH = 20;
+
     private enum Type{
         GP,PT,RPTQ,OTHER}
     private enum Format{
         Standard, Modern,Limited,Legacy,Constructed, TeamModern, TeamLimited,Other
     }
 
-    @Id
-    @GeneratedValue(generator="increment")
-    @GenericGenerator(name="increment", strategy = "increment")
     private int tournamentID;
     private String place;
-    @Temporal(TemporalType.TIME)
     private Date date;
-    @Enumerated(EnumType.STRING)
     private Format format;
-    @Enumerated(EnumType.STRING)
     private Type type;
 
     public Tournament(String p, Date d, Format f, Type t){
@@ -35,6 +31,10 @@ public class Tournament {
 
     public Tournament(){}
 
+    @Id
+    @Column(name="tournamentID")
+    @GeneratedValue(generator="increment")
+    @GenericGenerator(name="increment", strategy = "increment")
     public int getTournamentID() {
         return tournamentID;
     }
@@ -43,6 +43,7 @@ public class Tournament {
         this.tournamentID = tournamentID;
     }
 
+    @Column(name = "place", length = MAX_LENGTH, nullable = false)
     public String getPlace() {
         return place;
     }
@@ -51,6 +52,8 @@ public class Tournament {
         this.place = place;
     }
 
+    @Column(name = "date", nullable = false)
+    @Temporal(TemporalType.DATE)
     public Date getDate() {
         return date;
     }
@@ -59,6 +62,8 @@ public class Tournament {
         this.date = date;
     }
 
+    @Column(name = "format", length = MAX_LENGTH, nullable = false)
+    @Enumerated(EnumType.STRING)
     public Format getFormat() {
         return format;
     }
@@ -67,6 +72,8 @@ public class Tournament {
         this.format = format;
     }
 
+    @Column(name = "type", length = MAX_LENGTH, nullable = false)
+    @Enumerated(EnumType.STRING)
     public Type getType() {
         return type;
     }
@@ -78,6 +85,14 @@ public class Tournament {
     @Override
     public String toString() {
         return "Tournament{" + this.tournamentID + "," + this.place +"," + this.date +"," + this.format +"," +this.type +"}";
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj instanceof Tournament){
+            return this.tournamentID == ((Tournament) obj).tournamentID;
+        }
+        return false;
     }
 }
 

@@ -3,6 +3,8 @@ package fr.teamrenaissance.dar.entities;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "User")
@@ -14,9 +16,6 @@ public class User {
     private static final int URL_LENGTH = 300;
     private static final int PHONE_LENGTH = 15;
 
-    @Id
-    @GeneratedValue(generator="increment")
-    @GenericGenerator(name="increment", strategy = "increment")
     private int userID;
     private String name;
     private String firstname;
@@ -29,6 +28,16 @@ public class User {
     private String phoneNumber;
     private String facebook;
     private String twitter;
+
+    /**
+     * Loans where the user is the lender.
+     */
+    private Set<Loan> lenderLoans = new HashSet<>();
+    /**
+     * Loans where the user is the borrower.
+     */
+    private Set<Loan> borrowerLoans = new HashSet<>();
+
 
     public User(String n, String p, String ps, String m, String pass, String ad, String av, String dci, String tel,
                 String fb, String tw){
@@ -47,6 +56,10 @@ public class User {
 
     public User(){}
 
+    @Id
+    @Column(name="userID")
+    @GeneratedValue(generator="increment")
+    @GenericGenerator(name="increment", strategy = "increment")
     public int getUserID() {
         return userID;
     }
@@ -55,6 +68,7 @@ public class User {
         this.userID = userID;
     }
 
+    @Column(name = "name", length = NAME_LENGTH, nullable = false)
     public String getName() {
         return name;
     }
@@ -65,6 +79,7 @@ public class User {
         this.name = name;
     }
 
+    @Column(name = "firstname", length = NAME_LENGTH, nullable = false)
     public String getFirstname() {
         return firstname;
     }
@@ -75,6 +90,7 @@ public class User {
         this.firstname = firstname;
     }
 
+    @Column(name = "username", length = NAME_LENGTH, unique = true, nullable = false)
     public String getUsername() {
         return username;
     }
@@ -85,6 +101,7 @@ public class User {
         this.username = username;
     }
 
+    @Column(name = "email", length = EMAIL_LENGTH, unique = true, nullable = false)
     public String getEmail() {
         return email;
     }
@@ -97,6 +114,7 @@ public class User {
         this.email = email;
     }
 
+    @Column(name = "password", length = NAME_LENGTH, nullable = false)
     public String getPassword() {
         return password;
     }
@@ -110,6 +128,7 @@ public class User {
         this.password = password;
     }
 
+    @Column(name = "address", length = URL_LENGTH, nullable = false)
     public String getAddress() {
         return address;
     }
@@ -121,6 +140,7 @@ public class User {
         this.address = address;
     }
 
+    @Column(name = "avatar", length = URL_LENGTH, nullable = true)
     public String getAvatar() {
         return avatar;
     }
@@ -129,6 +149,7 @@ public class User {
         this.avatar = avatar;
     }
 
+    @Column(name = "dciNumber", length = PHONE_LENGTH, nullable = true)
     public String getDciNumber() {
         return dciNumber;
     }
@@ -139,6 +160,7 @@ public class User {
         this.dciNumber = dciNumber;
     }
 
+    @Column(name = "phoneNumber", length = PHONE_LENGTH, nullable = false)
     public String getPhoneNumber() {
         return phoneNumber;
     }
@@ -153,6 +175,7 @@ public class User {
         this.phoneNumber = phoneNumber;
     }
 
+    @Column(name = "facebook", length = URL_LENGTH, nullable = true)
     public String getFacebook() {
         return facebook;
     }
@@ -163,6 +186,7 @@ public class User {
         this.facebook = facebook;
     }
 
+    @Column(name = "twitter", length = URL_LENGTH, nullable = true)
     public String getTwitter() {
         return twitter;
     }
@@ -171,5 +195,31 @@ public class User {
         if(twitter != null && twitter.length() > URL_LENGTH)
             throw new Exception("L'URL du compte Twitter est limitée à "+URL_LENGTH+" caractères.");
         this.twitter = twitter;
+    }
+
+    @OneToMany(mappedBy = "lender")
+    public Set<Loan> getLenderLoans() {
+        return lenderLoans;
+    }
+
+    public void setLenderLoans(Set<Loan> lenderLoans) {
+        this.lenderLoans = lenderLoans;
+    }
+
+    @OneToMany(mappedBy = "borrower")
+    public Set<Loan> getBorrowerLoans() {
+        return borrowerLoans;
+    }
+
+    public void setBorrowerLoans(Set<Loan> borrowerLoans) {
+        this.borrowerLoans = borrowerLoans;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj instanceof User){
+            return this.userID == ((User) obj).userID;
+        }
+        return false;
     }
 }

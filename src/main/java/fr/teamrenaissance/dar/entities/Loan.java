@@ -8,28 +8,30 @@ import javax.persistence.*;
 @Table(name = "Loan")
 public class Loan {
 
-    @Id
-    @GeneratedValue(generator="increment")
-    @GenericGenerator(name="increment", strategy = "increment")
     private int loanID;
-    private int tournamentID;
-    private int cardID;
-    private int borrowerID;
-    private int lenderID;
+    private Tournament tournament;
+    private Card card;
+    private User borrower;
+    private User lender;
     private boolean returned;
     private boolean done;
 
-    public Loan(int tournamentID, int cardID, int borrowerID, int lenderID, boolean returned, boolean done) {
-        this.tournamentID = tournamentID;
-        this.cardID = cardID;
-        this.borrowerID = borrowerID;
-        this.lenderID = lenderID;
+
+    public Loan(Tournament tournament, Card card, User borrower, User lender, boolean returned, boolean done) {
+        this.tournament = tournament;
+        this.card = card;
+        this.borrower = borrower;
+        this.lender = lender;
         this.returned = returned;
         this.done = done;
     }
 
     public Loan(){}
 
+    @Id
+    @Column(name="loanID")
+    @GeneratedValue(generator="increment")
+    @GenericGenerator(name="increment", strategy = "increment")
     public int getLoanID() {
         return loanID;
     }
@@ -38,38 +40,55 @@ public class Loan {
         this.loanID = loanID;
     }
 
-    public int getTournamentID() {
-        return tournamentID;
+    @ManyToOne
+    @JoinColumn(name = "tournamentID",
+            foreignKey = @ForeignKey(name = "FK_Loan_Tournament")
+    )
+    public Tournament getTournament() {
+        return tournament;
     }
 
-    public void setTournamentID(int tournamentID) {
-        this.tournamentID = tournamentID;
+    public void setTournament(Tournament tournament) {
+        this.tournament = tournament;
     }
 
-    public int getCardID() {
-        return cardID;
+    @ManyToOne
+    @JoinColumn(name = "cardID",
+            foreignKey = @ForeignKey(name = "FK_Loan_Card")
+    )
+    public Card getCard() {
+        return card;
     }
 
-    public void setCardID(int cardID) {
-        this.cardID = cardID;
+    public void setCard(Card card) {
+        this.card = card;
     }
 
-    public int getBorrowerID() {
-        return borrowerID;
+    @ManyToOne
+    @JoinColumn(name = "borrowerID",
+            foreignKey = @ForeignKey(name = "FK_Loan_borrower")
+    )
+    public User getBorrower() {
+        return borrower;
     }
 
-    public void setBorrowerID(int borrowerID) {
-        this.borrowerID = borrowerID;
+    public void setBorrower(User borrower) {
+        this.borrower = borrower;
     }
 
-    public int getLenderID() {
-        return lenderID;
+    @ManyToOne
+    @JoinColumn(name = "lenderID",
+            foreignKey = @ForeignKey(name = "FK_Loan_lender")
+    )
+    public User getLender() {
+        return lender;
     }
 
-    public void setLenderID(int lenderID) {
-        this.lenderID = lenderID;
+    public void setLender(User lender) {
+        this.lender = lender;
     }
 
+    @Column(name="returned", nullable = false, columnDefinition = "boolean default false")
     public boolean isReturned() {
         return returned;
     }
@@ -78,11 +97,20 @@ public class Loan {
         this.returned = returned;
     }
 
+    @Column(name="done", nullable = false, columnDefinition = "boolean default false")
     public boolean isDone() {
         return done;
     }
 
     public void setDone(boolean done) {
         this.done = done;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj instanceof Loan){
+            return this.loanID == ((Loan) obj).loanID;
+        }
+        return false;
     }
 }

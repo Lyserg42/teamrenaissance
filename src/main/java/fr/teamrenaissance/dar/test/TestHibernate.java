@@ -10,19 +10,21 @@ public class TestHibernate {
         try {
             UserManager manager = new UserManager();
 
-            manager.insertUser(new User("Gamain", "Jeanne", "Naoko", "jeanne.gamain@gmail.com",
-                    "hello", "azerty", null, null, "0777777777",
+            manager.insertUser(new User("Gamain", "Jeanne", "test", "test@",
+                    "helloooo", "xxx", null, null, "0777777777",
                     null, null));
 
             User user = null;
             user = manager.getUser(1);
-            System.out.println(user.getEmail());
+            if (user != null) System.out.println(user.getEmail());
+            else System.out.println("NO USER FOUND");
 
             user = manager.getUserByEmail("jeanne.gamain@gmail.com");
-            System.out.println(user.getUserID());
+            if (user != null) System.out.println(user.getUserID());
+            else System.out.println("NO USER FOUND");
 
         }finally{
-            HibernateUtil.getSessionFactory().close();
+            HibernateUtil.shutdown();
         }
     }
 }
