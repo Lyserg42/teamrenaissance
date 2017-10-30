@@ -22,7 +22,7 @@
 <!-- Select permettant de filtrer selon un tournoi précis -->
 <div class="row">
 	<div class="col-md-3">
-		<select class="form-control" ng-model="filtreTournois">
+		<select class="form-control" ng-model="selectFiltreTournois">
 				<option selected="selected">Tous les tournois</option>
 				<option ng-repeat="t in selectTournament">{{t}}</option>
 		</select>
@@ -35,7 +35,7 @@
   <strong>Pr&ecirc;t valid&eacute;!</strong> Prenez contact avec la personne pour organiser les d&eacute;tails.
 </div>
 
-<div class="form-group" ng-repeat="t in tournaments | filtreTournoi : filtreTournois">
+<div class="form-group" ng-repeat="t in tournaments | filtreTournois : selectFiltreTournois">
 	<h3>{{t.tName}}</h3> {{t.date}}
 	<div class="card" ng-repeat="d in t.demandes">
 		<div class="row">

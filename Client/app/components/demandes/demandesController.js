@@ -8,7 +8,7 @@ app.controller('demandesCtrl', function($scope, $http) {
     $scope.selectTournament = new Array();
     //$scope.selectTournament[0] = "Tous les tournois";
 
-    $scope.filtreTournois = "Tous les tournois";
+    $scope.selectFiltreTournois = "Tous les tournois";
 
     $http.get("demandes.json").then(function(response){
 
