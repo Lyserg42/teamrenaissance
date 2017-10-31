@@ -22,9 +22,8 @@
 <!-- Select permettant de filtrer selon un tournoi précis -->
 <div class="row">
 	<div class="col-md-3">
-		<select class="form-control" ng-model="selectFiltreTournois">
-				<option selected="selected">Tous les tournois</option>
-				<option ng-repeat="t in selectTournament">{{t}}</option>
+		<select class="form-control" ng-model="selectFiltreTournois" ng-options="t for t in selectTournament">
+			{{t}}
 		</select>
 	</div>
 </div>
@@ -74,22 +73,23 @@
       </div>
 
       <div class="modal-body">
-        <div ng-repeat="c in modal.cards">
-        	<div class="row">
-				<div class="col-md-3">
-		        	<select class="form-control">
-		        		<option ng-repeat="n in [] | range:c.qty" >{{$index}}</option>
-		        		<option selected="selected">{{c.qty}}</option>
-		        	</select>
-		        </div>
-		        <div class="col-md-9">{{c.cName}}</div>
-		    </div>
-        </div>
+      	<form>
+	        <div ng-repeat="c in modal.cards">
+	        	<div class="row">
+					<div class="col-md-3">
+			        	<select class="form-control" ng-model="cartesNouveauPret[$index].qty" ng-options="n for n in [] | range:c.qty+1">
+			        		{{$index}}
+			        	</select>
+			        </div>
+			        <div class="col-md-9">{{c.cName}}</div>
+			    </div>
+	        </div>
+  		</form>
       </div>
 
       <div class="modal-footer">
       	<button type="button" class="btn btn-danger" data-dismiss="modal" ng-click="fermerConfirmation()">Annuler</button>
-        <button type="button" class="btn btn-success" data-dismiss="modal" ng-click="afficheConfirmation()">Confirmer</button>
+        <button type="button" class="btn btn-success" data-dismiss="modal" ng-click="validerPret()">Confirmer</button>
       </div>
 
     </div>

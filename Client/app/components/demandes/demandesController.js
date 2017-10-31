@@ -5,36 +5,48 @@ app.controller('demandesCtrl', function($scope, $http) {
     /* Booléen correspondant à l'affichage de la confirmation de prêt*/
     $scope.hideConfirmation = true;
 
-    $scope.selectTournament = new Array();
-    //$scope.selectTournament[0] = "Tous les tournois";
+    
 
-    $scope.selectFiltreTournois = "Tous les tournois";
+    /* Nouvelle requete au serveur pour obtenir le fichier JSON et mise à jour des variables qui en dépendent*/
+    $scope.refresh = function(){
 
-    $http.get("demandes.json").then(function(response){
+            /* Tableau contenant les noms des tournois pour le selectTournoi */
+            $scope.selectTournament = new Array();
+            $scope.selectTournament[0] = "Tous les tournois";
 
-        /* On stocke les données récupérées*/
-    	$scope.tournaments = response.data.tournaments;
+            /* Variable bindée à la valeur du selectTournoi */
+            $scope.selectFiltreTournois = "Tous les tournois";
 
-        /* On s'assure que les tournois sont en ordre chronologique */
-        $scope.tournaments.sort(function(a,b){
-            if(a.date < b.date){
-                return -1;
-            }
-            else {
-                return 1;
-            }
-        });
+            $http.get("demandes.json").then(function(response){
 
-        /* On initialise les cardPreview à la première carte de chaque liste*/
-    	$scope.tournaments.forEach(function(tournament, i){
-    		$scope.imgDemandes[i] = new Array();
-            tournament.demandes.forEach(function(demande, j){
-                $scope.imgDemandes[i][j] = demande.cards[0].img;
+                /* On stocke les données récupérées*/
+            	$scope.tournaments = response.data.tournaments;
+
+                /* On s'assure que les tournois sont en ordre chronologique */
+                $scope.tournaments.sort(function(a,b){
+                    if(a.date < b.date){
+                        return -1;
+                    }
+                    else {
+                        return 1;
+                    }
+                });
+
+            	$scope.tournaments.forEach(function(tournament, i){
+            	
+                    /* On initialise les cardPreview à la première carte de chaque liste*/
+                	$scope.imgDemandes[i] = new Array();
+                    tournament.demandes.forEach(function(demande, j){
+                        $scope.imgDemandes[i][j] = demande.cards[0].img;
+                    });
+
+                    /* On rentre les noms des tournois dans le selectTournoi */
+                    $scope.selectTournament[i+1]=tournament.tName;
+            	});
             });
+    };
 
-            $scope.selectTournament[i] = tournament.tName;
-    	});
-    });
+    $scope.refresh();
 
     /* On met à jour la cardPreview correspondante au hover sur une carte */
     $scope.updateImg = function(iGParent, iParent, img){
@@ -43,11 +55,29 @@ app.controller('demandesCtrl', function($scope, $http) {
 
     /* On met à jour les variables utilisées par le modal d'organisation de prêt */
     $scope.orgPret = function(iParent, i){
+
             $scope.modal = {
                 uName:$scope.tournaments[iParent].demandes[i].uName,
                 tournament:$scope.tournaments[iParent].tName,
                 cards: $scope.tournaments[iParent].demandes[i].cards
             };
+            $scope.cartesNouveauPret = new Array();
+            $scope.modal.cards.forEach(function(card,i){
+                $scope.cartesNouveauPret[i] = {cName:card.cName, qty:card.qty};
+            });
+            
+    };
+
+    $scope.validerPret = function(){
+
+        $scope.cartesNouveauPret.forEach(function(carte){
+                console.log(carte);
+        });
+
+        /* TODO envoi des données au serveur*/
+
+        $scope.refresh(); 
+        $scope.afficheConfirmation();
     };
 
     $scope.afficheConfirmation = function(){
