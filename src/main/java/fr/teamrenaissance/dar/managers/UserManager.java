@@ -1,13 +1,19 @@
 package fr.teamrenaissance.dar.managers;
 
+import fr.teamrenaissance.dar.entities.Card;
+import fr.teamrenaissance.dar.entities.Loan;
 import fr.teamrenaissance.dar.entities.User;
 import org.hibernate.Hibernate;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import javax.persistence.criteria.CriteriaQuery;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 public class UserManager {
@@ -41,6 +47,39 @@ public class UserManager {
             session.close();
             obj.put("newuser","succes");
         }
+        return obj;
+
+    }
+/*
+return JsonObject contains userId and list of his cards ask and not yet received
+ */
+    public JSONObject askCards(int userId){
+        SessionFactory sessFact = HibernateUtil.getSessionFactory();
+        Session sess = sessFact.openSession();
+        Transaction tr = sess.beginTransaction();
+        CriteriaQuery cq = sess.getCriteriaBuilder().createQuery(Loan.class);
+        cq.from(Loan.class);
+        JSONObject obj = new JSONObject();
+        Collection<Card> cards = new ArrayList<>();
+        try {
+            obj.put("userId",userId);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        List<Loan> loanList = sess.createQuery(cq).getResultList();
+        for(Loan l: loanList){
+            if(l.getBorrower().getUserID() == userId && l.getLender()== null){
+                cards.add(l.getCard());
+            }
+        }
+        try {
+            obj.put("ask Cards",cards);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        sess.flush();
+        tr.commit();
+        sess.close();
         return obj;
 
     }
