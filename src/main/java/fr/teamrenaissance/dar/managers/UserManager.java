@@ -84,6 +84,30 @@ return JsonObject contains userId and list of his cards ask and not yet received
 
     }
 
+    /*
+    return a jsonObject contains User
+    uses the getUser function
+     */
+    public JSONObject getUserJson(int userId){
+        JSONObject obj = new JSONObject();
+        User u = getUser(userId);
+        if(u == null){
+            try {
+                obj.put("user","not exist");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }else{
+            try {
+                obj.put("user",u);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        return obj;
+
+    }
+
 
 /*
  check if login is not use
