@@ -14,10 +14,12 @@ app.controller('demandesCtrl', function($scope, $http) {
             $scope.selectTournament = new Array();
             $scope.selectTournament[0] = "Tous les tournois";
 
-            /* Variable bindée à la valeur du selectTournoi */
+            /* Variable bindée à la valeur du selectTournoi 
+               Apres un nouveau pret, on fait un refresh et elle est reset donc l'utilisateur perd la selection de tournois faite.
+               On peut la garder mais ca peut poser probleme dans le cas ou le nouveau pret remplit exactement toutes les demandes restantes pour un tournoi*/
             $scope.selectFiltreTournois = "Tous les tournois";
 
-            $http.get("demandes.json").then(function(response){
+            $http.get("app/components/demandes/demandes.json").then(function(response){
 
                 /* On stocke les données récupérées*/
             	$scope.tournaments = response.data.tournaments;

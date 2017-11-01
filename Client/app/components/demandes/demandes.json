@@ -4,7 +4,7 @@
 		"demandes":[
 			{"uName":"Vansiri",
 			"cards":[
-						{ "qty":1, "cName":"Black Lotus", "img":"https://img.scryfall.com/cards/large/en/leb/233.jpg?1496447117"},
+						{ "qty":1, "cName":"Smokestack", "img":"https://img.scryfall.com/cards/large/en/usg/309.jpg?1496792480"},
 						{ "qty":2, "cName":"Nissa, Vastwood Seer", "img":"https://img.scryfall.com/cards/large/en/ori/189a.jpg?1505392785"},
 						{ "qty":1, "cName":"Wrath of God", "img":"https://img.scryfall.com/cards/large/en/10e/61.jpg?1496447568"}
 					]
@@ -33,7 +33,7 @@
 						{ "qty":1, "cName":"Liliana of the Veil", "img":"https://img.scryfall.com/cards/large/en/mm3/76.jpg?1501890996"}
 					]
 			},
-			{"uName":"Jack",
+			{"uName":"Rémi",
 			"cards":[ 
 					 	{ "qty":2, "cName":"Search for Azcanta", "img":"https://img.scryfall.com/cards/large/en/xln/74a.jpg?1509307776"},
 					  	{ "qty":3, "cName":"Charging Monstrosaur", "img":"https://img.scryfall.com/cards/large/en/xln/138.jpg?1509308684"}
