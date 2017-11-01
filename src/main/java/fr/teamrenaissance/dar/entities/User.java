@@ -222,4 +222,11 @@ public class User {
         }
         return false;
     }
+
+    public String toString(){
+        return ""+userID+" "+ name+" "+firstname+" "+username+" "
+        +email+" "+password+" "+address+" "+avatar+" "+dciNumber+" "
+        +phoneNumber+" "+facebook+" "+ twitter;
+
+    }
 }
