@@ -1,4 +1,4 @@
-package fr.teamrenaissance.dar.test;
+package fr.teamrenaissance.dar.test.User;
 
 import fr.teamrenaissance.dar.managers.UserManager;
 import org.json.JSONException;
