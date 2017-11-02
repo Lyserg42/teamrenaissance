@@ -16,11 +16,16 @@
 	<script src="app/shared/filtres.js"></script>
 	<script src="app/components/demandes/demandesController.js"></script>
 	<script src="app/components/demandes/filtreTournois.js"></script>
+	<script src="app/components/emprunter/emprunterCtrl.js"></script>
+	<script src="app/components/profil/profilCtrl.js"></script>
+	<script src="app/components/inscription/inscriptionCtrl.js"></script>
+	<script src="app/components/connexion/connexionCtrl.js"></script>
+	<script src="app/shared/menu/menuCtrl.js"></script>
 </head>
 
 
 <body ng-app="myApp" ng-controller="appCtrl">
-	<div ng-include="'app/shared/menu/menu.html'"></div>
+	<div ng-include="'app/shared/menu/menu.html'" ng-controller="menuCtrl"></div>
 	<br>
 </div>
 <div ng-view class="container-fluid"></div>

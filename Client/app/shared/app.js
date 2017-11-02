@@ -6,14 +6,24 @@ app.config(function($routeProvider){
 			controller : "demandesCtrl"
 		})
 		.when("/emprunter", {
-			templateUrl : "app/components/emprunter/emprunter.html"
+			templateUrl : "app/components/emprunter/emprunter.html",
+			controller : "emprunterCtrl"
 		})
 		.when("/mesprets", {
 			templateUrl : "app/components/mesPrets/mesPrets.html",
 			controller : "mesPretsController"
 		})
 		.when("/profil", {
-			templateUrl : "app/components/profil/profil.html"
+			templateUrl : "app/components/profil/profil.html",
+			controller : "profilCtrl"
+		})
+		.when("/connexion", {
+			templateUrl : "app/components/connexion/connexion.html",
+			controller : "connexionCtrl"
+		})
+		.when("/inscription", {
+			templateUrl : "app/components/inscription/inscription.html",
+			controller : "inscriptionCtrl"
 		})
 		.otherwise({
 			templateUrl : "app/components/demandes/demandes.html",

@@ -1,0 +1,18 @@
+{"tournaments":[
+	{ 	"tName":"GP Warsaw",
+		"date":"2017-11-11",
+		"format":"Standard"
+	},
+	{ 	"tName":"RPTQ Rivals of Ixalan",
+		"date":"2017-11-12",
+		"format":"Modern"
+	},
+	{ 	"tName":"GP Lyon",
+		"date":"2017-11-25",
+		"format":"Team Limited"
+	},
+	{ 	"tName":"GP Madrid",
+		"date":"2017-12-09",
+		"format":"Team Modern"
+	}
+]}
