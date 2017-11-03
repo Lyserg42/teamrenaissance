@@ -1,11 +1,8 @@
 package fr.teamrenaissance.dar.servlets;
 
-import fr.teamrenaissance.dar.entities.Loan;
 import fr.teamrenaissance.dar.entities.Tournament;
-import fr.teamrenaissance.dar.entities.User;
 import fr.teamrenaissance.dar.managers.LoanManager;
 import fr.teamrenaissance.dar.managers.TournamentManager;
-import fr.teamrenaissance.dar.managers.UserManager;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -16,10 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 
 public class LoanServlet  extends HttpServlet {
@@ -47,19 +41,24 @@ public class LoanServlet  extends HttpServlet {
             JSONArray tournamentsArray = new JSONArray();
 
             for (Tournament tournament : tournaments) {
-                JSONObject tournamentJson = new JSONObject();
 
-                tournamentJson.put("tID", tournament.getTournamentID());
-                tournamentJson.put("tName", tournament.getName());
-                tournamentJson.put("date", tournament.getDate());
-                //gets the list of lent cards
-                JSONArray lentCards = loanManager.getLendedCardsJson(userId, tournament.getTournamentID());
-                tournamentJson.put("lentCards", lentCards);
-                //gets the list of borrowed cards
+                JSONArray lentCards = loanManager.getLentCardsJson(userId, tournament.getTournamentID());
+                JSONArray borrowedCards = loanManager.getBorrowedCardsJson(userId, tournament.getTournamentID());
+                JSONArray demands = loanManager.getDemandsJson(userId, tournament.getTournamentID());
 
-                //gets the list of demands
+                if(lentCards.length() != 0 || borrowedCards.length() != 0 || demands.length() != 0){
+                    JSONObject tournamentJson = new JSONObject();
 
-                tournamentsArray.put(tournamentJson);
+                    tournamentJson.put("tID", tournament.getTournamentID());
+                    tournamentJson.put("tName", tournament.getName());
+                    tournamentJson.put("date", tournament.getDate());
+
+                    tournamentJson.put("lentCards", lentCards);
+                    tournamentJson.put("borrowedCards", borrowedCards);
+                    tournamentJson.put("demands", demands);
+
+                    tournamentsArray.put(tournamentJson);
+                }
             }
 
             resultJson.put("tournaments", tournamentsArray);

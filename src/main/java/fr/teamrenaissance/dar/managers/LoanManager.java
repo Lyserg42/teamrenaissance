@@ -2,9 +2,7 @@ package fr.teamrenaissance.dar.managers;
 
 import fr.teamrenaissance.dar.entities.Card;
 import fr.teamrenaissance.dar.entities.Loan;
-import fr.teamrenaissance.dar.entities.Tournament;
 import fr.teamrenaissance.dar.entities.User;
-import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
@@ -37,12 +35,14 @@ public class LoanManager {
     }
 */
 
+
     /**
-     * Returns the JSON object containing the cards lent by a user for a given tournament.
-     * @param userID the ID of the user that lend the cards
+     * Returns the JSON array containing the cards lent by a user for a given tournament.
+     * @param userID the ID of the user who lends the cards
      * @param tournamentID the ID of the tournament where the cards are lent
+     * @throws JSONException
      */
-    public JSONArray getLendedCardsJson(Integer userID, Integer tournamentID) throws JSONException {
+    public JSONArray getLentCardsJson(Integer userID, Integer tournamentID) throws JSONException {
         Session session = HibernateUtil.getSessionFactory().openSession();
 
         Transaction tx = null;
@@ -66,46 +66,141 @@ public class LoanManager {
 
             tx.commit();
 
-            for(Object[] line : result){
-                System.out.println(((User)line[0]).getUsername()+" "+((Card)line[1]).getName()+" "+line[2]);
-            }
+            return this.transformToJsonArray(result);
 
-            //make a map from the result
-            Map<String, List<Object[]>> resultMap =
-                    result.stream().collect(
-                    Collectors.groupingBy(line -> ((User)Arrays.asList(line).get(0)).getUsername())
-            );
+        } catch (JSONException e){
+            throw e;
+        } catch (Exception e) {
+            if (tx != null) tx.rollback();
+            throw e;
+        } finally {
+            session.close();
+        }
+    }
+
+
+    /**
+     * Returns the JSON array containing the cards borrowed by a user for a given tournament.
+     * @param userID the ID of the user who borrows the cards
+     * @param tournamentID the ID of the tournament where the cards are lent
+     * @throws JSONException
+     */
+    public JSONArray getBorrowedCardsJson(Integer userID, Integer tournamentID) throws JSONException {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = null;
+        try {
+            tx = session.beginTransaction();
+
+            CriteriaBuilder builder = session.getCriteriaBuilder();
+            CriteriaQuery<Object[]> criteriaQuery  = builder.createQuery(Object[].class);
+            //MULTISELECT
+            Root<Loan> loanRoot = criteriaQuery.from(Loan.class);
+            criteriaQuery.multiselect(loanRoot.get("lender"), loanRoot.get("card"), builder.countDistinct(loanRoot));
+            criteriaQuery.where(
+                    builder.equal(loanRoot.get("borrower"), userID),
+                    builder.equal(loanRoot.get("tournament"), tournamentID),
+                    builder.isNotNull(loanRoot.get("lender")));
+            //GROUP BY
+            criteriaQuery.groupBy(loanRoot.get("lender"), loanRoot.get("card"));
+
+            Query<Object[]> query = session.createQuery(criteriaQuery);
+            List<Object[]> result = query.getResultList();
+
+            tx.commit();
+
+            return this.transformToJsonArray(result);
+
+        } catch (JSONException e){
+            throw e;
+        }catch (Exception e) {
+            if (tx != null) tx.rollback();
+            throw e;
+        } finally {
+            session.close();
+        }
+    }
+
+    private JSONArray transformToJsonArray(List<Object[]> queryResult) throws JSONException{
+        //make a map from the result
+        Map<User, List<Object[]>> resultMap =
+                queryResult.stream().collect(
+                        Collectors.groupingBy(line -> (User)Arrays.asList(line).get(0))
+                );
+
+        //Create the JSON array
+        JSONArray jsonArray = new JSONArray();
+        for (User user : resultMap.keySet()) {
+            JSONObject loan = new JSONObject();
+            loan.put("uName", user.getUsername());
+            loan.put("uID", user.getUserID());
+
+            //create the JSON array of cards
+            JSONArray cards = new JSONArray();
+            for(Object[] line : resultMap.get(user)){
+                //create a card json object
+                JSONObject cardJson = new JSONObject();
+                cardJson.put("qty", line[2]);
+                Card card = (Card)line[1];
+                cardJson.put("cName", card.getName());
+                cardJson.put("cID", card.getCardID());
+                //add the json card to the cards array
+                cards.put(cardJson);
+            }
+            loan.put("cards", cards);
+            jsonArray.put(loan);
+        }
+
+        return jsonArray;
+    }
+
+
+    /**
+     * Returns the JSON array containing the cards demanded by a user for a given tournament and which have not yet find a lender.
+     * @param userID the ID of the user who borrows the cards
+     * @param tournamentID the ID of the tournament where the cards are lent
+     * @throws JSONException
+     */
+    public JSONArray getDemandsJson(Integer userID, Integer tournamentID) throws JSONException {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = null;
+        try {
+            tx = session.beginTransaction();
+
+            CriteriaBuilder builder = session.getCriteriaBuilder();
+            CriteriaQuery<Object[]> criteriaQuery  = builder.createQuery(Object[].class);
+            //MULTISELECT
+            Root<Loan> loanRoot = criteriaQuery.from(Loan.class);
+            criteriaQuery.multiselect(loanRoot.get("card"), builder.countDistinct(loanRoot));
+            criteriaQuery.where(
+                    builder.equal(loanRoot.get("borrower"), userID),
+                    builder.equal(loanRoot.get("tournament"), tournamentID),
+                    builder.isNull(loanRoot.get("lender")));
+            //GROUP BY
+            criteriaQuery.groupBy(loanRoot.get("card"));
+
+            Query<Object[]> query = session.createQuery(criteriaQuery);
+            List<Object[]> result = query.getResultList();
+
+            tx.commit();
 
             //Create the JSON array
-            JSONArray lentCards = new JSONArray();
-            for (String username : resultMap.keySet()) {
-                JSONObject loan = new JSONObject();
-                loan.put("uName", username);
-
-                //create the JSON array of cards
-                JSONArray cards = new JSONArray();
-                for(Object[] line : resultMap.get(username)){
-                    //create a card json object
-                    JSONObject cardJson = new JSONObject();
-                    cardJson.put("qty", line[2]);
-                    Card card = (Card)line[1];
-                    cardJson.put("cName", card.getName());
-                    //add the json card to the cards array
-                    cards.put(cardJson);
-                }
-                loan.put("cards", cards);
-                lentCards.put(loan);
+            JSONArray demands = new JSONArray();
+            for (Object[] line : result) {
+                //create a card json object
+                JSONObject cardJson = new JSONObject();
+                cardJson.put("qty", line[1]);
+                Card card = (Card)line[0];
+                cardJson.put("cName", card.getName());
+                cardJson.put("cID", card.getCardID());
+                //add the json card to the demands array
+                demands.put(cardJson);
             }
-/*
-            result.put("tName", tournament.getName());
-            result.put("date", tournament.getDate().toString());
-            result.put("lentCards", lentCards);
-            */
 
-            System.out.println(lentCards.toString());
-            return lentCards;
+            return demands;
 
-        } catch (Exception e) {
+        } catch (JSONException e){
+            throw e;
+        }catch (Exception e) {
             if (tx != null) tx.rollback();
             throw e;
         } finally {

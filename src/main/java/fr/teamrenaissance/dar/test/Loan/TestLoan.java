@@ -11,7 +11,7 @@ public class TestLoan {
             LoanManager manager = new LoanManager();
             TournamentManager tManager = new TournamentManager();
             System.out.println(tManager.getAllTournaments());
-            manager.getLendedCardsJson(1, 2);
+            manager.getLentCardsJson(1, 2);
         }finally{
             HibernateUtil.shutdown();
         }
