@@ -13,7 +13,7 @@ public class Tournament {
     private enum Type{
         GP,PT,RPTQ,OTHER}
     private enum Format{
-        Standard, Modern,Limited,Legacy,Constructed, TeamModern, TeamLimited,Other
+        Standard, Modern,Limited,Legacy,Constructed, TeamModern, TeamLimited,Other;
     }
 
     private int tournamentID;
@@ -80,6 +80,11 @@ public class Tournament {
 
     public void setType(Type type) {
         this.type = type;
+    }
+
+    @Transient
+    public String getName(){
+        return this.type + " " + this.place;
     }
 
     @Override
