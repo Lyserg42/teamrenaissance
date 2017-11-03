@@ -1,0 +1,8 @@
+{
+	"tId":1,
+	"uId":1,
+	"cards":[
+				{ "newQty":0, "cId":1},
+				{ "newQty":0, "cId":2},
+			]
+}
