@@ -39,7 +39,7 @@ public class Card {
         this.cardID = cardID;
     }
 
-    @Column(name = "name", length = NAME_LENGTH, nullable = false)
+    @Column(name = "name", length = NAME_LENGTH, nullable = false, unique = true)
     public String getName() {
         return name;
     }
