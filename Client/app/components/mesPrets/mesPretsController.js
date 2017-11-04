@@ -26,13 +26,6 @@ app.controller('mesPretsController', function($scope, $http) {
             });
 
             $scope.tournaments.forEach(function(tournament, i){
-
-                /* On initialise les cardPreview à la première carte de chaque liste*/
-                $scope.imgDemandes[i] = new Array();
-                tournament.demandes.forEach(function(demande, j){
-                    $scope.imgDemandes[i][j] = demande.cards[0].img;
-                });
-
                 /* On rentre les noms des tournois dans le selectTournoi */
                 $scope.selectTournament[i+1]=tournament.tName;
             });
@@ -40,8 +33,6 @@ app.controller('mesPretsController', function($scope, $http) {
     };
 
     $scope.refresh();
-
-    $scope.arraySize = $scope.tournaments.length;
 
 
     /*annuler un prêt/emprunts*/
