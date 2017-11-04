@@ -1,4 +1,5 @@
-{"tournaments":[
+{
+	"tournaments":[
 	{ 	"tName":"GP Warsaw",
 		"date":"2017-11-11",
 		"tId":1,
@@ -13,7 +14,7 @@
 			},
 			{"uName":"Lyserg",
 			"uId":2,
-			"cards":[ 
+			"cards":[
 					  	{ "qty":3, "cId":4, "cName":"Lightning Bolt"},
 					 	{ "qty":4, "cId":5, "cName":"Grizzly Bears"}
 					]
