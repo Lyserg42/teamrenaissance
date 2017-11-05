@@ -1,12 +1,134 @@
-<div class="container">
+<!-- <div class="container">
     <h2>Mes prêts</h2>
-    <ul>
-        <li ng-repeat="item in tournaments ">
-            <a ng-click="collapsed = !collapsed" >
+    <div ng-repeat="item in tournaments ">
+        <a href="#demo" class="btn btn-info" data-toggle="collapse">
                 {{item.tName}}
-            </a>
+        </a>
+        <div id="demo" class="collapse">
+            <div class = "lentCard" ng-repeat="lent in item.lentCards ">
+                lent.uName
+            </div>
+        </div>
+    </div>
+</div>
 
-            <div class="nested " ng-class="{'collapse' : collapsed}"></div>
-        </li>
-    </ul>
+-->
+
+<div class="container">
+    <h2>Mes prêts </h2>
+    <!--<div class ="tournament" ng-repeat="item in tournaments ">
+        <button type="button" class="btn btn-info" data-toggle="collapse" data-target="#demo">
+            {{item.tName}}
+        </button>
+        <div id="demo" class="collapse in">
+            <div  ng-repeat="lent in item.lentCards" class = "lentCard" >
+                    {{lent.uName}}
+            </div>
+
+
+        </div>
+    </div>
+    -->
+
+    <div class="row">
+        <div class="col-md-3">
+            <select class="form-control" ng-model="selectFiltreTournois" ng-options="t for t in selectTournament">
+                {{t}}
+            </select>
+        </div>
+    </div>
+
+    <!--
+    <div class="row">
+        <div class="col-md-3">
+            <select class="form-control" ng-model="selectFiltreEmpruntsPretsDemandes" ng-options="f for f in selectEmpruntsPretsDemandes">
+                {{f}}
+            </select>
+        </div>
+    </div>
+
+    -->
+
+    <div class="form-group" ng-repeat="t in tournaments | filtreTournois : selectFiltreTournois">
+        <h5> {{t.tName}} du {{t.date}} </h5>
+        <h4 class ="panel-title">
+            <a data-toggle="collapse" href="#preter{{$index}}">
+                <h5> Je prêtes </h5>
+            </a>
+        </h4>
+
+        <!----------------------------------PRETS----------------------------->
+        <div class="lender" ng-repeat="l in t.lentCards">
+            <div class="row">
+                <div class="col-sm-9">
+                    <div  class="lent-body">
+                        <a data-toggle="collapse" href="#myButton2{{$index}}">{{l.uName}}</a> <!--lien vers le profil du user a ajouté-->
+                        <div class ="deroule" ng-repeat="c in l.cards" ng-bind-html-unsafe="opt.text" >
+                            {{c.cName}} {{c.qty}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!----------------------------------EMPRUNTS----------------------------->
+        <h4 class ="panel-title">
+            <a data-toggle="collapse" href="#emprunter{{$index}}">
+                <h5> On me prête </h5>
+            </a>
+        </h4>
+
+        <div class="borower" ng-repeat="b in t.borrowedCards">
+            <div class="row">
+                <div class="col-sm-9">
+                    <div  class="borrow-body">
+                        <a data-toggle="collapse" href="#myButton3{{$index}}">{{b.uName}}</a> <!--lien vers le profil du user a ajouté-->
+                        <div class ="deroule" ng-repeat="c in b.cards" ng-bind-html-unsafe="opt.text" >
+                            <h6> {{c.cName}}</h6>
+
+                            <form ng-submit ="borowSubmit()" >
+                                <select class="form-control" id="howMuch">
+                                    <option> {{c.qty}}</option>
+                                    <option>2</option>
+                                    <option>3</option>
+                                    <option>4</option>
+                                </select>
+                            <input type="submit" id="Bsubmit" value="Submit" />
+                            </form>
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!----------------------------------NEED----------------------------->
+        <h4 class ="panel-title">
+            <a data-toggle="collapse" href="#need{{$index}}">
+                <h5> Ce qu'il me manque </h5>
+            </a>
+        </h4>
+
+        <div class="borower" ng-repeat="d in t.demands">
+            <div class="row">
+                <div class="col-sm-9">
+                    <div  class="borrow-body">
+                        <a data-toggle="collapse" href="#myButton4{{$index}}">{{d.uName}}</a> <!--lien vers le profil du user a ajouté-->
+                        <div class ="deroule" ng-repeat="c in b.cards" ng-bind-html-unsafe="opt.text" >
+                            {{c.cName}} {{c.qty}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+
+
 </div>
