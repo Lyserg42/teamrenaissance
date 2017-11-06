@@ -17,7 +17,7 @@ public class CardServlet extends HttpServlet {
 
     //L'utilisateur veut récupérer une page HTML
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        this.getServletContext().getRequestDispatcher("/WEB-INF/bonjour.jsp").forward(request, response);
+
     }
 
 }
