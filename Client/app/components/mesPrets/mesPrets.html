@@ -52,74 +52,76 @@
     <div class="form-group" ng-repeat="t in tournaments | filtreTournois : selectFiltreTournois">
         <h5> {{t.tName}} du {{t.date}} </h5>
         <h4 class ="panel-title">
-            <a data-toggle="collapse" href="#preter{{$index}}">
-                <h5> Je prêtes </h5>
+            <a data-toggle="collapse" data-toggle="collapse" data-target="#prets{{$index}}">
+                <h5> Je prête </h5>
             </a>
         </h4>
 
-        <!----------------------------------PRETS----------------------------->
-        <div class="lender" ng-repeat="l in t.lentCards">
-            <div class="row">
-                <div class="col-sm-9">
-                    <div  class="lent-body">
-                        <a data-toggle="collapse" href="#myButton2{{$index}}">{{l.uName}}</a> <!--lien vers le profil du user a ajouté-->
-                        <div class ="deroule" ng-repeat="c in l.cards" ng-bind-html-unsafe="opt.text" >
-                            {{c.cName}} {{c.qty}}
+        <!--PRETS-->
+        <div id="prets{{$index}}" class="collapse show">
+            <div id="lender" ng-repeat="l in t.lentCards">
+                <div class="row">
+                    <div class="col-sm-9">
+                        <div  class="lent-body">
+                            <a type="button" data-toggle="collapse" data-target="#pret{{$parent.$index}}.{{$index}}">{{l.uName}}</a> 
+                            <!--lien vers le profil du user a ajouter-->
+                            <div id="pret{{$parent.$index}}.{{$index}}"class="collapse show">
+                                <div ng-repeat="c in l.cards" ng-bind-html-unsafe="opt.text" >
+                                    {{c.qty}} {{c.cName}} 
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!----------------------------------EMPRUNTS----------------------------->
+        <!--EMPRUNTS-->
         <h4 class ="panel-title">
-            <a data-toggle="collapse" href="#emprunter{{$index}}">
+            <a data-toggle="collapse" data-target="#emprunt{{$index}}">
                 <h5> On me prête </h5>
             </a>
         </h4>
 
-        <div class="borower" ng-repeat="b in t.borrowedCards">
-            <div class="row">
-                <div class="col-sm-9">
-                    <div  class="borrow-body">
-                        <a data-toggle="collapse" href="#myButton3{{$index}}">{{b.uName}}</a> <!--lien vers le profil du user a ajouté-->
-                        <div class ="deroule" ng-repeat="c in b.cards" ng-bind-html-unsafe="opt.text" >
-                            <h6> {{c.cName}}</h6>
+        <div id="emprunt{{$index}}" class="collapse show">
+            <div ng-repeat="b in t.borrowedCards">
+                <div class="row">
+                    <div class="col-sm-9">
+                        <div  class="borrow-body">
+                            <a data-toggle="collapse" data-target="#emprunt{{$parent.$index}}.{{$index}}">{{b.uName}}</a> <!--lien vers le profil du user a ajouté-->
+                            <div id="emprunt{{$parent.$index}}.{{$index}}" class="collapse show">
+                                <div ng-repeat="c in b.cards" ng-bind-html-unsafe="opt.text" >
+                                    <h6> {{c.cName}}</h6>
 
-                            <form ng-submit ="borowSubmit()" >
-                                <select class="form-control" id="howMuch">
-                                    <option> {{c.qty}}</option>
-                                    <option>2</option>
-                                    <option>3</option>
-                                    <option>4</option>
-                                </select>
-                            <input type="submit" id="Bsubmit" value="Submit" />
-                            </form>
+                                    <form ng-submit ="borrowSubmit()" >
+                                        <select class="form-control" id="howMuch">
+                                            <option> {{c.qty}}</option>
+                                            <option>2</option>
+                                            <option>3</option>
+                                            <option>4</option>
+                                        </select>
+                                    <input type="submit" id="Bsubmit" value="Submit" />
+                                    </form>
 
 
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!----------------------------------NEED----------------------------->
+        <!--NEED-->
         <h4 class ="panel-title">
-            <a data-toggle="collapse" href="#need{{$index}}">
+        <a data-toggle="collapse" data-target="#need{{$index}}">
                 <h5> Ce qu'il me manque </h5>
             </a>
         </h4>
 
-        <div class="borower" ng-repeat="d in t.demands">
-            <div class="row">
-                <div class="col-sm-9">
-                    <div  class="borrow-body">
-                        <a data-toggle="collapse" href="#myButton4{{$index}}">{{d.uName}}</a> <!--lien vers le profil du user a ajouté-->
-                        <div class ="deroule" ng-repeat="c in b.cards" ng-bind-html-unsafe="opt.text" >
-                            {{c.cName}} {{c.qty}}
-                        </div>
-                    </div>
-                </div>
+        <div id="need{{$index}}" class="collapse show">
+            <div ng-repeat="c in t.demands">
+                    {{c.qty}} {{c.cName}} 
             </div>
         </div>
     </div>
