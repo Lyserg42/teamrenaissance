@@ -1,9 +1,0 @@
-{
-	"tId":1,
-	"uId":1,
-	"type":"emprunt",
-	"cards":[
-				{ "newQty":0, "cId":1},
-				{ "newQty":0, "cId":2},
-			]
-}

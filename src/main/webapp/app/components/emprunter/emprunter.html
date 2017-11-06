@@ -1,0 +1,19 @@
+<div class="container">
+	<form>
+		<select ng-model="selectedTournament" ng-options="t.tName for t in tournaments"></select>
+		<span ng-show="tournoiNonSelectionne">Merci de s&eacute;lectionner un tournoi.</span>
+		<br/>
+		<textarea  rows="8" cols="30" ng-model="cardList" required></textarea>
+		<br/>
+		Qty :   <input type="number" name="quantity" min="1" max="60" ng-model="qtyAjoutCarte" />
+		<br/>
+		Carte : <input type="text" ng-model="nameAjoutCarte" ng-keyup="suggestCardName()" /> 
+		<br/>
+		<button type="button" class="btn btn-primary" ng-click="ajouterCarte()">
+								Ajouter carte
+		</button>
+		<button type="submit" class="btn btn-primary" ng-click="envoyerDemande()">
+								Valider demande
+		</button>
+	</form>
+</div>
