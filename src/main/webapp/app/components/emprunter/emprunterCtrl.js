@@ -71,6 +71,7 @@ app.controller('emprunterCtrl', function($scope, $http) {
 
             /* TODO  Envoyer la string au serveur */
             console.log(data);
+            $http.post("https://teamrenaissance.fr/loan",data);
         }
     };
 
