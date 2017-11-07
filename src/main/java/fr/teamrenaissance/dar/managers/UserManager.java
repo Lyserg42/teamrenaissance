@@ -8,6 +8,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -19,7 +20,7 @@ import java.util.List;
 public class UserManager {
 
     ////sarra////
-    public JSONObject newUser(String name, String firstname, String mail, String username,
+    public static JSONObject newUser(String name, String firstname, String mail, String username,
                           String password, String adress, String avatar, String dciNumber,
                            String phoneNumber, String fb, String tw) throws Exception{
         JSONObject obj = new JSONObject();
@@ -52,6 +53,7 @@ public class UserManager {
     }
 /*
 return JsonObject contains userId and list of his cards ask and not yet received
+to remove ???
  */
     public JSONObject askCards(int userId){
         SessionFactory sessFact = HibernateUtil.getSessionFactory();
@@ -86,25 +88,36 @@ return JsonObject contains userId and list of his cards ask and not yet received
 
     /*
     return a jsonObject contains User
-    uses the getUser function
+    uses the getUserByLogin function
      */
-    public JSONObject getUserJson(int userId){
+    public static JSONObject getUserJson(String login){
         JSONObject obj = new JSONObject();
-        User u = getUser(userId);
+        User u = getUserByLogin(login);
+        JSONObject obju = new JSONObject();
         if(u == null){
             try {
-                obj.put("user","not exist");
+                obju.put("user","not exist");
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         }else{
             try {
-                obj.put("user",u);
+
+                obj.put("name",u.getName());
+                obj.put("firstname",u.getFirstname());
+                obj.put("email",u.getEmail());
+                obj.put("address",u.getAddress());
+                obj.put("avatar",u.getAvatar());
+                obj.put("phone number",u.getPhoneNumber());
+                obj.put("facebook",u.getFacebook());
+                obj.put("twitter",u.getTwitter());
+                obj.put("login", u.getUsername());
+                obju.put("user",obj);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
-        return obj;
+        return obju;
 
     }
 
@@ -112,7 +125,7 @@ return JsonObject contains userId and list of his cards ask and not yet received
 /*
  check if login is not use
  */
-    private boolean isValideLogin(String login){
+    private static boolean isValideLogin(String login){
         Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction tx = session.beginTransaction();
         CriteriaQuery<User> cq = session.getCriteriaBuilder().createQuery(User.class);
@@ -128,6 +141,32 @@ return JsonObject contains userId and list of his cards ask and not yet received
         session.close();
         return result;
 
+    }
+
+    /*getUser by login*/
+
+    private static User getUserByLogin(String loginUser){
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        User user = null;
+        Transaction tx = null;
+        try {
+            tx = session.beginTransaction();
+            CriteriaQuery<User> cq = session.getCriteriaBuilder().createQuery(User.class);
+            cq.from(User.class);
+            List<User> users = session.createQuery(cq).getResultList();
+          for(User u: users){
+              if(u.getUsername().equals(loginUser)){
+                  user = u;
+              }
+          }
+            tx.commit();
+        } catch (Exception e) {
+            if (tx != null) tx.rollback();
+            throw e;
+        } finally {
+            session.close();
+        }
+        return user;
     }
 /////////////////////////////////jeanne ///////////////
 
@@ -147,7 +186,7 @@ return JsonObject contains userId and list of his cards ask and not yet received
             session.close();
         }
     }
-
+/* getUser by ID*/
     public User getUser(int userID){
         Session session = HibernateUtil.getSessionFactory().openSession();
         User user = null;

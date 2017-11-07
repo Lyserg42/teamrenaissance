@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.PrintWriter;
 
 import org.json.JSONObject;
 
@@ -23,14 +24,23 @@ public class UserServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        JSONObject json = new JSONObject();
-        super.doGet(req, resp);
+       doPost(req,resp);
+
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try{
-            User user = new User();
+
+            if(req.getParameter("typeRequest").equals("getUser")){
+                String login = req.getParameter("login");
+               JSONObject obj=  UserManager.getUserJson(login);
+               resp.setContentType("application/json");
+                PrintWriter out = resp.getWriter();
+                out.print(obj);
+                out.flush();
+            }
+            /*User user = new User();
             user.setName(req.getParameter("name"));
             user.setFirstname(req.getParameter("firstname"));
             user.setUsername(req.getParameter("username"));
@@ -43,7 +53,7 @@ public class UserServlet extends HttpServlet {
             user.setFacebook(req.getParameter("facebook"));
             user.setTwitter(req.getParameter("twitter"));
 
-            userManager.insertUser(user);
+            userManager.insertUser(user);*/
 
         } catch(Exception e){
             System.err.println("user not inserted");
