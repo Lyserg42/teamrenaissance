@@ -8,6 +8,7 @@ app.controller('emprunterCtrl', function($scope, $http) {
         $scope.cards = response.data.cardNames;
     });
 
+    $scope.hideCodeRetour = true;
     $scope.qtyAjoutCarte = 1;
     $scope.cardList = "";
 
@@ -66,13 +67,20 @@ app.controller('emprunterCtrl', function($scope, $http) {
 
             });
 
-            var data = {uName:"Lyserg", tName:$scope.selectedTournament.tName, cards:cardListObjects};
+            var data = {tName:$scope.selectedTournament.tId, cards:cardListObjects};
             var dataJSON = JSON.stringify(data);
 
             /* TODO  Envoyer la string au serveur */
             console.log(data);
-            $http.post("https://teamrenaissance.fr/loan",data);
+            $http.post("/loan", data).then(function(response){
+                $scope.retourServeur = response.headers();
+                $scope.hideCodeRetour = false;
+            });
         }
+    };
+
+    $scope.fermerConfirmation = function(){
+        $scope.hideCodeRetour = true;
     };
 
 });
