@@ -67,12 +67,12 @@ app.controller('emprunterCtrl', function($scope, $http) {
 
             });
 
-            var data = {tName:$scope.selectedTournament.tId, cards:cardListObjects};
+            var data = {tId:$scope.selectedTournament.tId, cards:cardListObjects};
             var dataJSON = JSON.stringify(data);
 
             /* TODO  Envoyer la string au serveur */
             console.log(data);
-            $http.post("/loan", data).then(function(response){
+            $http.post("/loan", dataJSON).then(function(response){
                 $scope.retourServeur = response.headers();
                 $scope.hideCodeRetour = false;
             });

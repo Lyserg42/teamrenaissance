@@ -60,26 +60,31 @@ app.controller('demandesCtrl', function($scope, $http) {
 
             $scope.modal = {
                 uName:$scope.tournaments[iParent].demandes[i].uName,
+                uId:$scope.tournaments[iParent].demandes[i].uId,
                 tournament:$scope.tournaments[iParent].tName,
+                tId:$scope.tournaments[iParent].tId,
                 cards: $scope.tournaments[iParent].demandes[i].cards
             };
             $scope.cartesNouveauPret = new Array();
             $scope.modal.cards.forEach(function(card,i){
-                $scope.cartesNouveauPret[i] = {cName:card.cName, qty:card.qty};
+                $scope.cartesNouveauPret[i] = {cId:card.cId, qty:card.qty};
             });
             
     };
 
     $scope.validerPret = function(){
 
-        $scope.cartesNouveauPret.forEach(function(carte){
-                console.log(carte);
+        var data = {tId:$scope.modal.tId, uId:$scope.modal.uId, cards:$scope.cartesNouveauPret};
+        var dataJSON = JSON.stringify(data);
+
+        console.log(dataJSON);
+
+        $http.post("/demande", dataJSON).then(function(){
+            $scope.refresh(); 
+            $scope.afficheConfirmation();
         });
 
-        /* TODO envoi des données au serveur*/
-
-        $scope.refresh(); 
-        $scope.afficheConfirmation();
+        
     };
 
     $scope.afficheConfirmation = function(){
