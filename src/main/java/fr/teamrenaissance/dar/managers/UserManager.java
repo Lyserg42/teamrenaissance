@@ -12,6 +12,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
 import javax.persistence.criteria.CriteriaQuery;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -25,32 +27,44 @@ public class UserManager {
                            String phoneNumber, String fb, String tw) throws Exception{
         JSONObject obj = new JSONObject();
         if(!isValideLogin(username)){
-            obj.put("newuser","failed");
-        }
-        else {
-            Session session = HibernateUtil.getSessionFactory().openSession();
-            Transaction tx = session.beginTransaction();
-            User u = new User();
-            u.setAddress(adress);
-            u.setAvatar(avatar);
-            u.setName(name);
-            u.setFirstname(firstname);
-            u.setEmail(mail);
-            u.setUsername(username);
-            u.setPassword(password);
-            u.setDciNumber(dciNumber);
-            u.setPhoneNumber(phoneNumber);
-            u.setFacebook(fb);
-            u.setTwitter(tw);
-            session.save(u);
-            session.flush();
-            tx.commit();
-            session.close();
-            obj.put("newuser","succes");
+            obj.put("newuser","login already exist");
+        }else {
+            if (!passwordSolid(password)) {
+                obj.put("newuser", "password not respect");
+            } else {
+                if (!isEnteredField(name, firstname, username, password, phoneNumber)) {
+                    obj.put("newuser", "mandatory fields are not entered");
+                } else {
+                    if (!isValidPhone(phoneNumber)) {
+                        obj.put("newuser", "phone number not valid");
+                    } else {
+                        Session session = HibernateUtil.getSessionFactory().openSession();
+                        Transaction tx = session.beginTransaction();
+                        User u = new User();
+                        u.setAddress(adress);
+                        u.setAvatar(avatar);
+                        u.setName(name);
+                        u.setFirstname(firstname);
+                        u.setEmail(mail);
+                        u.setUsername(username);
+                        u.setPassword(password);
+                        u.setDciNumber(dciNumber);
+                        u.setPhoneNumber(phoneNumber);
+                        u.setFacebook(fb);
+                        u.setTwitter(tw);
+                        session.save(u);
+                        session.flush();
+                        tx.commit();
+                        session.close();
+                        obj.put("newuser", "succes");
+                    }
+                }
+            }
         }
         return obj;
 
     }
+
 /*
 return JsonObject contains userId and list of his cards ask and not yet received
 to remove ???
@@ -86,34 +100,74 @@ to remove ???
 
     }
 
+
     /*
-    return a jsonObject contains User
+    return a jsonObject contains User's data
     uses the getUserByLogin function
      */
-    public static JSONObject getUserJson(String login){
+    public static JSONObject connectionUser(String login, String pass){
         JSONObject obj = new JSONObject();
         User u = getUserByLogin(login);
         JSONObject obju = new JSONObject();
         if(u == null){
             try {
-                obju.put("user","not exist");
+                obju.put("userFailedConnection","user not registered");
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-        }else{
-            try {
+        }else {
+            if (!u.getPassword().equals(pass)) {
+                try {
+                    obju.put("userFailedConnection", "invalid password");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            } else {
 
-                obj.put("name",u.getName());
-                obj.put("firstname",u.getFirstname());
-                obj.put("email",u.getEmail());
-                obj.put("address",u.getAddress());
-                obj.put("avatar",u.getAvatar());
-                obj.put("phone number",u.getPhoneNumber());
-                obj.put("facebook",u.getFacebook());
-                obj.put("twitter",u.getTwitter());
-                obj.put("login", u.getUsername());
-                obju.put("user",obj);
+                try {
+                    obj.put("name", u.getName());
+                    obj.put("firstname", u.getFirstname());
+                    obj.put("email", u.getEmail());
+                    obj.put("address", u.getAddress());
+                    obj.put("avatar", u.getAvatar());
+                    obj.put("phone number", u.getPhoneNumber());
+                    obj.put("facebook", u.getFacebook());
+                    obj.put("twitter", u.getTwitter());
+                    obj.put("login", u.getUsername());
+                    obju.put("userSuccesConnection", obj);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return obju;
+    }
+    /* return user's data from login*/
+
+    public static JSONObject getUser(String login){
+        JSONObject obj = new JSONObject();
+        User u = getUserByLogin(login);
+        JSONObject obju = new JSONObject();
+        if(u == null){
+            try {
+                obju.put("getUserFailed","user not registered");
             } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }else {
+
+            try {
+                obj.put("name", u.getName());
+                obj.put("firstname", u.getFirstname());
+                obj.put("email", u.getEmail());
+                obj.put("address", u.getAddress());
+                obj.put("avatar", u.getAvatar());
+                obj.put("phone number", u.getPhoneNumber());
+                obj.put("facebook", u.getFacebook());
+                obj.put("twitter", u.getTwitter());
+                obj.put("login", u.getUsername());
+                obju.put("getUserSucces", obj);
+            }catch (JSONException e) {
                 e.printStackTrace();
             }
         }
@@ -121,6 +175,29 @@ to remove ???
 
     }
 
+    /* test if the email respect email format */
+    private static boolean isValideEmail(String email) {
+        boolean res = true;
+        try {
+            InternetAddress add = new InternetAddress(email);
+            add.validate();
+        } catch (AddressException e) {
+            res = false;
+        }
+        return res;
+    }
+
+
+/* check  phoneNumber */
+    private static boolean isValidPhone(String phoneNumber){
+        boolean res = true;
+        try {
+            Integer.parseInt(phoneNumber);
+        }catch (NumberFormatException e){
+            res = false;
+        }
+        return  res;
+    }
 
 /*
  check if login is not use
@@ -141,6 +218,47 @@ to remove ???
         session.close();
         return result;
 
+    }
+/* test if a string contains a number
+* */
+    private static boolean containNumber(String s){
+        char[] c = s.toCharArray();
+        for(char i:c){
+            if(Character.isDigit(i)){
+                return true;
+            }
+        }
+        return false;
+
+    }
+
+    /*test if a string contains a uppercase char*/
+
+    private static boolean containUppercase(String s){
+        char[] c = s.toCharArray();
+        for(char i:c){
+            if(Character.isUpperCase(i)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /* test if password is solid*/
+    private static boolean passwordSolid(String pssw){
+
+        return ((pssw.length()>=8) && containNumber(pssw) && containUppercase(pssw));
+    }
+
+    /*test if mandatory fields are entered*/
+    private static boolean isEnteredField(String name,
+                                          String lastName,String userName,
+                                          String password, String phoneNumber){
+    if(name.equals("") ||  lastName.equals("") || userName.equals("")
+            || password.equals("") || phoneNumber.equals("")){
+            return false;
+        }
+        return true;
     }
 
     /*getUser by login*/

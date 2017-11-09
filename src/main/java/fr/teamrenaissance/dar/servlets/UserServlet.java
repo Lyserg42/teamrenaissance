@@ -16,11 +16,6 @@ import org.json.JSONObject;
 @WebServlet(name = "UserServlet")
 public class UserServlet extends HttpServlet {
 
-    private UserManager userManager;
-
-    public void init() throws ServletException{
-        this.userManager = new UserManager();
-    }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -31,29 +26,38 @@ public class UserServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try{
+            JSONObject obj = new JSONObject();
+            if(req.getParameter("typeRequest").equals("inscription")){
+                String name = req.getParameter("name");
+                String firstanme = req.getParameter("firstname");
+                String username = req.getParameter("login");
+                String email = req.getParameter("email");
+                String password = req.getParameter("password");
+                String address = req.getParameter("address");
+                String avatar = req.getParameter("avatar");
+                String phoneNumber = req.getParameter("phoneNumber");
+                String dciNumber = req.getParameter("dciNumber");
+                String fb = req.getParameter("facebook");
+                String tw = req.getParameter("twitter");
 
+                obj = UserManager.newUser(name,firstanme,email,username,password,
+                        address,avatar,dciNumber,phoneNumber,fb,tw);
+            }
+
+            if(req.getParameter("typeRequest").equals("connection")){
+                String login = req.getParameter("login");
+                String password = req.getParameter("password");
+                obj= UserManager.connectionUser(login,password);
+            }
             if(req.getParameter("typeRequest").equals("getUser")){
                 String login = req.getParameter("login");
-               JSONObject obj=  UserManager.getUserJson(login);
-               resp.setContentType("application/json");
-                PrintWriter out = resp.getWriter();
-                out.print(obj);
-                out.flush();
-            }
-            /*User user = new User();
-            user.setName(req.getParameter("name"));
-            user.setFirstname(req.getParameter("firstname"));
-            user.setUsername(req.getParameter("username"));
-            user.setEmail(req.getParameter("email"));
-            user.setPassword(req.getParameter("password"));
-            user.setAddress(req.getParameter("address"));
-            user.setAvatar(req.getParameter("avatar"));
-            user.setPhoneNumber(req.getParameter("phoneNumber"));
-            user.setDciNumber(req.getParameter("dciNumber"));
-            user.setFacebook(req.getParameter("facebook"));
-            user.setTwitter(req.getParameter("twitter"));
+                obj=  UserManager.getUser(login);
 
-            userManager.insertUser(user);*/
+            }
+            resp.setContentType("application/json");
+            PrintWriter out = resp.getWriter();
+            out.print(obj);
+            out.flush();
 
         } catch(Exception e){
             System.err.println("user not inserted");
