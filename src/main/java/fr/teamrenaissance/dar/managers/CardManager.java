@@ -2,12 +2,16 @@ package fr.teamrenaissance.dar.managers;
 
 import fr.teamrenaissance.dar.entities.Card;
 import fr.teamrenaissance.dar.entities.Loan;
+import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.query.Query;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -121,5 +125,48 @@ public class CardManager {
         session.close();
         return  obj;
 
+    }
+
+
+    public static Card getCard(int cardID){
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Card card = null;
+        Transaction tx = null;
+        try {
+            tx = session.beginTransaction();
+            card = session.get(Card.class, cardID);
+            Hibernate.initialize(card);
+            tx.commit();
+        } catch (Exception e) {
+            if (tx != null) tx.rollback();
+            throw e;
+        } finally {
+            session.close();
+        }
+        return card;
+    }
+
+    public static Card getCardByName(String name){
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Card card = null;
+        Transaction tx = null;
+        try {
+            tx = session.beginTransaction();
+            CriteriaQuery cq = session.getCriteriaBuilder().createQuery(Card.class);
+            cq.from(Card.class);
+            List<Card> cardList = session.createQuery(cq).getResultList();
+            for(Card c : cardList){
+                if(c.getName().equals(name)){
+                    card = c;
+                }
+            }
+            tx.commit();
+        } catch (Exception e) {
+            if (tx != null) tx.rollback();
+            throw e;
+        } finally {
+            session.close();
+        }
+        return card;
     }
 }

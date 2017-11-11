@@ -288,7 +288,7 @@ to remove ???
     }
 /////////////////////////////////jeanne ///////////////
 
-    public void insertUser(User user) throws Exception {
+    public static void insertUser(User user) throws Exception {
 
         Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction tx = null;
@@ -305,7 +305,7 @@ to remove ???
         }
     }
 /* getUser by ID*/
-    public User getUser(int userID){
+    public static User getUser(int userID){
         Session session = HibernateUtil.getSessionFactory().openSession();
         User user = null;
         Transaction tx = null;
@@ -323,7 +323,7 @@ to remove ???
         return user;
     }
 
-    public User getUserByEmail(String email){
+    public static User getUserByEmail(String email){
         Session session = HibernateUtil.getSessionFactory().openSession();
         User user = null;
         Transaction tx = null;

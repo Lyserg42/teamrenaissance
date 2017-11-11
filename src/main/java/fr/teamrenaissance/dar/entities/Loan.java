@@ -26,6 +26,14 @@ public class Loan {
         this.done = done;
     }
 
+    public Loan(Tournament tournament, Card card, User borrower) {
+        this.tournament = tournament;
+        this.card = card;
+        this.borrower = borrower;
+        this.returned = false;
+        this.done = false;
+    }
+
     public Loan(){}
 
     @Id

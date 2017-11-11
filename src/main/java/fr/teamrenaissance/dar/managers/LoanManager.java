@@ -2,6 +2,7 @@ package fr.teamrenaissance.dar.managers;
 
 import fr.teamrenaissance.dar.entities.Card;
 import fr.teamrenaissance.dar.entities.Loan;
+import fr.teamrenaissance.dar.entities.Tournament;
 import fr.teamrenaissance.dar.entities.User;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -17,14 +18,42 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class LoanManager {
-/*
-    public void createAndInsertLoan(JSONObject loan){
+
+    /************** POST ******************/
+
+    public static void insertLoans(List<Loan> newLoans) throws JSONException {
+        /*
+        //get the JSON information
+        Tournament tournament = TournamentManager.getTournament(newLoanJson.getInt("tId"));
+        User user = UserManager.getUser(newLoanJson.getInt("uId"));
+        JSONArray cardsArray = newLoanJson.getJSONArray("cards");
+        HashMap<Card, Integer> cardsMap = new HashMap<>();
+        for(int i = 0; i < cardsArray.length(); i++) {
+            JSONObject cardJson = (JSONObject) cardsArray.get(i);
+            Card card = CardManager.getCard(cardJson.getInt("cId"));
+            cardsMap.put(card, cardJson.getInt("qty"));
+        }
+*/
+        //begin the transaction for all the insertions (if one insertion fails, there are all canceled)
         Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction tx = null;
         try {
             tx = session.beginTransaction();
-            session.save(user);
-            session.flush();
+            for(Loan loan : newLoans){
+                session.save(loan);
+                session.flush();
+            }
+            /*
+            for(Card c : cardsMap.keySet()){
+                //loop over the quantity
+                for(int i = 0; i < cardsMap.get(c); i++) {
+                    //creation of a new loan
+                    Loan loan = new Loan(tournament, c, user);
+                    //insertion of the loan in database
+                    session.save(loan);
+                    session.flush();
+                }
+            }*/
             tx.commit();
         } catch (Exception e) {
             if (tx != null) tx.rollback();
@@ -33,8 +62,9 @@ public class LoanManager {
             session.close();
         }
     }
-*/
 
+
+    /************** GET ******************/
 
     /**
      * Returns the JSON array containing the cards lent by a user for a given tournament.
@@ -42,7 +72,7 @@ public class LoanManager {
      * @param tournamentID the ID of the tournament where the cards are lent
      * @throws JSONException
      */
-    public JSONArray getLentCardsJson(Integer userID, Integer tournamentID) throws JSONException {
+    public static JSONArray getLentCardsJson(Integer userID, Integer tournamentID) throws JSONException {
         Session session = HibernateUtil.getSessionFactory().openSession();
 
         Transaction tx = null;
@@ -66,7 +96,7 @@ public class LoanManager {
 
             tx.commit();
 
-            return this.transformToJsonArray(result);
+            return transformToJsonArray(result);
 
         } catch (JSONException e){
             throw e;
@@ -85,7 +115,7 @@ public class LoanManager {
      * @param tournamentID the ID of the tournament where the cards are lent
      * @throws JSONException
      */
-    public JSONArray getBorrowedCardsJson(Integer userID, Integer tournamentID) throws JSONException {
+    public static JSONArray getBorrowedCardsJson(Integer userID, Integer tournamentID) throws JSONException {
         Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction tx = null;
         try {
@@ -108,7 +138,7 @@ public class LoanManager {
 
             tx.commit();
 
-            return this.transformToJsonArray(result);
+            return transformToJsonArray(result);
 
         } catch (JSONException e){
             throw e;
@@ -120,7 +150,7 @@ public class LoanManager {
         }
     }
 
-    private JSONArray transformToJsonArray(List<Object[]> queryResult) throws JSONException{
+    private static JSONArray transformToJsonArray(List<Object[]> queryResult) throws JSONException{
         //make a map from the result
         Map<User, List<Object[]>> resultMap =
                 queryResult.stream().collect(
@@ -160,7 +190,7 @@ public class LoanManager {
      * @param tournamentID the ID of the tournament where the cards are lent
      * @throws JSONException
      */
-    public JSONArray getDemandsJson(Integer userID, Integer tournamentID) throws JSONException {
+    public static JSONArray getDemandsJson(Integer userID, Integer tournamentID) throws JSONException {
         Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction tx = null;
         try {

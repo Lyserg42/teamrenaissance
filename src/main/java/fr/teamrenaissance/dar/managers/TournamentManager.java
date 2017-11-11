@@ -14,7 +14,7 @@ import java.util.List;
 
 public class TournamentManager {
 
-    public Tournament getTournament(int tournamentID){
+    public static Tournament getTournament(int tournamentID){
         Session session = HibernateUtil.getSessionFactory().openSession();
         Tournament tournament = null;
         Transaction tx = null;
@@ -35,7 +35,7 @@ public class TournamentManager {
     /**
      * Returns all the Tournaments in chronological order, from the newest to the oldest.
      */
-    public List<Tournament> getAllTournaments(){
+    public static  List<Tournament> getAllTournaments(){
         Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction tx = null;
         try {
