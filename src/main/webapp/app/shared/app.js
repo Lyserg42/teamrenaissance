@@ -17,6 +17,10 @@ app.config(function($routeProvider){
 			templateUrl : "app/components/profil/profil.html",
 			controller : "profilCtrl"
 		})
+		.when("/modifierprofil", {
+			templateUrl : "app/components/modifierProfil/modifierProfil.html",
+			controller : "modifierProfilCtrl"
+		})
 		.when("/connexion", {
 			templateUrl : "app/components/connexion/connexion.html",
 			controller : "connexionCtrl"

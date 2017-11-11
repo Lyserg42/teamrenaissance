@@ -1,4 +1,9 @@
 <div class="container">
+	<!--Confirmation de pret, hidden par default -->
+	<div class="alert alert-success" ng-hide="hideCodeRetour">
+	  <button type="button" class="close" ng-click="fermerConfirmation()">&times;</button>
+	  Code : {{retourServeur}}
+	</div>
 	<form>
 		<select ng-model="selectedTournament" ng-options="t.tName for t in tournaments"></select>
 		<span ng-show="tournoiNonSelectionne">Merci de s&eacute;lectionner un tournoi.</span>
@@ -10,10 +15,10 @@
 		Carte : <input type="text" ng-model="nameAjoutCarte" ng-keyup="suggestCardName()" /> 
 		<br/>
 		<button type="button" class="btn btn-primary" ng-click="ajouterCarte()">
-								Ajouter carte
+			Ajouter carte
 		</button>
 		<button type="submit" class="btn btn-primary" ng-click="envoyerDemande()">
-								Valider demande
+			Valider demande
 		</button>
 	</form>
 </div>

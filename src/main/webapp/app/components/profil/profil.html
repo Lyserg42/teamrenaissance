@@ -1,4 +1,8 @@
+
 <div class="container">
+	<div>
+		<a href="#!profil?uName=vansiri" class="nav-link active">Autre Profil</a>
+	</div>
 	<div>
 		<h1>{{profil.uName}}</h1>
 		<img src="{{profil.avatar}}"></img>
@@ -11,11 +15,14 @@
 		<div>Email : {{profil.email}}</div>
 		<a href="{{profil.facebook}}" ng-hide="profil.facebook === ''"><img src="../../../assets/icons/facebook.svg" height="32px"></img></a>
 		<a href="{{profil.twitter}}" ng-hide="profil.twitter === ''"><img src="../../../assets/icons/twitter.svg" height="32px"></img></a>
-		<button>Modifier Profil</button>
+		<a href="#!modifierprofil" ng-hide=""><button>Modifier Profil</button></a>
 	</div>
-	<div>
-		<iframe width="600" height="450" frameborder="0" style="border:0" src="{{map}}"></iframe>
+	<div><!--
+		<div my-map=""></div>
+		<iframe width="600" height="450" frameborder="0" style="border:0" src="{{map}}"></iframe> -->
 		 <!-- src="https://www.google.com/maps/embed/v1/place?key=AIzaSyD91MpqapwxhA44W0VvxzNTqmfohKGDraI&amp;q=36 Avenue du President+Wilson+Cachan" allowfullscreen> -->
-		<!-- '+profil.adresse+'+'+profil.ville -->
+		<!-- '+profil.adresse+'+'+profil.ville 
+	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD91MpqapwxhA44W0VvxzNTqmfohKGDraI&callback=window.initMap()"  async defer></script>-->
+		<!-- {{profil.adresse}} -->
 	</div>
 </div>

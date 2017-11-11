@@ -1,0 +1,48 @@
+
+<div class="container">
+	<div>
+		<h1>{{profil.uName}}</h1>
+		<img src="{{avatar}}"></img>
+		<form>
+			<div>Prenom : <input type="text" ng-model="profil.firstName"></div>
+			<div>Nom : <input type="text" ng-model="profil.lastName"></div>
+			<div>T&eacute;l&eacute;phone : <input type="text" ng-model="profil.telephone"></div>
+			<div>DCI : <input type="text" ng-model="profil.DCI"></div>
+			<div>Adresse : <input type="text" ng-model="profil.adresse"></div>
+			<div>Code Postal : <input type="text" ng-model="profil.codePostal"></div>
+			<div>Ville : <input type="text" ng-model="profil.ville"></div>
+			<div>Email : <input type="email" ng-model="profil.email"></div>
+			<div><img src="../../../assets/icons/facebook.svg" height="32px"></img><input type="text" ng-model="profil.facebook"></div>
+			<div><img src="../../../assets/icons/twitter.svg" height="32px"></img><input type="text" ng-model="profil.twitter"></div>
+			<div>Avatar : <input type="text" ng-model="profil.avatar"></div>
+			<div>Nouveau mot de passe : <input type="password" ng-model="profil.newPassword"></div>
+			<div>Confirmer  : <input type="password"></div>
+		
+		<button type="submit" data-toggle="modal" data-target="#verifPassword">Valider changements</button>
+		<a href="#!profil"><button>Annuler</button></a>
+	</form>
+	</div>
+
+	<!-- Modal de verification du password -->
+	<div class="modal fade" id="verifPassword" show>
+	  <div class="modal-dialog">
+	    <div class="modal-content">
+
+	      <div class="modal-header">
+	        <h4 class="modal-title">Mot de passe actuel</h4>
+	        <button type="button" class="close" data-dismiss="modal">&times;</button>
+	      </div>
+	      <form>
+		      <div class="modal-body">
+			        <div><input type="password" ng-model="profil.password" required></div>
+		      </div>
+
+		      <div class="modal-footer">
+		      	<button type="button" class="btn btn-danger" data-dismiss="modal">Annuler</button>
+		        <button type="submit" class="btn btn-success" ng-click="envoiModifs()">Confirmer</button>
+		      </div>
+	  		</form>
+	    </div>
+	  </div>
+	</div>
+</div>
