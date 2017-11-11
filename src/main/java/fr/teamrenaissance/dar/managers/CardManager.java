@@ -6,6 +6,7 @@ import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -19,76 +20,96 @@ public class CardManager {
 
     //Sarra
 
-    public JSONObject searchCardbyId(int idCard) {
-        Session session = HibernateUtil.getSessionFactory().openSession();
-        Transaction tx = session.beginTransaction();
-        JSONObject obj = new JSONObject();
-        CriteriaQuery cq = session.getCriteriaBuilder().createQuery(Card.class);
-        cq.from(Card.class);
-        Card ca = null;
-        List<Card> cardList = session.createQuery(cq).getResultList();
-        for (Card c : cardList) {
-            if (c.getCardID() == idCard) {
-                ca = c;
-                break;
-            }
-        }
-        if (ca == null) {
+
+    /**
+     * Return JSONObject contains 2 array: succes array for cards existing in DB and
+     *failed array for cards not existing in BD
+     *@param cardsList the array contains cards that user is looking for
+     */
+    public static JSONObject searchCards(JSONArray cardsList){
+        JSONObject res = new JSONObject();
+        JSONArray succes = new JSONArray();
+        JSONArray failed = new JSONArray();
+        for(int i =0; i < cardsList.length();i++){
             try {
-                obj.put(Integer.toString(idCard), "not exist");
-            } catch (JSONException e) {
-                e.printStackTrace();
+                Card c = getCardByName(cardsList.getString(i));
+                if( c == null){
+                    failed.put(cardsList.getString(i));
+                }
+                else{
+                   succes.put(cardsList.getString(i));
+                }
+            }catch (Exception e){
+
             }
-        } else {
-            try {
-                obj.put(Integer.toString(idCard), ca);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+
         }
-        tx.commit();
-        session.close();
+        try {
+            res.put("succes", succes);
+            res.put("failed",failed);
+        }catch(Exception e){
+
+        }
+        return  res;
+    }
+
+    /**
+     *
+     * @param name the name of the card
+     * @return a JSONObject contains result of the research
+     */
+    public static JSONObject searchCardbyName(String name) {
+       Card c = getCardByName(name);
+       JSONObject obj = new JSONObject();
+       if(c == null){
+           try {
+               obj.put("searcheCardFailed", name);
+           }catch (Exception e){
+
+           }
+       }
+       try {
+           obj.put("name", c.getName());
+           obj.put("picture",c.getPicture());
+           obj.put("legacyLegal",c.getIsLegacyLegal());
+           obj.put("modernLega",c.getIsModernLegal());
+           obj.put("standard legal",c.getIsStandardLegal());
+
+       }catch (Exception e){
+
+       }
         return obj;
 
     }
 
-    public JSONObject searchCardbyName(String name) {
+
+    public static Card getCardByName(String name){
         Session session = HibernateUtil.getSessionFactory().openSession();
-        Transaction tx = session.beginTransaction();
-        JSONObject obj = new JSONObject();
-        CriteriaQuery cq = session.getCriteriaBuilder().createQuery(Card.class);
-        cq.from(Card.class);
-        Card ca = null;
-        List<Card> cardList = session.createQuery(cq).getResultList();
-        for (Card c : cardList) {
-            if (c.getName().equals(name)) {
-                ca = c;
-                break;
+        Card card = null;
+        Transaction tx = null;
+        try {
+            tx = session.beginTransaction();
+            CriteriaQuery cq = session.getCriteriaBuilder().createQuery(Card.class);
+            cq.from(Card.class);
+            List<Card> cardList = session.createQuery(cq).getResultList();
+            for(Card c : cardList){
+                if(c.getName().equals(name)){
+                    card = c;
+                }
             }
+            tx.commit();
+        } catch (Exception e) {
+            if (tx != null) tx.rollback();
+            throw e;
+        } finally {
+            session.close();
         }
-        if (ca == null) {
-            try {
-                obj.put(name, "not exist");
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        } else {
-            try {
-                obj.put(name, ca);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-        tx.commit();
-        session.close();
-        return obj;
-
+        return card;
     }
-
-
-
+ /**** method not use **/
 
     // ask several cards
+    // to remove ?
 
     public JSONObject askSeveralCard(String cardsAsk){
         String[] cardsName = cardsAsk.split("\n");
@@ -128,7 +149,9 @@ public class CardManager {
     }
 
 
-    public static Card getCard(int cardID){
+    /* only use in this classe */
+    /* not use here to remove ?*/
+    private static Card getCard(int cardID){
         Session session = HibernateUtil.getSessionFactory().openSession();
         Card card = null;
         Transaction tx = null;
@@ -146,27 +169,38 @@ public class CardManager {
         return card;
     }
 
-    public static Card getCardByName(String name){
+    public JSONObject searchCardbyId(int idCard) {
         Session session = HibernateUtil.getSessionFactory().openSession();
-        Card card = null;
-        Transaction tx = null;
-        try {
-            tx = session.beginTransaction();
-            CriteriaQuery cq = session.getCriteriaBuilder().createQuery(Card.class);
-            cq.from(Card.class);
-            List<Card> cardList = session.createQuery(cq).getResultList();
-            for(Card c : cardList){
-                if(c.getName().equals(name)){
-                    card = c;
-                }
+        Transaction tx = session.beginTransaction();
+        JSONObject obj = new JSONObject();
+        CriteriaQuery cq = session.getCriteriaBuilder().createQuery(Card.class);
+        cq.from(Card.class);
+        Card ca = null;
+        List<Card> cardList = session.createQuery(cq).getResultList();
+        for (Card c : cardList) {
+            if (c.getCardID() == idCard) {
+                ca = c;
+                break;
             }
-            tx.commit();
-        } catch (Exception e) {
-            if (tx != null) tx.rollback();
-            throw e;
-        } finally {
-            session.close();
         }
-        return card;
+        if (ca == null) {
+            try {
+                obj.put(Integer.toString(idCard), "not exist");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        } else {
+            try {
+                obj.put(Integer.toString(idCard), ca);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        tx.commit();
+        session.close();
+        return obj;
+
     }
+
+
 }

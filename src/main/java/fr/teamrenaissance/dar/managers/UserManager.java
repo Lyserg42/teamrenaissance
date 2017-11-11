@@ -8,7 +8,6 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -22,41 +21,52 @@ import java.util.List;
 public class UserManager {
 
     ////sarra////
+
+    /* new inscription
+     check password, login, field, phone number, email, and create a new user in DB
+    return a JSONObject contains result
+    if the creation is successful return user's data
+    */
     public static JSONObject newUser(String name, String firstname, String mail, String username,
-                          String password, String adress, String avatar, String dciNumber,
-                           String phoneNumber, String fb, String tw) throws Exception{
+                                     String password, String adress, String avatar, String dciNumber,
+                                     String phoneNumber, String fb, String tw) throws Exception {
         JSONObject obj = new JSONObject();
-        if(!isValideLogin(username)){
-            obj.put("newuser","login already exist");
-        }else {
+        if (!isValideLogin(username)) {
+            obj.put("newuser", "login already exist");
+        } else {
             if (!passwordSolid(password)) {
                 obj.put("newuser", "password not respect");
             } else {
-                if (!isEnteredField(name, firstname, username, password, phoneNumber)) {
+                if (!isEnteredField(name, firstname, username, mail, adress,
+                        password, phoneNumber)) {
                     obj.put("newuser", "mandatory fields are not entered");
                 } else {
                     if (!isValidPhone(phoneNumber)) {
                         obj.put("newuser", "phone number not valid");
                     } else {
-                        Session session = HibernateUtil.getSessionFactory().openSession();
-                        Transaction tx = session.beginTransaction();
-                        User u = new User();
-                        u.setAddress(adress);
-                        u.setAvatar(avatar);
-                        u.setName(name);
-                        u.setFirstname(firstname);
-                        u.setEmail(mail);
-                        u.setUsername(username);
-                        u.setPassword(password);
-                        u.setDciNumber(dciNumber);
-                        u.setPhoneNumber(phoneNumber);
-                        u.setFacebook(fb);
-                        u.setTwitter(tw);
-                        session.save(u);
-                        session.flush();
-                        tx.commit();
-                        session.close();
-                        obj.put("newuser", "succes");
+                        if (!isValideEmail(mail)) {
+                            obj.put("newuser", "mail not valid");
+                        } else {
+                            Session session = HibernateUtil.getSessionFactory().openSession();
+                            Transaction tx = session.beginTransaction();
+                            User u = new User();
+                            u.setAddress(adress);
+                            u.setAvatar(avatar);
+                            u.setName(name);
+                            u.setFirstname(firstname);
+                            u.setEmail(mail);
+                            u.setUsername(username);
+                            u.setPassword(password);
+                            u.setDciNumber(dciNumber);
+                            u.setPhoneNumber(phoneNumber);
+                            u.setFacebook(fb);
+                            u.setTwitter(tw);
+                            session.save(u);
+                            session.flush();
+                            tx.commit();
+                            session.close();
+                            obj.put("newuser", "succes");
+                        }
                     }
                 }
             }
@@ -65,57 +75,26 @@ public class UserManager {
 
     }
 
-/*
-return JsonObject contains userId and list of his cards ask and not yet received
-to remove ???
- */
-    public JSONObject askCards(int userId){
-        SessionFactory sessFact = HibernateUtil.getSessionFactory();
-        Session sess = sessFact.openSession();
-        Transaction tr = sess.beginTransaction();
-        CriteriaQuery cq = sess.getCriteriaBuilder().createQuery(Loan.class);
-        cq.from(Loan.class);
-        JSONObject obj = new JSONObject();
-        Collection<Card> cards = new ArrayList<>();
-        try {
-            obj.put("userId",userId);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        List<Loan> loanList = sess.createQuery(cq).getResultList();
-        for(Loan l: loanList){
-            if(l.getBorrower().getUserID() == userId && l.getLender()== null){
-                cards.add(l.getCard());
-            }
-        }
-        try {
-            obj.put("ask Cards",cards);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        sess.flush();
-        tr.commit();
-        sess.close();
-        return obj;
 
-    }
 
 
     /*
-    return a jsonObject contains User's data
+    Connecte a user
+    check login and password and
+    return a jsonObject contains the data of the user connect
     uses the getUserByLogin function
      */
-    public static JSONObject connectionUser(String login, String pass){
+    public static JSONObject connectionUser(String login, String pass) {
         JSONObject obj = new JSONObject();
         User u = getUserByLogin(login);
         JSONObject obju = new JSONObject();
-        if(u == null){
+        if (u == null) {
             try {
-                obju.put("userFailedConnection","user not registered");
+                obju.put("userFailedConnection", "user not registered");
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-        }else {
+        } else {
             if (!u.getPassword().equals(pass)) {
                 try {
                     obju.put("userFailedConnection", "invalid password");
@@ -142,19 +121,21 @@ to remove ???
         }
         return obju;
     }
-    /* return user's data from login*/
 
-    public static JSONObject getUser(String login){
+    /* See a user's profile
+    return user's data from login*/
+
+    public static JSONObject getUser(String login) {
         JSONObject obj = new JSONObject();
         User u = getUserByLogin(login);
         JSONObject obju = new JSONObject();
-        if(u == null){
+        if (u == null) {
             try {
-                obju.put("getUserFailed","user not registered");
+                obju.put("getUserFailed", "user not registered");
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-        }else {
+        } else {
 
             try {
                 obj.put("name", u.getName());
@@ -167,13 +148,112 @@ to remove ???
                 obj.put("twitter", u.getTwitter());
                 obj.put("login", u.getUsername());
                 obju.put("getUserSucces", obj);
-            }catch (JSONException e) {
+            } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
         return obju;
 
     }
+
+    /* set profil of username :
+     set data's user in DB*/
+    public static JSONObject setUserProfil(String name, String firstname,
+                                           String mail, String username,
+                                           String password, String adress,
+                                           String avatar, String dciNumber,
+                                           String phoneNumber, String fb,
+                                           String tw) throws Exception {
+        JSONObject obj = new JSONObject();
+        JSONObject newUserProfil = new JSONObject();
+        if (!passwordSolid(password)) {
+            obj.put("setProfilFailed", "password not valide");
+            return obj;
+        }
+        if (!isEnteredField(name, firstname, username, mail, adress, password, phoneNumber)) {
+            obj.put("setProfilFailed", "mandatory fields are not entered");
+            return obj;
+        }
+
+        User u = getUserByLogin(username);
+
+
+        SessionFactory sessFact = HibernateUtil.getSessionFactory();
+        Session sess = sessFact.openSession();
+        Transaction tx = sess.beginTransaction();
+       // sess.evict(u);
+
+
+        if (u == null) {
+            obj.put("setUserProfil", "user not exist");
+            return obj;
+        }
+
+        newUserProfil.put("name",name);
+        u.setFirstname(firstname);
+        newUserProfil.put("firstname",firstname);
+        u.setEmail(mail);
+        newUserProfil.put("email",mail);
+        u.setPassword(password);
+        u.setAddress(adress);
+        newUserProfil.put("address",adress);
+        u.setAvatar(avatar);
+        newUserProfil.put("avatar",avatar);
+        u.setDciNumber(dciNumber);
+        newUserProfil.put("dciNumber",dciNumber);
+        u.setPhoneNumber(phoneNumber);
+        newUserProfil.put("phoneNumber",phoneNumber);
+        u.setFacebook(fb);
+        newUserProfil.put("facebook",fb);
+        u.setTwitter(tw);
+        newUserProfil.put("twitter",tw);
+        newUserProfil.put("username",username);
+        sess.update(u);
+        tx.commit();
+
+        obj.put("setUserProfilSucces",newUserProfil);
+        return  obj;
+
+
+    }
+
+    /*
+    return JsonObject contains userId and list of his cards ask and not yet received
+    not use so to remove ???
+     */
+    public JSONObject askCards(int userId) {
+        SessionFactory sessFact = HibernateUtil.getSessionFactory();
+        Session sess = sessFact.openSession();
+        Transaction tr = sess.beginTransaction();
+        CriteriaQuery cq = sess.getCriteriaBuilder().createQuery(Loan.class);
+        cq.from(Loan.class);
+        JSONObject obj = new JSONObject();
+        Collection<Card> cards = new ArrayList<>();
+        try {
+            obj.put("userId", userId);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        List<Loan> loanList = sess.createQuery(cq).getResultList();
+        for (Loan l : loanList) {
+            if (l.getBorrower().getUserID() == userId && l.getLender() == null) {
+                cards.add(l.getCard());
+            }
+        }
+        try {
+            obj.put("ask Cards", cards);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        sess.flush();
+        tr.commit();
+        sess.close();
+        return obj;
+
+    }
+
+
+    /**** private classes *****/
 
     /* test if the email respect email format */
     private static boolean isValideEmail(String email) {
@@ -188,7 +268,7 @@ to remove ???
     }
 
 
-/* check  phoneNumber */
+    /* check  phoneNumber not contains characters */
     private static boolean isValidPhone(String phoneNumber){
         boolean res = true;
         try {
@@ -199,9 +279,9 @@ to remove ???
         return  res;
     }
 
-/*
- check if login is not use
- */
+    /*
+    check if login is  use
+    */
     private static boolean isValideLogin(String login){
         Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction tx = session.beginTransaction();
@@ -219,8 +299,8 @@ to remove ???
         return result;
 
     }
-/* test if a string contains a number
-* */
+    /* test if string s contains a number
+    */
     private static boolean containNumber(String s){
         char[] c = s.toCharArray();
         for(char i:c){
@@ -232,7 +312,7 @@ to remove ???
 
     }
 
-    /*test if a string contains a uppercase char*/
+    /*test if string s contains a uppercase char*/
 
     private static boolean containUppercase(String s){
         char[] c = s.toCharArray();
@@ -244,7 +324,7 @@ to remove ???
         return false;
     }
 
-    /* test if password is solid*/
+    /* test if password pssw is solid*/
     private static boolean passwordSolid(String pssw){
 
         return ((pssw.length()>=8) && containNumber(pssw) && containUppercase(pssw));
@@ -252,16 +332,17 @@ to remove ???
 
     /*test if mandatory fields are entered*/
     private static boolean isEnteredField(String name,
-                                          String lastName,String userName,
+                                          String firstName,String userName,
+                                          String email, String address,
                                           String password, String phoneNumber){
-    if(name.equals("") ||  lastName.equals("") || userName.equals("")
-            || password.equals("") || phoneNumber.equals("")){
+    if(name.equals("") ||  firstName.equals("") || userName.equals("")
+          ||email.equals("")|| address.equals("")  || password.equals("") || phoneNumber.equals("")){
             return false;
         }
         return true;
     }
 
-    /*getUser by login*/
+    /*get user from DB by login*/
 
     private static User getUserByLogin(String loginUser){
         Session session = HibernateUtil.getSessionFactory().openSession();
@@ -278,6 +359,7 @@ to remove ???
               }
           }
             tx.commit();
+
         } catch (Exception e) {
             if (tx != null) tx.rollback();
             throw e;
