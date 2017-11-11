@@ -169,4 +169,20 @@ public class CardManager {
         }
         return card;
     }
+
+    public static void insertCard(Card card){
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = null;
+        try {
+            tx = session.beginTransaction();
+            session.save(card);
+            session.flush();
+            tx.commit();
+        } catch (Exception e) {
+            if (tx != null) tx.rollback();
+            //throw e;
+        } finally {
+            session.close();
+        }
+    }
 }

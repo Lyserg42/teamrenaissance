@@ -22,18 +22,6 @@ public class LoanManager {
     /************** POST ******************/
 
     public static void insertLoans(List<Loan> newLoans) throws JSONException {
-        /*
-        //get the JSON information
-        Tournament tournament = TournamentManager.getTournament(newLoanJson.getInt("tId"));
-        User user = UserManager.getUser(newLoanJson.getInt("uId"));
-        JSONArray cardsArray = newLoanJson.getJSONArray("cards");
-        HashMap<Card, Integer> cardsMap = new HashMap<>();
-        for(int i = 0; i < cardsArray.length(); i++) {
-            JSONObject cardJson = (JSONObject) cardsArray.get(i);
-            Card card = CardManager.getCard(cardJson.getInt("cId"));
-            cardsMap.put(card, cardJson.getInt("qty"));
-        }
-*/
         //begin the transaction for all the insertions (if one insertion fails, there are all canceled)
         Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction tx = null;
@@ -43,17 +31,6 @@ public class LoanManager {
                 session.save(loan);
                 session.flush();
             }
-            /*
-            for(Card c : cardsMap.keySet()){
-                //loop over the quantity
-                for(int i = 0; i < cardsMap.get(c); i++) {
-                    //creation of a new loan
-                    Loan loan = new Loan(tournament, c, user);
-                    //insertion of the loan in database
-                    session.save(loan);
-                    session.flush();
-                }
-            }*/
             tx.commit();
         } catch (Exception e) {
             if (tx != null) tx.rollback();
