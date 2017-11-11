@@ -1,5 +1,7 @@
 package fr.teamrenaissance.dar.entities;
 import org.hibernate.annotations.GenericGenerator;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -98,6 +100,16 @@ public class Tournament {
             return this.tournamentID == ((Tournament) obj).tournamentID;
         }
         return false;
+    }
+
+    @Transient
+    public JSONObject getJSONObject() throws JSONException {
+        JSONObject tournament = new JSONObject();
+        tournament.put("tName", this.getName());
+        tournament.put("date", date);
+        tournament.put("format", format);
+        tournament.put("tId", tournamentID);
+        return tournament;
     }
 }
 

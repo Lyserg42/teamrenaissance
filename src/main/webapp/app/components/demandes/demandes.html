@@ -22,7 +22,7 @@
 			<div class="row">
 				<div class="col-sm-9">
 					<div  class="card-body">
-						<p><h4>{{d.uName}}</h4></p>
+						<p><h4><a href="#!profil?uName={{d.uName}}" class="nav-link active">{{d.uName}}</a></h4></p>
 						<p>
 							<div ng-repeat="c in d.cards">
 								<span ng-mouseenter="updateImg($parent.$parent.$index, $parent.$index, c.img)">

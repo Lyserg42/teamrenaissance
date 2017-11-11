@@ -1,11 +1,7 @@
 app.controller('emprunterCtrl', function($scope, $http) {
 
-    $http.get("app/components/emprunter/tournaments.json").then(function(response){
+    $http.get("/tournament").then(function(response){
         $scope.tournaments = response.data.tournaments;
-    });
-
-    $http.get("app/components/emprunter/cards.json").then(function(response){
-        $scope.cards = response.data.cardNames;
     });
 
     $scope.hideCodeRetour = true;
