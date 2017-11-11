@@ -77,6 +77,7 @@ public class LoanServlet extends HttpServlet {
 
         } catch (JSONException e) {
             e.printStackTrace();
+            resp.sendError(HttpServletResponse.	SC_INTERNAL_SERVER_ERROR , e.getMessage());
         }
     }
 
@@ -111,7 +112,7 @@ public class LoanServlet extends HttpServlet {
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
         } catch (Exception e){
             e.printStackTrace();
-            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
+            resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
         }
     }
 

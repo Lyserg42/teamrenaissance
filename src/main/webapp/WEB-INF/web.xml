@@ -20,6 +20,11 @@
     <servlet-class>fr.teamrenaissance.dar.servlets.LoanServlet</servlet-class>
   </servlet>
 
+  <servlet>
+    <servlet-name>TournamentServlet</servlet-name>
+    <servlet-class>fr.teamrenaissance.dar.servlets.TournamentServlet</servlet-class>
+  </servlet>
+
 
   <servlet-mapping>
     <servlet-name>CardServlet</servlet-name>
@@ -34,6 +39,11 @@
   <servlet-mapping>
     <servlet-name>LoanServlet</servlet-name>
     <url-pattern>/loan</url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name>TournamentServlet</servlet-name>
+    <url-pattern>/tournament</url-pattern>
   </servlet-mapping>
 
 </web-app>

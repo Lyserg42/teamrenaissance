@@ -1,6 +1,5 @@
 package fr.teamrenaissance.dar.managers;
 
-import fr.teamrenaissance.dar.entities.Loan;
 import fr.teamrenaissance.dar.entities.Tournament;
 import org.hibernate.Hibernate;
 import org.hibernate.Session;
