@@ -54,7 +54,7 @@ public class CardManager {
     }
 
     /**
-     *
+     *use for search one card
      * @param name the name of the card
      * @return a JSONObject contains result of the research
      */

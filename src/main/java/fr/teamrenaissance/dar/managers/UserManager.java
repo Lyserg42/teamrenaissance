@@ -1,5 +1,6 @@
 package fr.teamrenaissance.dar.managers;
 
+import com.google.common.hash.Hashing;
 import fr.teamrenaissance.dar.entities.Card;
 import fr.teamrenaissance.dar.entities.Loan;
 import fr.teamrenaissance.dar.entities.User;
@@ -14,6 +15,7 @@ import org.json.JSONObject;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.persistence.criteria.CriteriaQuery;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -49,6 +51,7 @@ public class UserManager {
                         } else {
                             Session session = HibernateUtil.getSessionFactory().openSession();
                             Transaction tx = session.beginTransaction();
+                            String passwordHash256 = hash256(password);
                             User u = new User();
                             u.setAddress(adress);
                             u.setAvatar(avatar);
@@ -56,7 +59,7 @@ public class UserManager {
                             u.setFirstname(firstname);
                             u.setEmail(mail);
                             u.setUsername(username);
-                            u.setPassword(password);
+                            u.setPassword(passwordHash256);
                             u.setDciNumber(dciNumber);
                             u.setPhoneNumber(phoneNumber);
                             u.setFacebook(fb);
@@ -95,7 +98,7 @@ public class UserManager {
                 e.printStackTrace();
             }
         } else {
-            if (!u.getPassword().equals(pass)) {
+            if (!u.getPassword().equals(hash256(pass))) {
                 try {
                     obju.put("userFailedConnection", "invalid password");
                 } catch (JSONException e) {
@@ -188,13 +191,13 @@ public class UserManager {
             obj.put("setUserProfil", "user not exist");
             return obj;
         }
-
+        String passwordHash256 = hash256(password);
         newUserProfil.put("name",name);
         u.setFirstname(firstname);
         newUserProfil.put("firstname",firstname);
         u.setEmail(mail);
         newUserProfil.put("email",mail);
-        u.setPassword(password);
+        u.setPassword(passwordHash256);
         u.setAddress(adress);
         newUserProfil.put("address",adress);
         u.setAvatar(avatar);
@@ -252,6 +255,13 @@ public class UserManager {
 
     }
 
+    public static String hash256 (String passw){
+       /* String hash256hex = Hashing.sha256().
+                hashString(passw, StandardCharsets.UTF_8).toString();
+        return hash256hex;*/
+       return passw;
+
+    }
 
     /**** private classes *****/
 
@@ -368,6 +378,9 @@ public class UserManager {
         }
         return user;
     }
+
+
+
 /////////////////////////////////jeanne ///////////////
 
     public static void insertUser(User user) throws Exception {

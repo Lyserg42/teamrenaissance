@@ -16,6 +16,8 @@ import org.json.JSONObject;
 
 @WebServlet(name = "UserServlet")
 public class UserServlet extends HttpServlet {
+    private static final String USER = "user";
+    private static final String SUCCESCONNECTION ="userSuccesConnection";
 
 
     @Override
@@ -28,7 +30,7 @@ public class UserServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try{
             JSONObject obj = new JSONObject();
-            HttpSession userSession = req.getSession();
+            HttpSession userSession ;
             if(req.getParameter("typeRequest").equals("inscription")){
               /*  JSONObject newUser = ServletUtils.getJsonFromRequest(req);
                 String name = newUser.getString("name");
@@ -61,11 +63,15 @@ public class UserServlet extends HttpServlet {
             if(req.getParameter("typeRequest").equals("connection")){
                 String login = req.getParameter("login");
                 String password = req.getParameter("password");
+                userSession = req.getSession();
                 obj= UserManager.connectionUser(login,password);
-               if(obj.get("userSuccesConnection") !=null){
-                    userSession = req.getSession();
-                    userSession.setAttribute("user", obj.get("userSuccesConnection"));
-                }
+                if(obj.has(SUCCESCONNECTION)){
+
+                    userSession.setAttribute(USER, obj.get("userSuccesConnection"));
+                }else{
+                   userSession.invalidate();
+               }
+
 
             }
             if(req.getParameter("typeRequest").equals("getUser")){
@@ -89,28 +95,35 @@ public class UserServlet extends HttpServlet {
                 String dciNumber = newUserProfil.getString("dciNumber");
                 String fb = newUserProfil.getString("facebook");
                 String tw = newUserProfil.getString("twitter");*/
+                userSession = req.getSession();
                 String username =
-                        ((JSONObject) userSession.getAttribute("user")).getString("login");
-                //String username = req.getParameter("login");
-                String name = req.getParameter("name");
-                String firstname = req.getParameter("firstname");
-                String email = req.getParameter("email");
-                String password = req.getParameter("password");
-                String address = req.getParameter("address");
-                String avatar = req.getParameter("avatar");
-                String phoneNumber = req.getParameter("phoneNumber");
-                String dciNumber = req.getParameter("dciNumber");
-                String fb = req.getParameter("facebook");
-                String tw = req.getParameter("twitter");
-                obj= UserManager.setUserProfil(name,firstname,email,username,
-                        password,address,avatar,dciNumber,phoneNumber,
-                        fb,tw);
+                        ((JSONObject) userSession.getAttribute(USER)).getString("login");
+                if(username== null){
+                    obj.put("setProfilFailed","you must to be connect");
+                } else{
+
+                    //String username = req.getParameter("login");
+                    String name = req.getParameter("name");
+                    String firstname = req.getParameter("firstname");
+                    String email = req.getParameter("email");
+                    String password = req.getParameter("password");
+                    String address = req.getParameter("address");
+                    String avatar = req.getParameter("avatar");
+                    String phoneNumber = req.getParameter("phoneNumber");
+                    String dciNumber = req.getParameter("dciNumber");
+                    String fb = req.getParameter("facebook");
+                    String tw = req.getParameter("twitter");
+                    obj= UserManager.setUserProfil(name,firstname,email,username,
+                            password,address,avatar,dciNumber,phoneNumber,
+                            fb,tw);
+                }
 
 
             }
             if(req.getParameter("typeRequest").equals("deconnection")){
-                userSession.setAttribute("user",null);
-                obj.put("deconection","succes");
+                userSession = req.getSession();
+                userSession.invalidate();
+                obj.put("deconnection","succes");
             }
             resp.setContentType("application/json");
             PrintWriter out = resp.getWriter();
