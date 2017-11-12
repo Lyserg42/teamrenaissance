@@ -1,136 +1,98 @@
-<!-- <div class="container">
-    <h2>Mes prêts</h2>
-    <div ng-repeat="item in tournaments ">
-        <a href="#demo" class="btn btn-info" data-toggle="collapse">
-                {{item.tName}}
-        </a>
-        <div id="demo" class="collapse">
-            <div class = "lentCard" ng-repeat="lent in item.lentCards ">
-                lent.uName
-            </div>
-        </div>
-    </div>
-</div>
-
--->
-
-<div class="container">
+<div class="container" xmlns="http://www.w3.org/1999/html">
     <h2>Mes prêts </h2>
-    <!--<div class ="tournament" ng-repeat="item in tournaments ">
-        <button type="button" class="btn btn-info" data-toggle="collapse" data-target="#demo">
-            {{item.tName}}
-        </button>
-        <div id="demo" class="collapse in">
-            <div  ng-repeat="lent in item.lentCards" class = "lentCard" >
-                    {{lent.uName}}
-            </div>
-
-
-        </div>
-    </div>
-    -->
 
     <div class="row">
-        <div class="col-md-3">
+        <div class="col-md-4">
             <select class="form-control" ng-model="selectFiltreTournois" ng-options="t for t in selectTournament">
-                {{t}}
+                <p> {{t.tName}} </p>
             </select>
         </div>
     </div>
 
-    <!--
-    <div class="row">
-        <div class="col-md-3">
-            <select class="form-control" ng-model="selectFiltreEmpruntsPretsDemandes" ng-options="f for f in selectEmpruntsPretsDemandes">
-                {{f}}
-            </select>
-        </div>
-    </div>
-
-    -->
+    <br> </br>
 
     <div class="form-group" ng-repeat="t in tournaments | filtreTournois : selectFiltreTournois">
-        <h5> {{t.tName}} du {{t.date}} </h5>
-        <h4 class ="panel-title">
-            <a data-toggle="collapse" data-toggle="collapse" data-target="#prets{{$index}}">
-                <h5> Je prête </h5>
-            </a>
-        </h4>
+        <button class="btn btn-outline-primary" type="button" data-toggle="collapse" data-target="#collapseExample{{$index}}" title="voir mes prêts pour {{t.tName}}">
+            <h5> {{t.tName}} du {{t.date}} </h5>
+        </button>
 
-        <!--PRETS-->
-        <div id="prets{{$index}}" class="collapse show">
-            <div id="lender" ng-repeat="l in t.lentCards">
-                <div class="row">
-                    <div class="col-sm-9">
-                        <div  class="lent-body">
-                            <a type="button" data-toggle="collapse" data-target="#pret{{$parent.$index}}.{{$index}}">{{l.uName}}</a> 
+        <div id="collapseExample{{$index}}" class="collapse toggle" >
+            <h4 class="panel-title">
+                <button class="btn btn-outline-secondary" type="button" data-toggle="collapse" data-target="#prets{{$index}}" title = "voir ce que je prête">
+                    <h5> Je prête </h5>
+                </button>
+            </h4>
+
+
+            <!--PRETS-->
+            <div id="prets{{$index}}" class="collapse toggle" >
+                <div id="lender" ng-repeat="l in t.lentCards">
+                    <div class="row">
+                        <div class="col-sm-9">
+                            <a role= "button" class ="btn btn-outline-info" href="#!profil?uName={{l.uName}}">{{l.uName}}</a>
                             <!--lien vers le profil du user a ajouter-->
-                            <div id="pret{{$parent.$index}}.{{$index}}"class="collapse show">
-                                <div ng-repeat="c in l.cards" ng-bind-html-unsafe="opt.text" >
-                                    {{c.qty}} {{c.cName}} 
+                            <div id="pret{{$parent.$index}}.{{$index}}" class="collapse show">
+                                <div ng-repeat="c in l.cards">
+                                    <p> {{c.qty}} {{c.cName}} </p>
                                 </div>
                             </div>
                         </div>
                     </div>
+                    <button type="button" class="btn" data-toggle="modal" data-target="#modalLent"
+                            ng-click="orgLent($parent.$index,$index)"> Modifier
+                    </button>
+                    <br> </br>
                 </div>
             </div>
-        </div>
 
-        <!--EMPRUNTS-->
-        <h4 class ="panel-title">
-            <a data-toggle="collapse" data-target="#emprunt{{$index}}">
-                <h5> On me prête </h5>
-            </a>
-        </h4>
+            <br> </br>
 
-        <div id="emprunt{{$index}}" class="collapse show">
-            <div ng-repeat="b in t.borrowedCards">
-                <div class="row">
-                    <div class="col-sm-9">
-                        <div  class="borrow-body">
-                            <a data-toggle="collapse" data-target="#emprunt{{$parent.$index}}.{{$index}}">{{b.uName}}</a> <!--lien vers le profil du user a ajouté-->
+
+            <!--EMPRUNTS-->
+            <h4 class="panel-title">
+                <button class="btn btn-outline-secondary" type="button" data-toggle="collapse" data-target="#emprunt{{$index}}"  title = "voir ce que l'on me prête" >
+                    <h5> On me prête </h5>
+                </button>
+            </h4>
+
+            <div id="emprunt{{$index}}" class="collapse toggle">
+                <div ng-repeat="b in t.borrowedCards">
+                    <div class="row">
+                        <div class="col-sm-9">
+                            <a role= "button" class ="btn btn-outline-info" href="#!profil?uName={{b.uName}}">{{b.uName}}</a>
                             <div id="emprunt{{$parent.$index}}.{{$index}}" class="collapse show">
-                                <div ng-repeat="c in b.cards" ng-bind-html-unsafe="opt.text" >
-                                    <h6> {{c.cName}}</h6>
-
-                                    <form ng-submit ="borrowSubmit()" >
-                                        <select class="form-control" id="howMuch">
-                                            <option> {{c.qty}}</option>
-                                            <option>2</option>
-                                            <option>3</option>
-                                            <option>4</option>
-                                        </select>
-                                    <input type="submit" id="Bsubmit" value="Submit" />
-                                    </form>
-
-
+                                <div ng-repeat="c in b.cards" >
+                                    <p> {{c.qty}} {{c.cName}} </p>
                                 </div>
                             </div>
+
                         </div>
                     </div>
+                    <button type="button" class="btn" data-toggle="modal" data-target="#modalBorrow"
+                            ng-click="orgBorrow($parent.$index,$index)"> Modifier
+                    </button>
+                    <br> </br>
                 </div>
             </div>
-        </div>
+            <br> </br>
 
-        <!--NEED-->
-        <h4 class ="panel-title">
-        <a data-toggle="collapse" data-target="#need{{$index}}">
-                <h5> Ce qu'il me manque </h5>
-            </a>
-        </h4>
 
-        <div id="need{{$index}}" class="collapse show">
-            <div ng-repeat="c in t.demands">
-                    {{c.qty}} {{c.cName}} 
+            <!--NEED-->
+            <h4 class="panel-title">
+                <button class="btn btn-outline-secondary" type="button" data-toggle="collapse" data-target="#need{{$index}}"  title = "voir ce qu'il me manque">
+                    <h5> Carte(s) manquante(s) </h5>
+                </button>
+            </h4>
+
+            <div id="need{{$index}}" class="collapse toggle">
+                <div ng-repeat="c in t.demands">
+                    <p> {{c.qty}} {{c.cName}} </p>
+                </div>
+                <a role= "button" class ="btn btn-outline-info" href="#!emprunter">Ajouter</a>
+                <br> </br>
             </div>
+            <br> </br>
+
         </div>
     </div>
-
-
-
-
-
-
-
-
 </div>

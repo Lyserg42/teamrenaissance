@@ -61,6 +61,21 @@ app.controller('mesPretsController', function($scope, $http) {
     };
 
 
+
+
+    $scope.orgBorrow = function(iParent, i){
+
+
+    };
+
+
+    $scope.orgLent= function(iParent, i){
+
+
+    };
+
+
+
     /*annuler un prêt/emprunts*/
 
     /*clic sur le profil de preteur/emprunteur*/
