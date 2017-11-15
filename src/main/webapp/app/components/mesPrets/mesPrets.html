@@ -1,4 +1,4 @@
-<div class="container" xmlns="http://www.w3.org/1999/html">
+<div class="container" >
     <h2>Mes prêts </h2>
 
     <div class="row">
@@ -12,26 +12,25 @@
     <br> </br>
 
     <div class="form-group" ng-repeat="t in tournaments | filtreTournois : selectFiltreTournois">
-        <button class="btn btn-outline-primary" type="button" data-toggle="collapse" data-target="#collapseExample{{$index}}" title="voir mes prêts pour {{t.tName}}">
+        <button class="btn btn-outline-primary" type="button" ng-click="isCollapsed= !isCollapsed" title="voir mes prêts pour {{t.tName}}">
             <h5> {{t.tName}} du {{t.date}} </h5>
         </button>
 
-        <div id="collapseExample{{$index}}" class="collapse toggle" >
+        <div id="collapseExample{{$index}}" uib-collapse="isCollapsed" >
             <h4 class="panel-title">
-                <button class="btn btn-outline-secondary" type="button" data-toggle="collapse" data-target="#prets{{$index}}" title = "voir ce que je prête">
+                <button class="btn btn-outline-secondary" type="button" ng-click="isCollapsed2= !isCollapsed2" data-target="#prets{{$index}}" title = "voir ce que je prête">
                     <h5> Je prête </h5>
                 </button>
             </h4>
 
 
             <!--PRETS-->
-            <div id="prets{{$index}}" class="collapse toggle" >
+            <div id="prets{{$index}}" uib-collapse="isCollapsed2">
                 <div id="lender" ng-repeat="l in t.lentCards">
                     <div class="row">
                         <div class="col-sm-9">
                             <a role= "button" class ="btn btn-outline-info" href="#!profil?uName={{l.uName}}">{{l.uName}}</a>
-                            <!--lien vers le profil du user a ajouter-->
-                            <div id="pret{{$parent.$index}}.{{$index}}" class="collapse show">
+                            <div id="pret{{$parent.$index}}.{{$index}}">
                                 <div ng-repeat="c in l.cards">
                                     <p> {{c.qty}} {{c.cName}} </p>
                                 </div>
@@ -50,17 +49,17 @@
 
             <!--EMPRUNTS-->
             <h4 class="panel-title">
-                <button class="btn btn-outline-secondary" type="button" data-toggle="collapse" data-target="#emprunt{{$index}}"  title = "voir ce que l'on me prête" >
+                <button class="btn btn-outline-secondary" type="button" ng-click="isCollapsed3= !isCollapsed3" data-target="#emprunt{{$index}}"  title = "voir ce que l'on me prête" >
                     <h5> On me prête </h5>
                 </button>
             </h4>
 
-            <div id="emprunt{{$index}}" class="collapse toggle">
+            <div id="emprunt{{$index}}" uib-collapse="isCollapsed3">
                 <div ng-repeat="b in t.borrowedCards">
                     <div class="row">
                         <div class="col-sm-9">
                             <a role= "button" class ="btn btn-outline-info" href="#!profil?uName={{b.uName}}">{{b.uName}}</a>
-                            <div id="emprunt{{$parent.$index}}.{{$index}}" class="collapse show">
+                            <div id="emprunt{{$parent.$index}}.{{$index}}" >
                                 <div ng-repeat="c in b.cards" >
                                     <p> {{c.qty}} {{c.cName}} </p>
                                 </div>
@@ -79,12 +78,12 @@
 
             <!--NEED-->
             <h4 class="panel-title">
-                <button class="btn btn-outline-secondary" type="button" data-toggle="collapse" data-target="#need{{$index}}"  title = "voir ce qu'il me manque">
+                <button class="btn btn-outline-secondary" type="button"  ng-click="isCollapsed4= !isCollapsed4" data-target="#need{{$index}}"  title = "voir ce qu'il me manque">
                     <h5> Carte(s) manquante(s) </h5>
                 </button>
             </h4>
 
-            <div id="need{{$index}}" class="collapse toggle">
+            <div id="need{{$index}}" uib-collapse="isCollapsed4">
                 <div ng-repeat="c in t.demands">
                     <p> {{c.qty}} {{c.cName}} </p>
                 </div>
