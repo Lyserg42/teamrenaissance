@@ -1,11 +1,18 @@
 app.controller('profilCtrl', function($scope, $http, $routeParams) {
 
+	/* TODO Remplacer "Lyserg" par le nom de l'utilisateur connecte actuellement */
+	var data = {typeRequest:"getUser",
+				login:"Lyserg"};
+
 	if (typeof $routeParams.uName !== 'undefined') {
-    	$scope.param = "?uName="+$routeParams.uName;
+    	data.login = $routeParams.uName;
 	}
 
-	
+    var dataJSON = JSON.stringify(data);
 
+    console.log(data);
+
+    /* TOOD mettre /user en premier parametre et dataJSON en second parametre */
 	$http.get("app/components/profil/profil.json").then(function(response){
 
                 /* On stocke les données récupérées*/

@@ -4,26 +4,47 @@
 		<h1>{{profil.uName}}</h1>
 		<img src="{{avatar}}"></img>
 		<form>
-			<div>Prenom : <input type="text" ng-model="profil.firstName"></div>
-			<div>Nom : <input type="text" ng-model="profil.lastName"></div>
-			<div>T&eacute;l&eacute;phone : <input type="text" ng-model="profil.telephone"></div>
-			<div>DCI : <input type="text" ng-model="profil.DCI"></div>
-			<div>Adresse : <input type="text" ng-model="profil.adresse"></div>
-			<div>Code Postal : <input type="text" ng-model="profil.codePostal"></div>
-			<div>Ville : <input type="text" ng-model="profil.ville"></div>
-			<div>Email : <input type="email" ng-model="profil.email"></div>
-			<div><img src="../../../assets/icons/facebook.svg" height="32px"></img><input type="text" ng-model="profil.facebook"></div>
-			<div><img src="../../../assets/icons/twitter.svg" height="32px"></img><input type="text" ng-model="profil.twitter"></div>
-			<div>Avatar : <input type="text" ng-model="profil.avatar"></div>
-			<div>Nouveau mot de passe : <input type="password" ng-model="profil.newPassword"></div>
+			<div>Prenom : <input type="text" ng-model="profil.firstName"/></div>
+			<div>Nom : <input type="text" ng-model="profil.lastName"/></div>
+			<div>T&eacute;l&eacute;phone : <input type="text" ng-model="profil.telephone"/></div>
+			<div>DCI : <input type="text" ng-model="profil.DCI"/></div>
+			<div>Adresse : <input type="text" ng-model="profil.adresse"/></div>
+			<div>Code Postal : <input type="text" ng-model="profil.codePostal"/></div>
+			<div>Ville : <input type="text" ng-model="profil.ville"/></div>
+			<div>Email : <input type="email" ng-model="profil.email"/></div>
+			<div><img src="../../../assets/icons/facebook.svg" height="32px"></img><input type="text" ng-model="profil.facebook"/></div>
+			<div><img src="../../../assets/icons/twitter.svg" height="32px"></img><input type="text" ng-model="profil.twitter"/></div>
+			<div>Avatar : <input type="text" ng-model="profil.avatar"/></div>
+			<div>Nouveau mot de passe : <input type="password" ng-model="profil.newPassword"/></div>
 			<div>Confirmer  : <input type="password"></div>
 		
-		<button type="submit" data-toggle="modal" data-target="#verifPassword">Valider changements</button>
+		<button type="submit" ng-click="open()">Valider changements</button>
 		<a href="#!profil"><button>Annuler</button></a>
 	</form>
 	</div>
 
-	<!-- Modal de verification du password -->
+
+	<div class="myModalParent"></div>
+	<div class="modal-demo">
+	    <script type="text/ng-template" id="myModalContent.html">
+		<div>
+			<div class="modal-header">
+	            <h3 class="modal-title" id="modal-title">Entrez votre mot de passe</h3>
+	        </div>
+	        <div class="modal-body" id="modal-body">
+	           <form>
+			       <input type="password" ng-model="password"/>
+		  		</form>
+	        </div>
+	        <div class="modal-footer">
+	            <button class="btn btn-primary" type="button" ng-click="ok()">OK</button>
+	            <button class="btn btn-warning" type="button" ng-click="cancel()">Cancel</button>
+	        </div>
+	    </div>
+	    </script>
+	</div>
+
+	<!-- Modal de verification du password OLD
 	<div class="modal fade" id="verifPassword" show>
 	  <div class="modal-dialog">
 	    <div class="modal-content">
@@ -44,5 +65,5 @@
 	  		</form>
 	    </div>
 	  </div>
-	</div>
+	</div>	-->
 </div>

@@ -1,9 +1,13 @@
-app.controller('menuCtrl', function($scope) {
+app.controller('menuCtrl', function($scope, $http) {
 
     $scope.isConnected = false;
     $scope.activeTab = "Accueil"
     $scope.justConnected = false;
     $scope.justDisconnected = false;
+
+     $http.get("app/components/demandes/demandes.json").then(function(response){
+        
+     });
 
     $scope.deconnexion = function(){
     	$scope.fermerConfirmationConnexion();
