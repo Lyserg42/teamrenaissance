@@ -13,6 +13,8 @@ import java.io.IOException;
  */
 public class ServletUtils {
 
+    public static final String CONNECTION_NEEDED_MESSAGE = "Pour faire cela, vous devez vous connecter.";
+
     public static JSONObject getJsonFromRequest(HttpServletRequest request) throws IOException {
         StringBuilder sb = new StringBuilder();
         BufferedReader reader = request.getReader();

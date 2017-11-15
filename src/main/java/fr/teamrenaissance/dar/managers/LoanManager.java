@@ -21,7 +21,7 @@ public class LoanManager {
 
     /************** POST ******************/
 
-    public static void insertLoans(List<Loan> newLoans) throws JSONException {
+    public static void insertLoans(List<Loan> newLoans) throws Exception {
         //begin the transaction for all the insertions (if one insertion fails, there are all canceled)
         Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction tx = null;
@@ -207,6 +207,54 @@ public class LoanManager {
 
         } catch (JSONException e){
             throw e;
+        }catch (Exception e) {
+            if (tx != null) tx.rollback();
+            throw e;
+        } finally {
+            session.close();
+        }
+    }
+
+
+    /************** DELETE ******************/
+
+
+    public static void deleteLoans(Integer borrowerID, Integer lenderID, int tournamentID, int cardID, int newQty) throws Exception{
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = null;
+        try {
+            tx = session.beginTransaction();
+            //get all the loans corresponding to the given arguments
+            CriteriaBuilder builder = session.getCriteriaBuilder();
+            CriteriaQuery<Loan> criteriaQuery  = builder.createQuery(Loan.class);
+            Root<Loan> loanRoot = criteriaQuery.from(Loan.class);
+            criteriaQuery.select(loanRoot);
+            if(lenderID == null) {
+                criteriaQuery.where(
+                        builder.equal(loanRoot.get("borrower"), borrowerID),
+                        builder.equal(loanRoot.get("tournament"), tournamentID),
+                        builder.equal(loanRoot.get("card"), cardID),
+                        builder.isNull(loanRoot.get("lender")));
+            } else {
+                criteriaQuery.where(
+                        builder.equal(loanRoot.get("borrower"), borrowerID),
+                        builder.equal(loanRoot.get("tournament"), tournamentID),
+                        builder.equal(loanRoot.get("card"), cardID),
+                        builder.equal(loanRoot.get("lender"), lenderID));
+            }
+
+            Query<Loan> query = session.createQuery(criteriaQuery);
+            List<Loan> result = query.getResultList();
+            //delete loans to have the new quantity
+            int toDelete = result.size() < newQty ? 0 : result.size() - newQty;
+            for(int i = 0; i < toDelete; i++){
+                Loan loan = result.get(i);
+                session.delete(loan);
+                session.flush();
+            }
+
+            tx.commit();
+
         }catch (Exception e) {
             if (tx != null) tx.rollback();
             throw e;
