@@ -1,11 +1,9 @@
-app.controller('demandesCtrl', function($scope, $http) {
+app.controller('demandesCtrl', function($scope, $http, $uibModal, $log, $document) {
 
     $scope.imgDemandes = new Array();
 
     /* Booléen correspondant à l'affichage de la confirmation de prêt*/
     $scope.hideConfirmation = true;
-
-    
 
     /* Nouvelle requete au serveur pour obtenir le fichier JSON et mise à jour des variables qui en dépendent*/
     $scope.refresh = function(){
@@ -69,7 +67,7 @@ app.controller('demandesCtrl', function($scope, $http) {
             $scope.modal.cards.forEach(function(card,i){
                 $scope.cartesNouveauPret[i] = {cId:card.cId, qty:card.qty};
             });
-            
+            $scope.open();
     };
 
     $scope.validerPret = function(){
@@ -80,7 +78,7 @@ app.controller('demandesCtrl', function($scope, $http) {
         console.log(dataJSON);
 
         $http.post("/demande", dataJSON).then(function(){
-            $scope.refresh(); 
+            $scope.refresh();   
             $scope.afficheConfirmation();
         });
 
@@ -97,5 +95,98 @@ app.controller('demandesCtrl', function($scope, $http) {
 
 
 
+    /* Gestion du modal*/
 
-});
+    $scope.items = ['item1', 'item2', 'item3'];
+
+    $scope.animationsEnabled = true;
+
+    $scope.open = function (size) {
+
+        var parentElem = angular.element($document[0].querySelector('.myModalParent'));
+
+        var modalInstance = $uibModal.open({
+          animation: $scope.animationsEnabled,
+          ariaLabelledBy: 'modal-title',
+          ariaDescribedBy: 'modal-body',
+          templateUrl: 'myModalContent.html',
+          controller: 'modalInstCtrl',
+          appendTo: parentElem,
+          size: size,
+          resolve: {
+            modalValues: function () {
+              return $scope.modal;
+            },
+            cartesIds: function() {
+                return $scope.cartesNouveauPret;
+            }
+          }
+    });
+
+    modalInstance.result.then(function (selectedItem) {
+          $scope.refresh(); 
+          $scope.afficheConfirmation();
+        }, function () {
+          $log.info('Modal dismissed at: ' + new Date());
+        });
+    };
+
+    $scope.openComponentModal = function () {
+        var modalInstance = $uibModal.open({
+          animation: $scope.animationsEnabled,
+          component: 'modalComponent',
+          resolve: {
+            modalValues: function () {
+              return $scope.modal;
+            },
+            cartesIds: function() {
+                return $scope.cartesNouveauPret;
+            }
+
+          }
+    });
+
+    modalInstance.result.then(function () {
+          $scope.refresh(); 
+          $scope.afficheConfirmation();
+        }, function () {
+          $log.info('modal-component dismissed at: ' + new Date());
+        });
+    };
+
+
+    $scope.toggleAnimation = function () {
+        $scope.animationsEnabled = !$scope.animationsEnabled;
+    };
+
+
+
+
+    });
+
+
+    // Please note that $uibModalInstance represents a modal window (instance) dependency.
+    // It is not the same as the $uibModal service used above.
+
+    app.controller('modalInstCtrl', function ($scope, $http, $uibModalInstance, modalValues, cartesIds) {
+
+        $scope.modal = modalValues;
+        $scope.cartesNouveauPret = cartesIds;
+
+    $scope.ok = function () {
+        var data = {tId:$scope.modal.tId, uId:$scope.modal.uId, cards:$scope.cartesNouveauPret};
+        var dataJSON = JSON.stringify(data);
+
+        console.log(dataJSON);
+
+      /*  $http.post("/demande", dataJSON).then(function(){
+            $uibModalInstance.close();
+        }); */
+         $uibModalInstance.close();
+        
+    };
+
+    $scope.cancel = function () {
+        $uibModalInstance.dismiss('cancel');
+        };
+    });
