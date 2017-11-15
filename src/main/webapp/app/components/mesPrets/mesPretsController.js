@@ -1,4 +1,4 @@
-app.controller('mesPretsController', function($scope, $http) {
+app.controller('mesPretsController', function($scope, $http, $uibModal, $log, $document) {
     $scope.refresh = function(){
 
         /* Tableau contenant les noms des tournois pour le selectTournoi */
@@ -49,30 +49,137 @@ app.controller('mesPretsController', function($scope, $http) {
 
     $scope.refresh();
 
-    $scope.borowSubmit = function(idT,idC,numC,uId){
-        /*si la quantité est différente que celle de départ présent dans le tableau du JSON,
-        envoyer une requete POST avec la nouvelle qty au serveur,
-        et récuperer un nouveau JSON avec la MAJ*/
-        $http.post();
+
+
+    $scope.animationsEnabled = true;
+
+    $scope.open = function (size) {
+
+        var parentElem = angular.element($document[0].querySelector('.myModalParent'));
+
+        var modalInstance = $uibModal.open({
+            animation: $scope.animationsEnabled,
+            ariaLabelledBy: 'modal-title',
+            ariaDescribedBy: 'modal-body',
+            templateUrl: 'myModalContent.html',
+            controller: 'modalInstCtrl',
+            appendTo: parentElem,
+            size: size,
+            resolve: {
+                modalValues: function () {
+                    return $scope.modal;
+                },
+                cartesIds: function() {
+                    return $scope.modifEmprunts;
+                }
+            }
+        });
+
+        modalInstance.result.then(function (selectedItem) {
+            $scope.refresh();
+            $scope.afficheConfirmation();
+        }, function () {
+            $log.info('Modal dismissed at: ' + new Date());
+            $scope.fermerConfirmation();
+        });
     };
 
-    $scope.lentSubmit = function(idT,idC,numC,uId){
-        $http.post();
+    $scope.openComponentModal = function () {
+        var modalInstance = $uibModal.open({
+            animation: $scope.animationsEnabled,
+            component: 'modalComponent',
+            resolve: {
+                modalValues: function () {
+                    return $scope.modal;
+                },
+                cartesIds: function() {
+                    return $scope.modifEmprunts;
+                }
+
+            }
+        });
+
+        modalInstance.result.then(function () {
+            $scope.refresh();
+            $scope.afficheConfirmation();
+        }, function () {
+            $log.info('modal-component dismissed at: ' + new Date());
+            $scope.fermerConfirmation();
+        });
     };
+
+
+    $scope.toggleAnimation = function () {
+        $scope.animationsEnabled = !$scope.animationsEnabled;
+    };
+
+
+
 
 
 
 
     $scope.orgBorrow = function(iParent, i){
+            $scope.modal = {
+                uName:$scope.tournaments[iParent].borrowedCards[i].uName,
+                uId:$scope.tournaments[iParent].borrowedCards[i].uId,
+                tournament:$scope.tournaments[iParent].tName,
+                tId:$scope.tournaments[iParent].tId,
+                cards: $scope.tournaments[iParent].borrowedCards[i].cards
+            };
+            $scope.modifEmprunts = new Array();
+            $scope.modal.cards.forEach(function(card,i){
+                $scope.modifEmprunts[i] = {cId:card.cId, qty:card.qty};
+            });
+
+            $scope.open();
+        };
+
+        $scope.validerBorrow = function(){
+
+            var data = {uId:$scope.modal.uId,tId:$scope.modal.tId, cards:$scope.modifEmprunts};
+            var dataJSON = JSON.stringify(data);
+
+            console.log(dataJSON);
+
+            $http.post("/emprunt", dataJSON).then(function(){
+                $scope.refresh();
+                $scope.afficheConfirmation();
+            });
+        };
 
 
-    };
 
 
-    $scope.orgLent= function(iParent, i){
+        $scope.orgLent = function(iParent, i){
+            $scope.modal = {
+                uName:$scope.tournaments[iParent].borrowedCards[i].uName,
+                uId:$scope.tournaments[iParent].borrowedCards[i].uId,
+                tournament:$scope.tournaments[iParent].tName,
+                tId:$scope.tournaments[iParent].tId,
+                cards: $scope.tournaments[iParent].borrowedCards[i].cards
+            };
+            $scope.modifPret = new Array();
+            $scope.modal.cards.forEach(function(card,i){
+                $scope.modifPret[i] = {cId:card.cId, qty:card.qty};
+            });
 
+            $scope.open();
+        };
 
-    };
+        $scope.validerLent = function(){
+
+            var data = {uId:$scope.modal.uId,tId:$scope.modal.tId, cards:$scope.modifPret};
+            var dataJSON = JSON.stringify(data);
+
+            console.log(dataJSON);
+
+            $http.post("/pret", dataJSON).then(function(){
+                $scope.refresh();
+                $scope.afficheConfirmation();
+            });
+        };
+
 
 
 
@@ -89,7 +196,23 @@ app.controller('mesPretsController', function($scope, $http) {
 
 
 
+    app.controller('modalInstCtrl', function ($scope, $http, $uibModalInstance, modalValues, cartesIds) {
 
+        $scope.modal = modalValues;
+        $scope.modifEmprunts = cartesIds;
+
+        $scope.ok = function () {
+            var data = {tId:$scope.modal.tId, uId:$scope.modal.uId, cards:$scope.modifEmprunts};
+            var dataJSON = JSON.stringify(data);
+            console.log(dataJSON);
+            $uibModalInstance.close();
+
+        };
+
+        $scope.cancel = function () {
+            $uibModalInstance.dismiss('cancel');
+        };
+    });
 
 
 

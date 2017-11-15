@@ -1,4 +1,4 @@
-<div class="container" >
+<div class="container" xmlns="http://www.w3.org/1999/html">
     <h2>Mes prêts </h2>
 
     <div class="row">
@@ -16,16 +16,17 @@
             <h5> {{t.tName}} du {{t.date}} </h5>
         </button>
 
+        <br></br>
         <div id="collapseExample{{$index}}" uib-collapse="isCollapsed" >
             <h4 class="panel-title">
-                <button class="btn btn-outline-secondary" type="button" ng-click="isCollapsed2= !isCollapsed2" data-target="#prets{{$index}}" title = "voir ce que je prête">
+                <button class="btn btn-primary" type="button" ng-click="isCollapsed2= !isCollapsed2" data-target="#prets{{$index}}" title = "voir ce que je prête">
                     <h5> Je prête </h5>
                 </button>
             </h4>
 
 
             <!--PRETS-->
-            <div id="prets{{$index}}" uib-collapse="isCollapsed2">
+            <div id="prets{{$index}}" uib-collapse="!isCollapsed2">
                 <div id="lender" ng-repeat="l in t.lentCards">
                     <div class="row">
                         <div class="col-sm-9">
@@ -37,9 +38,11 @@
                             </div>
                         </div>
                     </div>
-                    <button type="button" class="btn" data-toggle="modal" data-target="#modalLent"
+                    <!-- <button type="button" class="btn" data-toggle="modal" data-target="#modalLent"
                             ng-click="orgLent($parent.$index,$index)"> Modifier
-                    </button>
+                    </button> -->
+                    <button type="button" class="btn" ng-click="mesPretsController.lent()"> Modifier </button>
+
                     <br> </br>
                 </div>
             </div>
@@ -49,12 +52,12 @@
 
             <!--EMPRUNTS-->
             <h4 class="panel-title">
-                <button class="btn btn-outline-secondary" type="button" ng-click="isCollapsed3= !isCollapsed3" data-target="#emprunt{{$index}}"  title = "voir ce que l'on me prête" >
+                <button class="btn btn-primary" type="button" ng-click="isCollapsed3= !isCollapsed3" data-target="#emprunt{{$index}}"  title = "voir ce que l'on me prête" >
                     <h5> On me prête </h5>
                 </button>
             </h4>
 
-            <div id="emprunt{{$index}}" uib-collapse="isCollapsed3">
+            <div id="emprunt{{$index}}" uib-collapse="!isCollapsed3">
                 <div ng-repeat="b in t.borrowedCards">
                     <div class="row">
                         <div class="col-sm-9">
@@ -68,7 +71,7 @@
                         </div>
                     </div>
                     <button type="button" class="btn" data-toggle="modal" data-target="#modalBorrow"
-                            ng-click="orgBorrow($parent.$index,$index)"> Modifier
+                            ng-click="mesPretsController.borrow()"> Modifier
                     </button>
                     <br> </br>
                 </div>
@@ -78,20 +81,51 @@
 
             <!--NEED-->
             <h4 class="panel-title">
-                <button class="btn btn-outline-secondary" type="button"  ng-click="isCollapsed4= !isCollapsed4" data-target="#need{{$index}}"  title = "voir ce qu'il me manque">
-                    <h5> Carte(s) manquante(s) </h5>
+                <button class="btn btn-primary " type="button"  ng-click="isCollapsed4= !isCollapsed4" data-target="#need{{$index}}"  title = "voir ce qu'il me manque">
+                    <h5> Il me manque </h5>
                 </button>
             </h4>
 
-            <div id="need{{$index}}" uib-collapse="isCollapsed4">
+            <div id="need{{$index}}" uib-collapse="!isCollapsed4">
                 <div ng-repeat="c in t.demands">
                     <p> {{c.qty}} {{c.cName}} </p>
                 </div>
-                <a role= "button" class ="btn btn-outline-info" href="#!emprunter">Ajouter</a>
+                <button class="btn" type="button" href="#!emprunter">Ajouter</button>
                 <br> </br>
             </div>
             <br> </br>
 
         </div>
     </div>
+
+    <div class="modal-demo">
+    <script type="text/ng-template" id="myModalContent.html">
+        <div class="modal-header">
+            <h3 class="modal-title" id="modal-title">Modifier</h3>
+        </div>
+        <div class="modal-body" id="modal-body">
+            <form>
+                <div ng-repeat="c in modal.cards">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <select class="form-control" ng-model="modifEmprunts[$index].qty" ng-options="n for n in [] | range:c.qty+1">
+                                {{$index}}
+                            </select>
+                        </div>
+                        <div class="col-md-9">{{c.cName}}</div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-primary" type="button" ng-click="$ctrl.ok()">OK</button>
+            <button class="btn btn-warning" type="button" ng-click="$ctrl.cancel()">Cancel</button>
+        </div>
+    </script>
+    </div>
+
+
+
+
+
 </div>
