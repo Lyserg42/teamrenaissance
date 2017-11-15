@@ -148,7 +148,7 @@ public class LoanServlet extends HttpServlet {
                 if(emprunt){
                     LoanManager.deleteLoans(borrowerId, lenderId, tournamentID, obj.getInt("cId"), obj.getInt("newQty"));
                 } else {
-                    //LoanManager.deleteLender(borrowerId, lenderId, tournamentID, obj.getInt("cId"), obj.getInt("newQty"));
+                    LoanManager.deleteLender(borrowerId, lenderId, tournamentID, obj.getInt("cId"), obj.getInt("newQty"));
                 }
             }
 

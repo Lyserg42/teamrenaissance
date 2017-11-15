@@ -10,7 +10,8 @@ public class TestLoan {
         try{
             //System.out.println(TournamentManager.getAllTournaments());
             //LoanManager.getLentCardsJson(1, 2);
-            LoanManager.deleteLoans(2, null, 2, 1, 0);
+            //LoanManager.deleteLoans(2, null, 2, 1, 0);
+            LoanManager.deleteLender(3, 1, 4, 1, 1);
         }finally{
             HibernateUtil.shutdown();
         }

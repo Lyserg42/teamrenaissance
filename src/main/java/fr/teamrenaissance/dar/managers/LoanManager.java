@@ -218,8 +218,10 @@ public class LoanManager {
 
     /************** DELETE ******************/
 
-
-    public static void deleteLoans(Integer borrowerID, Integer lenderID, int tournamentID, int cardID, int newQty) throws Exception{
+    /**
+     * Returns the Loans corresponding to the given arguments (the lenderID can be null).
+     */
+    public static List<Loan> getLoans(Integer borrowerID, Integer lenderID, int tournamentID, int cardID){
         Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction tx = null;
         try {
@@ -245,11 +247,62 @@ public class LoanManager {
 
             Query<Loan> query = session.createQuery(criteriaQuery);
             List<Loan> result = query.getResultList();
+
+            tx.commit();
+            return result;
+
+        }catch (Exception e) {
+            if (tx != null) tx.rollback();
+            throw e;
+        } finally {
+            session.close();
+        }
+    }
+
+    public static void deleteLoans(Integer borrowerID, Integer lenderID, int tournamentID, int cardID, int newQty) throws Exception{
+        List<Loan> loans = getLoans(borrowerID, lenderID, tournamentID, cardID);
+
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = null;
+        try {
+            tx = session.beginTransaction();
+
             //delete loans to have the new quantity
-            int toDelete = result.size() < newQty ? 0 : result.size() - newQty;
+            int toDelete = loans.size() < newQty ? 0 : loans.size() - newQty;
             for(int i = 0; i < toDelete; i++){
-                Loan loan = result.get(i);
+                Loan loan = loans.get(i);
                 session.delete(loan);
+                session.flush();
+            }
+
+            tx.commit();
+
+        }catch (Exception e) {
+            if (tx != null) tx.rollback();
+            throw e;
+        } finally {
+            session.close();
+        }
+    }
+
+
+    public static void deleteLender(Integer borrowerID, Integer lenderID, int tournamentID, int cardID, int newQty) throws Exception{
+        if(lenderID == null){
+            throw new IllegalArgumentException("the lender can not be null");
+        }
+        List<Loan> loans = getLoans(borrowerID, lenderID, tournamentID, cardID);
+
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = null;
+        try {
+            tx = session.beginTransaction();
+
+            //delete the lender from the loans
+            int toDelete = loans.size() < newQty ? 0 : loans.size() - newQty;
+            for(int i = 0; i < toDelete; i++){
+                Loan loan = loans.get(i);
+                loan.setLender(null);
+                session.update(loan);
                 session.flush();
             }
 
