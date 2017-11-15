@@ -30,7 +30,9 @@
 								</span>
 							</div>
 						</p>
-							<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalOrgPret" ng-click="orgPret($parent.$index,$index)">
+							<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalOrgPret" 
+									ng-click="orgPret($parent.$index,$index)"
+									>
 								Pr&ecirc;ter des cartes
 							</button>
 					</div>
@@ -41,8 +43,36 @@
 			</div>
 		</div>
 	</div>
+<div class="myModalParent"></div>
+<div class="modal-demo">
+    <script type="text/ng-template" id="myModalContent.html">
+	<div>
+		<div class="modal-header">
+            <h3 class="modal-title" id="modal-title">Pr&ecirc;t &agrave; {{modal.uName}} pour le {{modal.tournament}}</h3>
+        </div>
+        <div class="modal-body" id="modal-body">
+           <form>
+		        <div ng-repeat="c in modal.cards">
+		        	<div class="row">
+						<div class="col-md-3">
+				        	<select class="form-control" ng-model="cartesNouveauPret[$index].qty" ng-options="n for n in [] | range:c.qty+1">
+				        		{{$index}}
+				        	</select>
+				        </div>
+				        <div class="col-md-9">{{c.cName}}</div>
+				    </div>
+		        </div>
+	  		</form>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-primary" type="button" ng-click="ok()">OK</button>
+            <button class="btn btn-warning" type="button" ng-click="cancel()">Cancel</button>
+        </div>
+    </div>
+    </script>
+</div>
 
-	<!-- Modal d'orga de pret -->
+	<!-- Modal d'orga de pret boostrap normal
 	<div class="modal fade" id="modalOrgPret">
 	  <div class="modal-dialog">
 	    <div class="modal-content">
@@ -74,5 +104,8 @@
 
 	    </div>
 	  </div>
-	</div>
+	</div>-->
+
+
+
 </div>
