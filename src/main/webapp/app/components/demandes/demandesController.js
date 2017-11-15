@@ -97,8 +97,6 @@ app.controller('demandesCtrl', function($scope, $http, $uibModal, $log, $documen
 
     /* Gestion du modal*/
 
-    $scope.items = ['item1', 'item2', 'item3'];
-
     $scope.animationsEnabled = true;
 
     $scope.open = function (size) {
@@ -128,6 +126,7 @@ app.controller('demandesCtrl', function($scope, $http, $uibModal, $log, $documen
           $scope.afficheConfirmation();
         }, function () {
           $log.info('Modal dismissed at: ' + new Date());
+          $scope.fermerConfirmation();
         });
     };
 
@@ -151,6 +150,7 @@ app.controller('demandesCtrl', function($scope, $http, $uibModal, $log, $documen
           $scope.afficheConfirmation();
         }, function () {
           $log.info('modal-component dismissed at: ' + new Date());
+          $scope.fermerConfirmation();
         });
     };
 
@@ -163,7 +163,6 @@ app.controller('demandesCtrl', function($scope, $http, $uibModal, $log, $documen
 
 
     });
-
 
     // Please note that $uibModalInstance represents a modal window (instance) dependency.
     // It is not the same as the $uibModal service used above.
