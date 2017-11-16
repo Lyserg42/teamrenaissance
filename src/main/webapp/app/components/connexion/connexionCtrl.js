@@ -5,8 +5,8 @@ app.controller('connexionCtrl', function($scope, $http, $route) {
 
         console.log(dataJSON);
 
-      	$http.post("/user", dataJSON).then(function(){
-      		$route.reload();
+      	$http.post("/user", dataJSON).then(function(response){
+      		console.log(response);
         });
         
     };

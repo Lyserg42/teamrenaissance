@@ -52,7 +52,7 @@
 			}
 		 ],
 		"demands":[
-			{ "qty":1, "cId":1, "cName":"Smokestack"},
+			{ "qty":1, "cId":1, "cName":""},
 			{ "qty":2, "cId":2, "cName":"Nissa, Vastwood Seer"},
 			{ "qty":1, "cId":3, "cName":"Wrath of God"}
 		 ]
