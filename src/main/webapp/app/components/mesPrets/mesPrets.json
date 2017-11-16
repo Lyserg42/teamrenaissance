@@ -31,23 +31,23 @@
 			{"uName":"Vansiri",
 			"uId":1,
 			"cards":[
-						{ "qty":1, "cId":1, "cName":"Smokestack"},
-						{ "qty":2, "cId":2, "cName":"Nissa, Vastwood Seer"},
-						{ "qty":1, "cId":3, "cName":"Wrath of God"}
+						{ "qty":4, "cId":11, "cName":"Mishra's Workshop"},
+						{ "qty":4, "cId":12, "cName":"Borderland Ranger"},
+						{ "qty":4, "cId":13, "cName":"Damnation"}
 					]
 			},
 			{"uName":"Lyserg",
 			"uId":2,
 			"cards":[ 
-					  	{ "qty":3, "cId":4, "cName":"Lightning Bolt"},
-					 	{ "qty":4, "cId":5, "cName":"Grizzly Bears"}
+					  	{ "qty":2, "cId":14, "cName":"Shock"},
+					 	{ "qty":2, "cId":15, "cName":"Saheeli Rai"}
 					]
 			},
 			{"uName":"Naoko",
 			"uId":3,
 			"cards":[ 
-					 	{ "qty":2, "cId":6, "cName":"Ensnaring Bridge"},
-					  	{ "qty":3, "cId":7, "cName":"Elesh Norn, Grand Cenobite"}
+					 	{ "qty":1, "cId":6, "cName":"Lantern of Insight"},
+					  	{ "qty":1, "cId":7, "cName":"Death's Shadow"}
 					]
 			}
 		 ],
