@@ -25,7 +25,7 @@ app.controller('modifierProfilCtrl', function($scope, $http, $uibModal, $log, $d
           ariaLabelledBy: 'modal-title',
           ariaDescribedBy: 'modal-body',
           templateUrl: 'myModalContent.html',
-          controller: 'modalInstCtrl',
+          controller: 'modalInstCtrlProfil',
           appendTo: parentElem,
           resolve: {
             profilValues: function () {
@@ -72,7 +72,7 @@ app.controller('modifierProfilCtrl', function($scope, $http, $uibModal, $log, $d
 // Please note that $uibModalInstance represents a modal window (instance) dependency.
 // It is not the same as the $uibModal service used above.
 
-app.controller('modalInstCtrl', function ($scope, $http, $uibModalInstance, profilValues) {
+app.controller('modalInstCtrlProfil', function ($scope, $http, $uibModalInstance, profilValues) {
 
 	    $scope.profil = profilValues;
 

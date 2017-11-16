@@ -41,7 +41,7 @@
                     <!-- <button type="button" class="btn" data-toggle="modal" data-target="#modalLent"
                             ng-click="orgLent($parent.$index,$index)"> Modifier
                     </button> -->
-                    <button type="button" class="btn" ng-click="mesPretsController.lent()"> Modifier </button>
+                    <button type="button" class="btn" ng-click="modification($parent.$index,$index,pret)"> Modifier </button>
 
                     <br> </br>
                 </div>
@@ -70,9 +70,7 @@
 
                         </div>
                     </div>
-                    <button type="button" class="btn" data-toggle="modal" data-target="#modalBorrow"
-                            ng-click="mesPretsController.borrow()"> Modifier
-                    </button>
+                    <button type="button" class="btn" ng-click="modification($parent.$index,$index,emprunt)"> Modifier  </button>
                     <br> </br>
                 </div>
             </div>
@@ -97,7 +95,7 @@
 
         </div>
     </div>
-
+    <div class="myModalParent"></div>
     <div class="modal-demo">
     <script type="text/ng-template" id="myModalContent.html">
         <div class="modal-header">
@@ -108,7 +106,7 @@
                 <div ng-repeat="c in modal.cards">
                     <div class="row">
                         <div class="col-md-3">
-                            <select class="form-control" ng-model="modifEmprunts[$index].qty" ng-options="n for n in [] | range:c.qty+1">
+                            <select class="form-control" ng-model="modifIds[$index].qty" ng-options="n for n in [] | range:c.qty+1">
                                 {{$index}}
                             </select>
                         </div>
@@ -118,8 +116,8 @@
             </form>
         </div>
         <div class="modal-footer">
-            <button class="btn btn-primary" type="button" ng-click="$ctrl.ok()">OK</button>
-            <button class="btn btn-warning" type="button" ng-click="$ctrl.cancel()">Cancel</button>
+            <button class="btn btn-primary" type="button" ng-click="ok()">OK</button>
+            <button class="btn btn-warning" type="button" ng-click="cancel()">Cancel</button>
         </div>
     </script>
     </div>

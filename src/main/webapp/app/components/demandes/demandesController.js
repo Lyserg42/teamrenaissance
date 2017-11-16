@@ -70,20 +70,6 @@ app.controller('demandesCtrl', function($scope, $http, $uibModal, $log, $documen
             $scope.open();
     };
 
-    $scope.validerPret = function(){
-
-        var data = {tId:$scope.modal.tId, uId:$scope.modal.uId, cards:$scope.cartesNouveauPret};
-        var dataJSON = JSON.stringify(data);
-
-        console.log(dataJSON);
-
-        $http.post("/demande", dataJSON).then(function(){
-            $scope.refresh();   
-            $scope.afficheConfirmation();
-        });
-
-        
-    };
 
     $scope.afficheConfirmation = function(){
         $scope.hideConfirmation=false;
@@ -108,7 +94,7 @@ app.controller('demandesCtrl', function($scope, $http, $uibModal, $log, $documen
           ariaLabelledBy: 'modal-title',
           ariaDescribedBy: 'modal-body',
           templateUrl: 'myModalContent.html',
-          controller: 'modalInstCtrl',
+          controller: 'modalInstCtrlDemandes',
           appendTo: parentElem,
           size: size,
           resolve: {
@@ -167,7 +153,7 @@ app.controller('demandesCtrl', function($scope, $http, $uibModal, $log, $documen
     // Please note that $uibModalInstance represents a modal window (instance) dependency.
     // It is not the same as the $uibModal service used above.
 
-    app.controller('modalInstCtrl', function ($scope, $http, $uibModalInstance, modalValues, cartesIds) {
+    app.controller('modalInstCtrlDemandes', function ($scope, $http, $uibModalInstance, modalValues, cartesIds) {
 
         $scope.modal = modalValues;
         $scope.cartesNouveauPret = cartesIds;
