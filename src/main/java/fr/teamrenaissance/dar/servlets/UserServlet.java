@@ -18,6 +18,7 @@ import org.json.JSONObject;
 public class UserServlet extends HttpServlet {
     private static final String USER = "user";
     private static final String SUCCESCONNECTION ="userSuccesConnection";
+    private static final String DEFAULT_AVATAR = "";
 
 
     @Override
@@ -31,20 +32,22 @@ public class UserServlet extends HttpServlet {
         try{
             JSONObject obj = new JSONObject();
             HttpSession userSession ;
-            if(req.getParameter("typeRequest").equals("inscription")){
-              /*  JSONObject newUser = ServletUtils.getJsonFromRequest(req);
-                String name = newUser.getString("name");
-                String firstanme = newUser.getString("firstname");
-                String username = newUser.getString("login");
-                String email = newUser.getString("email");
-                String password = newUser.getString("password");
-                String address = newUser.getString("address");
-                String avatar = newUser.getString("avatar");
-                String phoneNumber = newUser.getString("phoneNumber");
-                String dciNumber = newUser.getString("dciNumber");
-                String fb = newUser.getString("facebook");
-                String tw = newUser.getString("twitter");*/
-                String name = req.getParameter("name");
+            JSONObject request =  ServletUtils.getJsonFromRequest(req);
+            String typeRequeste = request.getString("typeRequest");
+            if(typeRequeste.equals("inscription")){
+
+                String name = request.getString("name");
+                String firstanme = request.getString("firstname");
+                String username = request.getString("login");
+                String email = request.getString("email");
+                String password = request.getString("password");
+                //String address = request.getString("address");
+                //String avatar = request.getString("avatar");
+                //String phoneNumber = request.getString("phoneNumber");
+                //String dciNumber = request.getString("dciNumber");
+                //String fb = request.getString("facebook");
+                //String tw = request.getString("twitter");
+                /*String name = req.getParameter("name");
                 String firstanme = req.getParameter("firstname");
                 String username = req.getParameter("login");
                 String email = req.getParameter("email");
@@ -54,56 +57,64 @@ public class UserServlet extends HttpServlet {
                 String phoneNumber = req.getParameter("phoneNumber");
                 String dciNumber = req.getParameter("dciNumber");
                 String fb = req.getParameter("facebook");
-                String tw = req.getParameter("twitter");
+                String tw = req.getParameter("twitter");*/
 
                 obj = UserManager.newUser(name,firstanme,email,username,password,
-                        address,avatar,dciNumber,phoneNumber,fb,tw);
+                        "",DEFAULT_AVATAR,"","","","");
             }
 
-            if(req.getParameter("typeRequest").equals("connection")){
-                String login = req.getParameter("login");
-                String password = req.getParameter("password");
+            if(typeRequeste.equals("connexion")){
+                String login = request.getString("login");
+                String password = request.getString("pasword");
+               /* String login = req.getParameter("login");
+                String password = req.getParameter("password");*/
                 userSession = req.getSession();
-                obj= UserManager.connectionUser(login,password);
-                if(obj.has(SUCCESCONNECTION)){
+               if(!userSession.isNew()){
+                   obj.put("userFailedConnection","you must to disconnect");
 
-                    userSession.setAttribute(USER, obj.get("userSuccesConnection"));
-                }else{
-                   userSession.invalidate();
+               }else {
+
+                   obj = UserManager.connectionUser(login, password);
+                   if (obj.has(SUCCESCONNECTION)) {
+
+                       userSession.setAttribute(USER, obj.get("userSuccesConnection"));
+                   } else {
+                       userSession.invalidate();
+                   }
                }
 
 
             }
-            if(req.getParameter("typeRequest").equals("getUser")){
-                String login = req.getParameter("login");
+            if(typeRequeste.equals("getUser")){
+                String login = request.getString("uName");
                 obj=  UserManager.getUser(login);
 
             }
-            if(req.getParameter("typeRequest").equals("setUserProfil")){
-               /* JSONObject newUserProfil = ServletUtils.getJsonFromRequest(req);
-                String name = newUserProfil.getString("name");
-                String firstanme = newUserProfil.getString("firstname");
-                //String username = newUserProfil.getString("login");
-                String username =
-                        ((JSONObject) userSession.getAttribute("user")).getString("login");
+            if(typeRequeste.equals("setUserProfil")){
 
-                String email = newUserProfil.getString("email");
-                String password = newUserProfil.getString("password");
-                String address = newUserProfil.getString("address");
-                String avatar = newUserProfil.getString("avatar");
-                String phoneNumber = newUserProfil.getString("phoneNumber");
-                String dciNumber = newUserProfil.getString("dciNumber");
-                String fb = newUserProfil.getString("facebook");
-                String tw = newUserProfil.getString("twitter");*/
+                //String username = newUserProfil.getString("login");
+               // String username =
+                //        ((JSONObject) userSession.getAttribute("user")).getString("login");
+
                 userSession = req.getSession();
                 String username =
                         ((JSONObject) userSession.getAttribute(USER)).getString("login");
                 if(username== null){
                     obj.put("setProfilFailed","you must to be connect");
                 } else{
+                    String name = request.getString("name");
+                    String firstname = request.getString("firstname");
+                    String email = request.getString("email");
+                    String password = request.getString("password");
+                    String address = request.getString("address");
+                    String avatar = request.getString("avatar");
+                    String phoneNumber = request.getString("phoneNumber");
+                    String dciNumber = request.getString("dciNumber");
+                    String fb = request.getString("facebook");
+                    String tw = request.getString("twitter");
 
                     //String username = req.getParameter("login");
-                    String name = req.getParameter("name");
+                   /* String name = req.getParameter("name");
                     String firstname = req.getParameter("firstname");
                     String email = req.getParameter("email");
                     String password = req.getParameter("password");
@@ -112,7 +123,7 @@ public class UserServlet extends HttpServlet {
                     String phoneNumber = req.getParameter("phoneNumber");
                     String dciNumber = req.getParameter("dciNumber");
                     String fb = req.getParameter("facebook");
-                    String tw = req.getParameter("twitter");
+                    String tw = req.getParameter("twitter");*/
                     obj= UserManager.setUserProfil(name,firstname,email,username,
                             password,address,avatar,dciNumber,phoneNumber,
                             fb,tw);
@@ -120,7 +131,7 @@ public class UserServlet extends HttpServlet {
 
 
             }
-            if(req.getParameter("typeRequest").equals("deconnection")){
+            if(typeRequeste.equals("deconnection")){
                 userSession = req.getSession();
                 userSession.invalidate();
                 obj.put("deconnection","succes");

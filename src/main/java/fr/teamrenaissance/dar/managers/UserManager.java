@@ -39,8 +39,8 @@ public class UserManager {
             if (!passwordSolid(password)) {
                 obj.put("newuser", "password not respect");
             } else {
-                if (!isEnteredField(name, firstname, username, mail, adress,
-                        password, phoneNumber)) {
+                if (!isEnteredField(name, firstname, username, mail,
+                        password)) {
                     obj.put("newuser", "mandatory fields are not entered");
                 } else {
                     if (!isValidPhone(phoneNumber)) {
@@ -142,6 +142,7 @@ public class UserManager {
 
             try {
                 obj.put("name", u.getName());
+                obj.put("uId",u.getUserID());
                 obj.put("firstname", u.getFirstname());
                 obj.put("email", u.getEmail());
                 obj.put("address", u.getAddress());
@@ -149,7 +150,7 @@ public class UserManager {
                 obj.put("phone number", u.getPhoneNumber());
                 obj.put("facebook", u.getFacebook());
                 obj.put("twitter", u.getTwitter());
-                obj.put("login", u.getUsername());
+                obj.put("uName", u.getUsername());
                 obju.put("getUserSucces", obj);
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -173,7 +174,7 @@ public class UserManager {
             obj.put("setProfilFailed", "password not valide");
             return obj;
         }
-        if (!isEnteredField(name, firstname, username, mail, adress, password, phoneNumber)) {
+        if (!isEnteredField(name, firstname, username, mail,password)) {
             obj.put("setProfilFailed", "mandatory fields are not entered");
             return obj;
         }
@@ -343,10 +344,10 @@ public class UserManager {
     /*test if mandatory fields are entered*/
     private static boolean isEnteredField(String name,
                                           String firstName,String userName,
-                                          String email, String address,
-                                          String password, String phoneNumber){
+                                          String email,
+                                          String password){
     if(name.equals("") ||  firstName.equals("") || userName.equals("")
-          ||email.equals("")|| address.equals("")  || password.equals("") || phoneNumber.equals("")){
+          ||email.equals("") || password.equals("") ){
             return false;
         }
         return true;
