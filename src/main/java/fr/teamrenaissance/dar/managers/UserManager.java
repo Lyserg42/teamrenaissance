@@ -50,28 +50,32 @@ public class UserManager {
                         if (!isValideEmail(mail)) {
                             obj.put("newuser", "Unknown Error");
                         } else {
-                            Session session = HibernateUtil.getSessionFactory().openSession();
-                            Transaction tx = session.beginTransaction();
-                            String passwordHash256 = hash256(password);
-                            User u = new User();
-                            u.setAddress(adress);
-                            u.setAvatar(avatar);
-                            u.setName(name);
-                            u.setFirstname(firstname);
-                            u.setEmail(mail);
-                            u.setUsername(username);
-                            u.setPassword(passwordHash256);
-                            u.setDciNumber(dciNumber);
-                            u.setPhoneNumber(phoneNumber);
-                            u.setFacebook(fb);
-                            u.setTwitter(tw);
-                            u.setCity(city);
-                            u.setZipCode(zipCode);
-                            session.save(u);
-                            session.flush();
-                            tx.commit();
-                            session.close();
-                            obj.put("newuser", "succes");
+                            if(existMail(mail)){
+                                obj.put("newuser","Mail already exist");
+                            }else {
+                                Session session = HibernateUtil.getSessionFactory().openSession();
+                                Transaction tx = session.beginTransaction();
+                                String passwordHash256 = hash256(password);
+                                User u = new User();
+                                u.setAddress(adress);
+                                u.setAvatar(avatar);
+                                u.setName(name);
+                                u.setFirstname(firstname);
+                                u.setEmail(mail);
+                                u.setUsername(username);
+                                u.setPassword(passwordHash256);
+                                u.setDciNumber(dciNumber);
+                                u.setPhoneNumber(phoneNumber);
+                                u.setFacebook(fb);
+                                u.setTwitter(tw);
+                                u.setCity(city);
+                                u.setZipCode(zipCode);
+                                session.save(u);
+                                session.flush();
+                                tx.commit();
+                                session.close();
+                                obj.put("newuser", "succes");
+                            }
                         }
 
                 }
@@ -348,6 +352,25 @@ public class UserManager {
             }
         }
         return false;
+    }
+
+    /* test if email exist in DB*/
+    private static boolean existMail(String mail){
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = session.beginTransaction();
+        CriteriaQuery<User> cq = session.getCriteriaBuilder().createQuery(User.class);
+        cq.from(User.class);
+        boolean result = false;
+        List<User> users = session.createQuery(cq).getResultList();
+        for(User u:users) {
+            if(u.getEmail().equals(mail)) {
+                result = true;
+                break;
+            }
+        }
+        tx.commit();
+        session.close();
+        return result;
     }
 
     /* test if password pssw is solid*/

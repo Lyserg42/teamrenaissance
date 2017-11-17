@@ -32,43 +32,41 @@ public class UserServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try{
-            resp.setContentType("text/plain");
-            PrintWriter out = resp.getWriter();
 
            JSONObject obj = new JSONObject();
             HttpSession userSession ;
             JSONObject request =  ServletUtils.getJsonFromRequest(req);
             String typeRequest = request.getString("typeRequest");
-
+            PrintWriter out = resp.getWriter();
             if(typeRequest.equals("inscription")){
-
                 String name = request.getString("name");
-                String firstanme = request.getString("firstname");
+                String firstname = request.getString("firstname");
                 String username = request.getString("login");
                 String email = request.getString("email");
                 String password = request.getString("password");
-                String address = request.getString("address");
-                String avatar = request.getString("avatar");
-                String phoneNumber = request.getString("phoneNumber");
-                String dciNumber = request.getString("dciNumber");
-                String fb = request.getString("facebook");
-                String tw = request.getString("twitter");
 
-               obj = UserManager.newUser(name,firstanme,email,
+               obj = UserManager.newUser(name,firstname,email,
                username,password, "",DEFAULT_AVATAR,
                        "","",
                        "","","","");
+
+
                if(!obj.get("newuser").equals("succes")){
+                   resp.setContentType("application/json");
+
                    resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
                    out.print(obj);
 
                }else{
+                   resp.setContentType("text/plain");
+
                    resp.setStatus(HttpServletResponse.SC_OK);
 
                }
             }
 
             else if(typeRequest.equals("connexion")){
+                resp.setContentType("text/plain");
 
                 String login = request.getString("login");
                 String password = request.getString("password");

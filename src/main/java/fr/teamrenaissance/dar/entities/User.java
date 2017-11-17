@@ -16,6 +16,7 @@ public class User {
     private static final int URL_LENGTH = 300;
     private static final int PHONE_LENGTH = 15;
     private static final int PASSWORD_LENGTH = 100;
+    private static final int ZIPCODE_LENGTH = 5;
 
     private Integer userID;
     private String name;
@@ -227,7 +228,7 @@ public class User {
     public void setCity(String city){
         this.city = city;
     }
-    @Column(name = "zipCode", length = URL_LENGTH, nullable = true)
+    @Column(name = "zipCode", length = ZIPCODE_LENGTH, nullable = true)
     public String getZipCode(){
         return zipCode;
     }
