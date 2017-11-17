@@ -1,26 +1,89 @@
 <div class="container">
 	<h1>Inscription</h1>
-
-	<div ng-controller="inscriptionCtrl">
-		<form novalidate class="simple-form">
-			<label>Nom: <input type="text" ng-model="nom" /></label><br />
-
-			<label>Prénom: <input type="text" ng-model="prenom" /></label><br />
-
-			<label>E-mail: <input type="email" ng-model="email" /></label><br />
-
-			<label>Mot de passe : <input type="password" ng-model="password"></label><br />
-
-			<label>Confirmer  : <input type="password"></label><br />
+		<form class="form-horizontal" name="formInscription" novalidate>
+			<div class="form-group">
+				<div class="control-label col-sm-2">
+					<label>Pseudo</label>
+				</div>
+				<div class="col-sm-10">
+					<input type="text" name="pseudo" ng-model="pseudo" required/>
+					<span style="color:red" ng-show="formInscription.pseudo.$dirty && formInscription.pseudo.$invalid">
+						Le pseudo est requis.
+					</span>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="control-label col-sm-2">
+					<label>Nom</label>
+				</div>
+				<div class="col-sm-10">
+					<input type="text" name="nom" ng-model="nom" required/>
+					<span style="color:red" ng-show="formInscription.nom.$dirty && formInscription.nom.$invalid">
+						Le nom est requis.
+					</span>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="control-label col-sm-2">
+					<label>Prénom</label>
+				</div>
+				<div class="col-sm-10">
+					<input type="text" name="prenom" ng-model="prenom" required/>
+					<span style="color:red" ng-show="formInscription.prenom.$dirty && formInscription.prenom.$invalid">
+						Le prénom est requis.
+					</span>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="control-label col-sm-2">
+					<label>E-mail</label>
+				</div>
+				<div class="col-sm-10">
+					<input type="email" name="email" ng-model="email" required />
+					<span style="color:red" ng-show="formInscription.email.$dirty && formInscription.email.$invalid">
+						L'e-mail n'est pas valide.
+					</span>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="control-label col-sm-2">
+					<label>Mot de passe</label>
+				</div>
+				<div class="col-sm-10">
+					<input type="password" name="password" ng-model="password" required password-constraints-directive/>
+					<span style="color:red" ng-show="formInscription.password.$dirty && formInscription.password.$invalid">
+						Le mot de passe doit faire au moins 8 caractères et contenir au moins un chiffre et une majuscule.
+					</span>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="control-label col-sm-2">
+					<label>Confirmer</label>
+				</div>
+				<div class="col-sm-10">
+					<input type="password" name="checkpw" ng-model="checkpw" required/>
+					<span style="color:red" ng-show="formInscription.checkpw.$dirty && (checkpw != password)">
+						Différent du mot de passe.
+					</span>
+				</div>
+			</div>
 
 			<div ng-show="form.$submitted || form.uEmail.$touched">
 				<span ng-show="form.uEmail.$error.required">Tell us your email.</span> 
 				<span ng-show="form.uEmail.$error.email">This is not a valid email.</span>
 			</div>
 			
-			<button ng-click="reset()"/>Reset</button> 
-			<button ng-click="inscription()">S'inscrire</button>
+			<div class="form-group">
+				<div class="col-sm-offset-2 col-sm-10">
+					<button ng-click="reset()"/>Reset</button> 
+					<button ng-click="inscription()" ng-disabled=	"formInscription.nom.$invalid
+																	|| formInscription.prenom.$invalid
+																	|| formInscription.email.$invalid
+																	|| formInscription.password.$invalid
+																	|| (checkpw != password)">
+						S'inscrire
+					</button>
+				</div>
+			</div>
 		</form>
-	</div>
-
 </div>
