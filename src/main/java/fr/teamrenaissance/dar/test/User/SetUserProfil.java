@@ -9,9 +9,9 @@ public class SetUserProfil {
         JSONObject obj = null;
         try {
             obj = UserManager.setUserProfil("hellal","sarra","sarra_hellal@hotmail.com",
-                    "sarro","Oii7poooooooo","ZZZ",
+                    "sarrro","Kiuiui7uip","ZZZ",
                     "","",
-                    "1236445","yyyyyy","");
+                    "1236445","yyyyyy","","","");
 
         } catch (Exception e) {
             e.printStackTrace();

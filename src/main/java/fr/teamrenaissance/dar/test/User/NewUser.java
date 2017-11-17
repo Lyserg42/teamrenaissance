@@ -6,12 +6,11 @@ import org.json.JSONObject;
 public class NewUser {
 
     public static void main(String args[]){
-        UserManager um = new UserManager();
         JSONObject obj = null;
         try {
-            obj = um.newUser("hellal","sarra","sarra_hellal@hotmail.com",
-                    "sarrra","totototo",
-                    "xxx","","555","","","");
+            obj = UserManager.newUser("hellal","sarra","sarra_hellal@hotmail.com",
+                    "sarrro","Kiuiui7uip",
+                    "rue des alouettes","","","","","","fontenay","94120");
         } catch (Exception e) {
             e.printStackTrace();
         }

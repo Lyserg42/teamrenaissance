@@ -23,24 +23,28 @@ public class UserServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-       doPost(req,resp);
+      // doPost(req,resp);
+        resp.setStatus(HttpServletResponse.SC_ACCEPTED);
+
 
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try{
-            JSONObject obj = new JSONObject();
+            resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+
+           /* JSONObject obj = new JSONObject();
             HttpSession userSession ;
             JSONObject request =  ServletUtils.getJsonFromRequest(req);
-            String typeRequeste = request.getString("typeRequest");
-            if(typeRequeste.equals("inscription")){
+            String typeRequest = request.getString("typeRequest");
+            if(typeRequest.equals("inscription")){
 
                 String name = request.getString("name");
                 String firstanme = request.getString("firstname");
                 String username = request.getString("login");
                 String email = request.getString("email");
-                String password = request.getString("password");
+                String password = request.getString("password");*/
                 //String address = request.getString("address");
                 //String avatar = request.getString("avatar");
                 //String phoneNumber = request.getString("phoneNumber");
@@ -59,44 +63,50 @@ public class UserServlet extends HttpServlet {
                 String fb = req.getParameter("facebook");
                 String tw = req.getParameter("twitter");*/
 
-                obj = UserManager.newUser(name,firstanme,email,username,password,
-                        "",DEFAULT_AVATAR,"","","","");
+               /* obj = UserManager.newUser(name,firstanme,email,
+               username,password,
+
+                        "",DEFAULT_AVATAR,"","","","","","");
             }
 
-            if(typeRequeste.equals("connexion")){
+            else if(typeRequest.equals("connexion")){
+
                 String login = request.getString("login");
-                String password = request.getString("pasword");
+                String password = request.getString("pasword");*/
                /* String login = req.getParameter("login");
                 String password = req.getParameter("password");*/
-                userSession = req.getSession();
+                /*userSession = req.getSession();
                if(!userSession.isNew()){
-                   obj.put("userFailedConnection","you must to disconnect");
-
+                   obj.put("userFailedConnection","you must disconnect");
+                   resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
                }else {
 
                    obj = UserManager.connectionUser(login, password);
                    if (obj.has(SUCCESCONNECTION)) {
 
                        userSession.setAttribute(USER, obj.get("userSuccesConnection"));
+                       resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+
                    } else {
                        userSession.invalidate();
+                       resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
                    }
                }
 
 
             }
-            if(typeRequeste.equals("getUser")){
+            else if(typeRequest.equals("getUser")){
                 String login = request.getString("uName");
                 obj=  UserManager.getUser(login);
 
             }
-            if(typeRequeste.equals("setUserProfil")){
+            else if(typeRequest.equals("setUserProfil")){*/
 
                 //String username = newUserProfil.getString("login");
                // String username =
                 //        ((JSONObject) userSession.getAttribute("user")).getString("login");
 
-                userSession = req.getSession();
+                /*userSession = req.getSession();
                 String username =
                         ((JSONObject) userSession.getAttribute(USER)).getString("login");
                 if(username== null){
@@ -112,6 +122,8 @@ public class UserServlet extends HttpServlet {
                     String dciNumber = request.getString("dciNumber");
                     String fb = request.getString("facebook");
                     String tw = request.getString("twitter");
+                    String city = request.getString("city");
+                    String zipCode = request.getString("zipCode");*/
 
                     //String username = req.getParameter("login");
                    /* String name = req.getParameter("name");
@@ -124,22 +136,29 @@ public class UserServlet extends HttpServlet {
                     String dciNumber = req.getParameter("dciNumber");
                     String fb = req.getParameter("facebook");
                     String tw = req.getParameter("twitter");*/
-                    obj= UserManager.setUserProfil(name,firstname,email,username,
+                   /* obj= UserManager.setUserProfil(name,firstname,email,username,
                             password,address,avatar,dciNumber,phoneNumber,
-                            fb,tw);
+                            fb,tw,city,zipCode);
                 }
 
 
             }
-            if(typeRequeste.equals("deconnection")){
+            else if(typeRequest.equals("deconnection")){
                 userSession = req.getSession();
                 userSession.invalidate();
                 obj.put("deconnection","succes");
             }
-            resp.setContentType("application/json");
+            else {
+                resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            }*/
+
+            resp.setContentType("text/plain");
             PrintWriter out = resp.getWriter();
-            out.print(obj);
+           // out.print("essai");
             out.flush();
+            out.close();
+            //resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+
 
         } catch(Exception e){
             System.err.println("user not inserted");

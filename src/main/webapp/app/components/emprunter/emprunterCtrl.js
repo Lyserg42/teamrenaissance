@@ -71,6 +71,7 @@ app.controller('emprunterCtrl', function($scope, $http) {
             $http.post("/loan", dataJSON).then(function(response){
                 $scope.retourServeur = response.headers();
                 $scope.hideCodeRetour = false;
+                console.log($scope.retourServeur);
             });
         }
     };

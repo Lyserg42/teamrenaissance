@@ -29,9 +29,13 @@ public class UserManager {
     return a JSONObject contains result
     if the creation is successful return user's data
     */
-    public static JSONObject newUser(String name, String firstname, String mail, String username,
-                                     String password, String adress, String avatar, String dciNumber,
-                                     String phoneNumber, String fb, String tw) throws Exception {
+    public static JSONObject newUser(String name, String firstname,
+                                     String mail, String username,
+                                     String password, String adress,
+                                     String avatar, String dciNumber,
+                                     String phoneNumber, String fb,
+                                     String tw, String city,
+                                     String zipCode) throws Exception {
         JSONObject obj = new JSONObject();
         if (!isValideLogin(username)) {
             obj.put("newuser", "login already exist");
@@ -43,9 +47,6 @@ public class UserManager {
                         password)) {
                     obj.put("newuser", "mandatory fields are not entered");
                 } else {
-                    if (!isValidPhone(phoneNumber)) {
-                        obj.put("newuser", "phone number not valid");
-                    } else {
                         if (!isValideEmail(mail)) {
                             obj.put("newuser", "mail not valid");
                         } else {
@@ -64,13 +65,15 @@ public class UserManager {
                             u.setPhoneNumber(phoneNumber);
                             u.setFacebook(fb);
                             u.setTwitter(tw);
+                            u.setCity(city);
+                            u.setZipCode(zipCode);
                             session.save(u);
                             session.flush();
                             tx.commit();
                             session.close();
                             obj.put("newuser", "succes");
                         }
-                    }
+
                 }
             }
         }
@@ -116,6 +119,8 @@ public class UserManager {
                     obj.put("facebook", u.getFacebook());
                     obj.put("twitter", u.getTwitter());
                     obj.put("login", u.getUsername());
+                    obj.put("city",u.getCity());
+                    obj.put("zipCode",u.getZipCode());
                     obju.put("userSuccesConnection", obj);
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -151,6 +156,8 @@ public class UserManager {
                 obj.put("facebook", u.getFacebook());
                 obj.put("twitter", u.getTwitter());
                 obj.put("uName", u.getUsername());
+                obj.put("city",u.getCity());
+                obj.put("zipCode",u.getZipCode());
                 obju.put("getUserSucces", obj);
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -167,7 +174,8 @@ public class UserManager {
                                            String password, String adress,
                                            String avatar, String dciNumber,
                                            String phoneNumber, String fb,
-                                           String tw) throws Exception {
+                                           String tw,String city,
+                                           String zipCode) throws Exception {
         JSONObject obj = new JSONObject();
         JSONObject newUserProfil = new JSONObject();
         if (!passwordSolid(password)) {
@@ -176,6 +184,10 @@ public class UserManager {
         }
         if (!isEnteredField(name, firstname, username, mail,password)) {
             obj.put("setProfilFailed", "mandatory fields are not entered");
+            return obj;
+        }
+        if(!isValidPhone(phoneNumber)){
+            obj.put("setProfilFailed","phone number");
             return obj;
         }
 
@@ -211,6 +223,10 @@ public class UserManager {
         newUserProfil.put("facebook",fb);
         u.setTwitter(tw);
         newUserProfil.put("twitter",tw);
+        u.setCity(city);
+        newUserProfil.put("city",city);
+        u.setZipCode(zipCode);
+        newUserProfil.put("zipCode",zipCode);
         newUserProfil.put("username",username);
         sess.update(u);
         tx.commit();
@@ -257,10 +273,9 @@ public class UserManager {
     }
 
     public static String hash256 (String passw){
-       /* String hash256hex = Hashing.sha256().
+        String hash256hex = Hashing.sha256().
                 hashString(passw, StandardCharsets.UTF_8).toString();
-        return hash256hex;*/
-       return passw;
+        return hash256hex;
 
     }
 
