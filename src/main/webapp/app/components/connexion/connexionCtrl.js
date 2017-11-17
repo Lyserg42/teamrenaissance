@@ -12,7 +12,7 @@ app.controller('connexionCtrl', function($scope, $http, $route) {
 
         console.log(dataJSON);
 
-      	$http.post("/user", dataJSON).then(
+      	$http.post("/teamrenaissance/user", dataJSON).then(
             function success(response){
                 $scope.succesConnexion = true;
                 console.log("succes");
