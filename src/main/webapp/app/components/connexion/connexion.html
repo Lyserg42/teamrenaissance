@@ -3,7 +3,11 @@
 
 	<div class="alert alert-danger" ng-show="erreurConnexion">
 	  <button type="button" class="close" ng-click="fermerErreurConnexion()">&times;</button>
-	  La connexion a échouée.
+	  La connexion a échouée. {{raisonEchecConnexion}}
+	</div>
+	<div class="alert alert-success" ng-show="succesConnexion">
+	  <button type="button" class="close" ng-click="fermerSuccesConnexion()">&times;</button>
+	  Vous êtes bien connecté !
 	</div>
 	<form class="form-horizontal" novalidate>
 		<div class="form-group">
