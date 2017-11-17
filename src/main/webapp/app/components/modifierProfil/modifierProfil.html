@@ -3,23 +3,116 @@
 	<div>
 		<h1>{{profil.uName}}</h1>
 		<img src="{{avatar}}"></img>
-		<form>
-			<div>Prenom : <input type="text" ng-model="profil.firstName"/></div>
-			<div>Nom : <input type="text" ng-model="profil.lastName"/></div>
-			<div>T&eacute;l&eacute;phone : <input type="text" ng-model="profil.telephone"/></div>
-			<div>DCI : <input type="text" ng-model="profil.DCI"/></div>
-			<div>Adresse : <input type="text" ng-model="profil.adresse"/></div>
-			<div>Code Postal : <input type="text" ng-model="profil.codePostal"/></div>
-			<div>Ville : <input type="text" ng-model="profil.ville"/></div>
-			<div>Email : <input type="email" ng-model="profil.email"/></div>
-			<div><img src="../../../assets/icons/facebook.svg" height="32px"></img><input type="text" ng-model="profil.facebook"/></div>
-			<div><img src="../../../assets/icons/twitter.svg" height="32px"></img><input type="text" ng-model="profil.twitter"/></div>
-			<div>Avatar : <input type="text" ng-model="profil.avatar"/></div>
-			<div>Nouveau mot de passe : <input type="password" ng-model="profil.newPassword"/></div>
-			<div>Confirmer  : <input type="password"></div>
-		
-		<button type="submit" ng-click="open()">Valider changements</button>
-		<a href="#!profil"><button>Annuler</button></a>
+		<form class="form-horizontal" name="formModifProfil" novalidate>
+
+			<div class="form-group">
+				<div class="control-label col-sm-2">
+					<label>Nom</label>
+				</div>
+				<div class="col-sm-10">
+					<input type="text" ng-model="profil.lastName" size="50px"/>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="control-label col-sm-2">
+					<label>Prénom</label>
+				</div>
+				<div class="col-sm-10">
+					<input type="text" ng-model="profil.firstName" size="50px"/>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="control-label col-sm-2">
+					<label>T&eacute;l&eacute;phone</label>
+				</div>
+				<div class="col-sm-10">
+					<input type="text" ng-model="profil.telephone" size="50px"/>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="control-label col-sm-2">
+					<label>Adresse</label>
+				</div>
+				<div class="col-sm-10">
+					<input type="text" ng-model="profil.adresse" size="50px"/>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="control-label col-sm-2">
+					<label>Code Postal</label>
+				</div>
+				<div class="col-sm-10">
+					<input type="text" ng-model="profil.codePostal" size="50px"/>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="control-label col-sm-2">
+					<label>Ville</label>
+				</div>
+				<div class="col-sm-10">
+					<input type="text" ng-model="profil.ville" size="50px"/>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="control-label col-sm-2">
+					<label>Email</label>
+				</div>
+				<div class="col-sm-10">
+					<input type="email" ng-model="profil.email" size="50px"/>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="control-label col-sm-2">
+					<label><img src="../../../assets/icons/facebook.svg" height="32px" /></label>
+				</div>
+				<div class="col-sm-10">
+					<input type="text" ng-model="profil.facebook" size="50px"/>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="control-label col-sm-2">
+					<label><img src="../../../assets/icons/twitter.svg" height="32px" /></label></label>
+				</div>
+				<div class="col-sm-10">
+					<input type="text" ng-model="profil.twitter" size="50px"/>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="control-label col-sm-2">
+					<label>Avatar</label>
+				</div>
+				<div class="col-sm-10">
+					<input type="text" ng-model="profil.avatar" size="50px"/>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="control-label col-sm-2">
+					<label>Nouveau mot de passe</label>
+				</div>
+				<div class="col-sm-10">
+					<input type="password" ng-model="profil.newPassword" name="password" size="50px" required password-constraints-directive>
+					<span style="color:red" ng-show="formModifProfil.password.$dirty && formModifProfil.password.$invalid && profil.newPassword != '' ">
+						Le mot de passe doit faire au moins 8 caractères et contenir au moins un chiffre et une majuscule
+					</span>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="control-label col-sm-2">
+					<label>Confirmer</label>
+				</div>
+				<div class="col-sm-10">
+					<input type="password" ng-model="checkpw" name="checkpw" size="50px"/>
+					<span style="color:red" ng-show="checkpw != profil.newPassword">
+						Différent du nouveau mot de passe
+					</span>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-offset-2 col-sm-10">
+					<button type="submit" ng-click="open()">Valider changements</button>
+					<a href="#!profil"><button>Annuler</button></a>
+				</div>
+			</div>
 	</form>
 	</div>
 

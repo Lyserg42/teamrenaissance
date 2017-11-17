@@ -89,13 +89,20 @@ public class CardManager {
         Transaction tx = null;
         try {
             tx = session.beginTransaction();
-            CriteriaQuery cq = session.getCriteriaBuilder().createQuery(Card.class);
-            cq.from(Card.class);
+            CriteriaBuilder builder = session.getCriteriaBuilder();
+            CriteriaQuery<Card> cq = builder.createQuery(Card.class);
+            Root<Card> root = cq.from(Card.class);
+            cq.select(root);
+            cq.where( builder.equal(root.get("name"), name));
             List<Card> cardList = session.createQuery(cq).getResultList();
+            /*
             for(Card c : cardList){
                 if(c.getName().equals(name)){
                     card = c;
                 }
+            }*/
+            if(!cardList.isEmpty()){
+                card = cardList.get(0);
             }
             tx.commit();
         } catch (Exception e) {

@@ -1,4 +1,12 @@
-<div class="container">
+<div>
+<div class="container" ng-show="loading">
+	<img src="../../../assets/icons/loading.svg" class="loadingIcon"/>
+</div>
+<div class="container" ng-show="!chargementOk && !loading">
+	<h3>Erreur de chargement des données</h3>
+	<h4>Essayez d'actualiser la page</h4>
+</div>
+<div class="container" ng-show="chargementOk && !loading">
 	<!--Confirmation de pret, hidden par default -->
 	<div class="alert alert-success" ng-hide="hideCodeRetour">
 	  <button type="button" class="close" ng-click="fermerConfirmation()">&times;</button>
@@ -21,4 +29,26 @@
 			Valider demande
 		</button>
 	</form>
+
+	<div style="color:red" ng-show="listeNonValide">
+		{{erreurServeur}}
+	</div>
+
+	<!-- Modal de confirmation en cas de succes -->
+	<div class="myModalParent"></div>
+	<div class="modal-demo">
+    <script type="text/ng-template" id="myModalContent.html">
+	<div>
+		<div class="modal-header">
+            <h4 class="modal-title" id="modal-title">Demande pour le {{selectedTournament.tName}} enregistrée.</h4>
+        </div>
+        <div class="modal-body" id="modal-body">
+        	{{cardList}}
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-primary" type="button" ng-click="ok()">OK</button>
+        </div>
+    </div>
+    </script>
+</div>
 </div>

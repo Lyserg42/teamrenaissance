@@ -106,11 +106,16 @@ public class LoanServlet extends HttpServlet {
             ArrayList<Loan> loans = new ArrayList<>();
             Tournament tournament = TournamentManager.getTournament(newLoanJson.getInt("tId"));
             JSONArray cardsArray = newLoanJson.getJSONArray("cards");
+            JSONArray failed = new JSONArray();
+
             for (int i = 0; i < cardsArray.length(); i++) {
                 JSONObject cardJson = (JSONObject) cardsArray.get(i);
                 //get card
                 Card card = CardManager.getCardByName(cardJson.getString("cName"));
-                if(card == null) throw new Exception("card "+cardJson.getString("cName")+ " not found");
+                if(card == null){
+                    failed.put(cardJson.getString("cName"));
+                    continue;
+                }
                 //get quantity
                 int qty = cardJson.getInt("qty");
                 for(int j = 0; j < qty; j++){
@@ -118,8 +123,16 @@ public class LoanServlet extends HttpServlet {
                 }
             }
 
-            LoanManager.insertLoans(loans);
-            resp.setStatus(HttpServletResponse.SC_OK);
+            if(failed.length() == 0){
+                LoanManager.insertLoans(loans);
+                resp.setStatus(HttpServletResponse.SC_OK);
+            } else {
+                resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
+                resp.setContentType("application/json");
+                PrintWriter out = resp.getWriter();
+                out.print(failed);
+                out.flush();
+            }
 
         } catch (JSONException e){
             e.printStackTrace();
