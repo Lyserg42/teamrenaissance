@@ -4,23 +4,25 @@ app.controller('modifierProfilCtrl', function($scope, $http, $uibModal, $log, $d
   $scope.succesModification = false;
   $scope.erreurModification = false;
 
-	$http.get("app/components/profil/profil.json").then(
-    function succes(response){
+  $scope.refresh = function(){
+  	$http.get("app/components/profil/profil.json").then(
+      function succes(response){
 
-      $scope.loading = false;
-      $scope.chargementOk = true;
+        $scope.loading = false;
+        $scope.chargementOk = true;
 
-      /* On stocke les données récupérées*/
-      $scope.profil = response.data;
+        /* On stocke les données récupérées*/
+        $scope.profil = response.data;
 
-      /* On copie l'url de l'avatar pour ne pas qu'elle soit modifiee à la volée */
-      $scope.avatar = $scope.profil.avatar;
-    },
-    function echec(response){
-      $scope.loading = false;
-      $scope.chargementOk = false;
-    }
-  );
+        /* On copie l'url de l'avatar pour ne pas qu'elle soit modifiee à la volée */
+        $scope.avatar = $scope.profil.avatar;
+      },
+      function echec(response){
+        $scope.loading = false;
+        $scope.chargementOk = false;
+      }
+    );
+  }
 
 
   $scope.modifierProfil = function (){
@@ -66,12 +68,22 @@ app.controller('modifierProfilCtrl', function($scope, $http, $uibModal, $log, $d
           }
     });
 
-    modalInstance.result.then(function (selectedItem) {
-			console.log("Succes");
-        }, function () {
+    modalInstance.result.then(
+      function ok(codeRetour) {
+			   if(codeRetour === 1){
+          $scope.ouvrirSuccesModification();
+         }
+         else if(codeRetour === -1){
+          $scope.ouvrirErreurModification();
+         }
+         else{
+          console.log(codeRetour);
+         }
+
+      }, 
+      function cancel() {
           $log.info('Modal dismissed at: ' + new Date());
-          $scope.fermerConfirmation();
-        });
+      });
     };
 
     $scope.openComponentModal = function () {
@@ -86,12 +98,14 @@ app.controller('modifierProfilCtrl', function($scope, $http, $uibModal, $log, $d
           }
     });
 
-    modalInstance.result.then(function () {
-			console.log("Succes");
-        }, function () {
-          $log.info('modal-component dismissed at: ' + new Date());
-          $scope.fermerConfirmation();
-        });
+    modalInstance.result.then(
+      function () {
+			 console.log("Succes");
+      }, 
+      function () {
+        $log.info('modal-component dismissed at: ' + new Date());
+        $scope.fermerConfirmation();
+      });
     };
 
 
@@ -108,6 +122,8 @@ app.controller('modalInstCtrlProfil', function ($scope, $http, $uibModalInstance
 	    $scope.profil = profilValues;
 
 	$scope.ok = function () {
+
+    $scope.erreurMDP = false;
 
 		/*TODO Remplacer uId:"1" par l'id de l'utilisateur connecte*/
 		$scope.data = {	typeRequest:"setUserProfil",
@@ -128,14 +144,21 @@ app.controller('modalInstCtrlProfil', function ($scope, $http, $uibModalInstance
 
 
 		$scope.dataJSON = JSON.stringify($scope.data);
-		console.log($scope.dataJSON);
 
-	  $http.post("/user", dataJSON).then(
-      function succes(response){
-	        $uibModalInstance.close();
-	     },
-       function echec(response){
-          $uibModalInstance.close();
+		console.log($scope.dataJSON);
+    
+
+	  $http.post("/user", $scope.dataJSON).then(
+        function succes(response){
+          $uibModalInstance.close(1);
+        },
+        function echec(response){
+        if(response.status == -1){
+          $uibModalInstance.close(-1);
+        }
+        else{
+          $scope.erreurMDP = true;
+        }
        }
      ); 
 	    
@@ -143,5 +166,5 @@ app.controller('modalInstCtrlProfil', function ($scope, $http, $uibModalInstance
 
 	$scope.cancel = function () {
 	    $uibModalInstance.dismiss('cancel');
-	    };
+	};
 });

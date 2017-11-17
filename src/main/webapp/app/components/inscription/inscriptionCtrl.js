@@ -18,17 +18,17 @@ app.controller('inscriptionCtrl', function($scope, $http) {
 
         console.log(dataJSON);
 
-      	$http.post("/teamrenaisance/user", dataJSON).then(
+      	$http.post("/teamrenaissance/user", dataJSON).then(
       		function succes(response){
       			$scope.ouvrirSuccesInscription();
       		},
       		function echec(response){
 
-      			if(response.data != null){
+      			if(response.status != -1){
       				$scope.raisonEchecInscription = response.data.newuser;
       			}
       			else{
-      				$scope.raisonEchecInscription = "Impossible de connecter le serveur.";
+      				$scope.raisonEchecInscription = "Impossible de contacter le serveur.";
       			}
       			$scope.ouvrirErreurInscription();
       		}

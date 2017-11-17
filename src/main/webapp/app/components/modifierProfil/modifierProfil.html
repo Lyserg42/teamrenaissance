@@ -1,15 +1,15 @@
 <div>
 <div class="container" ng-show="loading">
-	<img src="../../../assets/icons/loading.svg" class="loadingIcon">
+	<img src="../../../assets/icons/loading.svg" class="loadingIcon"></img>
 </div>
 <div class="container" ng-show="!chargementOk && !loading">
 	<h3>Erreur de chargement des données</h3>
 	<h4>Essayez d'actualiser la page</h4>
 </div>
-<div class="container" ng-show="!chargementOk && !loading">
+<div class="container" ng-show="chargementOk && !loading">
 	<div class="alert alert-danger" ng-show="erreurModification">
 	  <button type="button" class="close" ng-click="fermerErreurModification()">&times;</button>
-	  Modifications non effectuées : {{raisonEchecConnexion}}.
+	  Modifications non effectuées : impossible de contacter le serveur.
 	</div>
 	<div class="alert alert-success" ng-show="succesModification">
 	  <button type="button" class="close" ng-click="fermerSuccesModification()">&times;</button>
@@ -141,7 +141,10 @@
 	        </div>
 	        <div class="modal-body" id="modal-body">
 	           <form>
-			       <input type="password" ng-model="password"/>
+					<input type="password" ng-model="password"/>
+					<span style="color:red" ng-show="erreurMDP">
+						Mot de passe erroné.
+					</span>
 		  		</form>
 	        </div>
 	        <div class="modal-footer">
