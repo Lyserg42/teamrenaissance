@@ -1,15 +1,47 @@
 app.controller('modifierProfilCtrl', function($scope, $http, $uibModal, $log, $document) {
 
+  $scope.loading = true;
+  $scope.succesModification = false;
+  $scope.erreurModification = false;
 
-	$http.get("app/components/profil/profil.json").then(function(response){
+	$http.get("app/components/profil/profil.json").then(
+    function succes(response){
 
-                /* On stocke les données récupérées*/
-            	$scope.profil = response.data;
+      $scope.loading = false;
+      $scope.chargementOk = true;
 
-            	/* On copie l'url de l'avatar pour ne pas qu'elle soit modifiee à la volée */
-            	$scope.avatar = $scope.profil.avatar;
+      /* On stocke les données récupérées*/
+      $scope.profil = response.data;
 
-	});
+      /* On copie l'url de l'avatar pour ne pas qu'elle soit modifiee à la volée */
+      $scope.avatar = $scope.profil.avatar;
+    },
+    function echec(response){
+      $scope.loading = false;
+      $scope.chargementOk = false;
+    }
+  );
+
+
+  $scope.modifierProfil = function (){
+    $scope.open();
+  }
+
+  $scope.fermerErreurModification = function(){
+    $scope.erreurModification = false;
+  }
+
+  $scope.ouvrirErreurModification = function(){
+    $scope.erreurModification = true;
+  }
+
+  $scope.fermerSuccesModification = function(){
+      $scope.succesModification = false;
+  }
+
+  $scope.ouvrirSuccesModification = function(){
+      $scope.succesModification = true;
+  }
 
 
  /* Gestion du modal*/
@@ -66,7 +98,6 @@ app.controller('modifierProfilCtrl', function($scope, $http, $uibModal, $log, $d
     $scope.toggleAnimation = function () {
         $scope.animationsEnabled = !$scope.animationsEnabled;
     };
-
 });
 
 // Please note that $uibModalInstance represents a modal window (instance) dependency.
@@ -99,10 +130,14 @@ app.controller('modalInstCtrlProfil', function ($scope, $http, $uibModalInstance
 		$scope.dataJSON = JSON.stringify($scope.data);
 		console.log($scope.dataJSON);
 
-	  /*  $http.post("/user", dataJSON).then(function(){
+	  $http.post("/user", dataJSON).then(
+      function succes(response){
 	        $uibModalInstance.close();
-	    }); */
-	     $uibModalInstance.close();
+	     },
+       function echec(response){
+          $uibModalInstance.close();
+       }
+     ); 
 	    
 	};
 

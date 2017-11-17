@@ -18,7 +18,7 @@ app.controller('inscriptionCtrl', function($scope, $http) {
 
         console.log(dataJSON);
 
-      	$http.post("/user", dataJSON).then(
+      	$http.post("/teamrenaisance/user", dataJSON).then(
       		function succes(response){
       			$scope.ouvrirSuccesInscription();
       		},
