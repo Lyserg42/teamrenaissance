@@ -1,18 +1,27 @@
 
-<div class="container">
-	<div>
-		<h1>{{profil.uName}}</h1>
-		<img src="{{profil.avatar}}"></img>
-		<div>{{profil.firstName+" "+profil.lastName}}</div>
-		<div>T&eacute;l&eacute;phone : {{profil.telephone}}</div>
-		<div>DCI : {{profil.DCI}}</div>
-		<br/>
-		<div>Adresse</div>
-		<p>{{profil.adresse+"\n"+profil.codePostal+" "+profil.ville}}</p>
-		<div>Email : {{profil.email}}</div>
-		<a href="{{profil.facebook}}" ng-hide="profil.facebook === ''"><img src="../../../assets/icons/facebook.svg" height="32px"></img></a>
-		<a href="{{profil.twitter}}" ng-hide="profil.twitter === ''"><img src="../../../assets/icons/twitter.svg" height="32px"></img></a>
-		<a href="#!modifierprofil" ng-hide=""><button>Modifier Profil</button></a>
+<div>
+	<div class="container" ng-show="loading">
+	<img src="../../../assets/icons/loading.svg" class="loadingIcon">
+	</div>
+	<div class="container" ng-show="!chargementOk && !loading">
+		<h3>Erreur de chargement des données</h3>
+		<h4>Essayez d'actualiser la page</h4>
+	</div>
+	<div class="container" ng-show="chargementOk && !loading">
+		<div>
+			<h1>{{profil.uName}}</h1>
+			<img src="{{profil.avatar}}"></img>
+			<div>{{profil.firstName+" "+profil.lastName}}</div>
+			<div>T&eacute;l&eacute;phone : {{profil.telephone}}</div>
+			<div>DCI : {{profil.DCI}}</div>
+			<br/>
+			<div>Adresse</div>
+			<p>{{profil.adresse+"\n"+profil.codePostal+" "+profil.ville}}</p>
+			<div>Email : {{profil.email}}</div>
+			<a href="{{profil.facebook}}" ng-hide="profil.facebook === ''"><img src="../../../assets/icons/facebook.svg" height="32px"></img></a>
+			<a href="{{profil.twitter}}" ng-hide="profil.twitter === ''"><img src="../../../assets/icons/twitter.svg" height="32px"></img></a>
+			<a href="#!modifierprofil" ng-hide=""><button>Modifier Profil</button></a>
+		</div>
 	</div>
 	<div><!--
 		<div my-map=""></div>
