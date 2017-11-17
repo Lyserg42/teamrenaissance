@@ -1,23 +1,40 @@
-app.controller('emprunterCtrl', function($scope, $http) {
+app.controller('emprunterCtrl', function($scope, $http, $uibModal, $log, $document) {
 
-    $http.get("/tournament").then(function(response){
-        $scope.tournaments = response.data.tournaments;
-    });
+    $scope.refresh = function(){
+        $scope.loading = true;
+        $scope.listeNonValide = false;
 
-    $scope.hideCodeRetour = true;
-    $scope.qtyAjoutCarte = 1;
-    $scope.cardList = "";
-
-    $scope.ajouterCarte = function(){
-        if(!$scope.nameAjoutCarte == ""){
-            if(!$scope.cardList[$scope.cardList.length-1] == "\n" && !$scope.cardList == ""){
-                $scope.cardList += "\n";
+        /* app/components/emprunter/tournaments.json */
+        $http.get("/loan").then(
+            function succes(response){
+                $scope.loading = false;
+                $scope.chargementOk = true;
+                $scope.tournaments = response.data.tournaments;
+            },
+            function echec(response){
+                $scope.loading = false;
+                $scope.chargementOk = false;
             }
-            $scope.cardList += $scope.qtyAjoutCarte +" "+ $scope.nameAjoutCarte;
-            $scope.qtyAjoutCarte = 1;
-            $scope.nameAjoutCarte = "";
-        }
+        );
+
+        $scope.hideCodeRetour = true;
+        $scope.qtyAjoutCarte = 1;
+        $scope.cardList = "";
+
+        $scope.ajouterCarte = function(){
+            if(!$scope.nameAjoutCarte == ""){
+                if(!$scope.cardList[$scope.cardList.length-1] == "\n" && !$scope.cardList == ""){
+                    $scope.cardList += "\n";
+                }
+                $scope.cardList += $scope.qtyAjoutCarte +" "+ $scope.nameAjoutCarte;
+                $scope.qtyAjoutCarte = 1;
+                $scope.nameAjoutCarte = "";
+            }
+        };
+
     };
+
+    $scope.refresh();
 
     $scope.suggestCardName = function(){
         console.log("hello");
@@ -68,18 +85,15 @@ app.controller('emprunterCtrl', function($scope, $http) {
 
             /* TODO  Envoyer la string au serveur */
             console.log(data);
-            $http.post("/loan", dataJSON).then(function(response){
-                console.log(response);
-                if(response.status == 200){
-                    console.log("Votre demande d'emprunt a bien été enregistrée.");
-                    $scope.retourServeur = "Votre demande d'emprunt a bien été enregistrée.";
-                } else {
-                    console.log("Demande rejettée, les cartes suivantes n'ont pas été trouvée");
-                    $scope.retourServeur = "Demande rejettée, les cartes suivantes n'ont pas été trouvée :\n"+
-                        response.data;
+            $http.post("/loan", dataJSON).then(
+                function succes(response){
+                    $scope.open();
+                },
+                function echec(response){
+                    $scope.listeNonValide = true;
+                    $scope.erreurServeur = response.data;
                 }
-                $scope.hideCodeRetour = false;
-            });
+            );
         }
     };
 
@@ -87,4 +101,90 @@ app.controller('emprunterCtrl', function($scope, $http) {
         $scope.hideCodeRetour = true;
     };
 
+
+
+/* Gestion du modal*/
+
+    $scope.animationsEnabled = true;
+
+    $scope.open = function (size) {
+
+        var parentElem = angular.element($document[0].querySelector('.myModalParent'));
+
+        var modalInstance = $uibModal.open({
+          animation: $scope.animationsEnabled,
+          ariaLabelledBy: 'modal-title',
+          ariaDescribedBy: 'modal-body',
+          templateUrl: 'myModalContent.html',
+          controller: 'modalInstCtrlEmprunter',
+          appendTo: parentElem,
+          size: size,
+          resolve: {
+            tournoi: function () {
+              return $scope.selectedTournament;
+            },
+            cartes: function() {
+                return $scope.cardList;
+            }
+          }
+    });
+
+    modalInstance.result.then(function (selectedItem) {
+          $scope.refresh(); 
+          $scope.afficheConfirmation();
+        }, function () {
+          $log.info('Modal dismissed at: ' + new Date());
+          $scope.fermerConfirmation();
+        });
+    };
+
+    $scope.openComponentModal = function () {
+        var modalInstance = $uibModal.open({
+          animation: $scope.animationsEnabled,
+          component: 'modalComponent',
+          resolve: {
+            tournoi: function () {
+              return $scope.selectedTournament;
+            },
+            cartes: function() {
+                return $scope.cardList;
+            }
+
+          }
+    });
+
+    modalInstance.result.then(function () {
+          $scope.refresh(); 
+          $scope.afficheConfirmation();
+        }, function () {
+          $log.info('modal-component dismissed at: ' + new Date());
+          $scope.fermerConfirmation();
+        });
+    };
+
+
+    $scope.toggleAnimation = function () {
+        $scope.animationsEnabled = !$scope.animationsEnabled;
+    };
+
+
+});
+
+// Please note that $uibModalInstance represents a modal window (instance) dependency.
+// It is not the same as the $uibModal service used above.
+
+app.controller('modalInstCtrlEmprunter', function ($scope, $http, $uibModalInstance, tournoi, cartes) {
+
+    $scope.selectedTournament = tournoi;
+    $scope.cardList = cartes;
+
+    $scope.ok = function () {
+
+         $uibModalInstance.close();
+        
+    };
+
+    $scope.cancel = function () {
+        $uibModalInstance.dismiss('cancel');
+    };
 });
