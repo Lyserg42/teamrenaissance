@@ -15,7 +15,6 @@ import java.io.PrintWriter;
 @WebServlet(name = "CardServlet")
 public class CardServlet extends HttpServlet {
 
-    //L'utilisateur envoie des données (via un formulaire...)
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         JSONObject obj = new JSONObject();
@@ -40,7 +39,6 @@ public class CardServlet extends HttpServlet {
 
     }
 
-    //L'utilisateur veut récupérer une page HTML
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
     }

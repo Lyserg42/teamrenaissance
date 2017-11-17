@@ -69,7 +69,15 @@ app.controller('emprunterCtrl', function($scope, $http) {
             /* TODO  Envoyer la string au serveur */
             console.log(data);
             $http.post("/loan", dataJSON).then(function(response){
-                $scope.retourServeur = response.headers();
+                console.log(response);
+                if(response.status == 200){
+                    console.log("Votre demande d'emprunt a bien été enregistrée.");
+                    $scope.retourServeur = "Votre demande d'emprunt a bien été enregistrée.";
+                } else {
+                    console.log("Demande rejettée, les cartes suivantes n'ont pas été trouvée");
+                    $scope.retourServeur = "Demande rejettée, les cartes suivantes n'ont pas été trouvée :\n"+
+                        response.data;
+                }
                 $scope.hideCodeRetour = false;
             });
         }
