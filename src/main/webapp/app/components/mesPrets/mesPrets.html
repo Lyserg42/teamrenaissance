@@ -1,4 +1,4 @@
-<div class="container" xmlns="http://www.w3.org/1999/html">
+<div class="container">
     <h2>Mes prêts </h2>
 
     <div class="row">
@@ -38,12 +38,7 @@
                             </div>
                         </div>
                     </div>
-                    <!-- <button type="button" class="btn" data-toggle="modal" data-target="#modalLent"
-                            ng-click="orgLent($parent.$index,$index)"> Modifier
-                    </button> -->
-                    <button type="button" class="btn" ng-click="modification($parent.$index,$index,pret)"> Modifier </button>
-
-                    <br> </br>
+                    <button type="button" class="btn" ng-click="modification($parent.$index, $index, 'pret')"> Modifier </button>
                 </div>
             </div>
 
@@ -70,8 +65,7 @@
 
                         </div>
                     </div>
-                    <button type="button" class="btn" ng-click="modification($parent.$index,$index,emprunt)"> Modifier  </button>
-                    <br> </br>
+                    <button type="button" class="btn" ng-click="modification($parent.$index,$index, 'emprunt')"> Modifier  </button>
                 </div>
             </div>
             <br> </br>
@@ -88,7 +82,7 @@
                 <div ng-repeat="c in t.demands">
                     <p> {{c.qty}} {{c.cName}} </p>
                 </div>
-                <button class="btn" type="button" href="#!emprunter">Ajouter</button>
+                <a href="#!emprunter" ><button class="btn" type="button" href="#!emprunter">Ajouter</button></a>
                 <br> </br>
             </div>
             <br> </br>

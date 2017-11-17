@@ -1,4 +1,13 @@
 <div class="container">
+	<div class="alert alert-danger" ng-show="erreurInscription">
+  		<button type="button" class="close" ng-click="fermerErreurInscription()">&times;</button>
+  		<div>L'inscription a échouée : {{raisonEchecInscription}}</div>
+	</div>
+	<div class="alert alert-succes" ng-show="succesInscription">
+  		<button type="button" class="close" ng-click="fermerSuccesInscription()">&times;</button>
+  		<div>L'inscription est un succès. Vous pouvez désormais vous connecter.</div>
+	</div>
+	<div>
 	<h1>Inscription</h1>
 		<form class="form-horizontal" name="formInscription" novalidate>
 			<div class="form-group">
@@ -86,4 +95,5 @@
 				</div>
 			</div>
 		</form>
+	</div>
 </div>

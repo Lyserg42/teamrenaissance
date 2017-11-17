@@ -31,30 +31,30 @@
 			{"uName":"Vansiri",
 			"uId":1,
 			"cards":[
-						{ "qty":4, "cId":11, "cName":"Mishra's Workshop"},
-						{ "qty":4, "cId":12, "cName":"Borderland Ranger"},
-						{ "qty":4, "cId":13, "cName":"Damnation"}
+						{ "qty":4, "cId":13, "cName":"Mishra's Workshop"},
+						{ "qty":4, "cId":14, "cName":"Borderland Ranger"},
+						{ "qty":4, "cId":15, "cName":"Damnation"}
 					]
 			},
 			{"uName":"Lyserg",
 			"uId":2,
 			"cards":[ 
-					  	{ "qty":2, "cId":14, "cName":"Shock"},
-					 	{ "qty":2, "cId":15, "cName":"Saheeli Rai"}
+					  	{ "qty":2, "cId":16, "cName":"Shock"},
+					 	{ "qty":2, "cId":17, "cName":"Saheeli Rai"}
 					]
 			},
 			{"uName":"Naoko",
 			"uId":3,
 			"cards":[ 
-					 	{ "qty":1, "cId":6, "cName":"Lantern of Insight"},
-					  	{ "qty":1, "cId":7, "cName":"Death's Shadow"}
+					 	{ "qty":1, "cId":21, "cName":"Lantern of Insight"},
+					  	{ "qty":1, "cId":22, "cName":"Death's Shadow"}
 					]
 			}
 		 ],
 		"demands":[
-			{ "qty":1, "cId":1, "cName":""},
-			{ "qty":2, "cId":2, "cName":"Nissa, Vastwood Seer"},
-			{ "qty":1, "cId":3, "cName":"Wrath of God"}
+			{ "qty":1, "cId":18, "cName":"Jace, the Mind Sculptor"},
+			{ "qty":2, "cId":19, "cName":"Fireball"},
+			{ "qty":1, "cId":20, "cName":"Path to Exile"}
 		 ]
 	},
 	{ 	"tName":"GP Lyon",

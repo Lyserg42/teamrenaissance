@@ -12,7 +12,6 @@ app.controller('mesPretsController', function($scope, $http, $uibModal, $log, $d
 
         $scope.selectFiltreEmpruntsPretsDemandes = "Tous";
 
-
         $scope.selectEmpruntsPretsDemandes[1]="lentCards";
         $scope.selectEmpruntsPretsDemandes[2]="borrowedCards";
         $scope.selectEmpruntsPretsDemandes[3]="demands";
@@ -49,22 +48,6 @@ app.controller('mesPretsController', function($scope, $http, $uibModal, $log, $d
     };
 
     $scope.refresh();
-
-    $scope.modifLent = function(iParent, i){
-        $scope.modal = {
-            uName:$scope.tournaments[iParent].borrowedCards[i].uName,
-            uId:$scope.tournaments[iParent].borrowedCards[i].uId,
-            tournament:$scope.tournaments[iParent].tName,
-            tId:$scope.tournaments[iParent].tId,
-            cards: $scope.tournaments[iParent].borrowedCards[i].cards
-        };
-        $scope.modifPret = new Array();
-        $scope.modal.cards.forEach(function(card,i){
-            $scope.modifPrets[i] = {cId:card.cId, qty:card.qty};
-        });
-
-        $scope.open();
-    };
 
     $scope.validerLent = function(){
 
