@@ -41,14 +41,14 @@ public class UserManager {
             obj.put("newuser", "login already exist");
         } else {
             if (!passwordSolid(password)) {
-                obj.put("newuser", "password not respect");
+                obj.put("newuser", "Unknown Error");
             } else {
                 if (!isEnteredField(name, firstname, username, mail,
                         password)) {
-                    obj.put("newuser", "mandatory fields are not entered");
+                    obj.put("newuser", "Unknown Error");
                 } else {
                         if (!isValideEmail(mail)) {
-                            obj.put("newuser", "mail not valid");
+                            obj.put("newuser", "Unknown Error");
                         } else {
                             Session session = HibernateUtil.getSessionFactory().openSession();
                             Transaction tx = session.beginTransaction();
