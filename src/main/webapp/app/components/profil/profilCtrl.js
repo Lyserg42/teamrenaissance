@@ -14,7 +14,9 @@ app.controller('profilCtrl', function($scope, $http, $routeParams) {
     console.log(data);
 
     /* TOOD mettre /user en premier parametre et dataJSON en second parametre */
+    /* app/components/profil/serveur/getUser.json */
 	$http.post("/user",data).then(
+
         function succes(response){
 
             console.log("Succes communication serveur");

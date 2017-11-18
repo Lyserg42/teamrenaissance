@@ -1,6 +1,6 @@
 <div>
 <div class="container" ng-show="loading">
-	<img src="../../../assets/icons/loading.svg" class="loadingIcon"></img>
+	<img src="assets/icons/loading.svg" class="loadingIcon"></img>
 </div>
 <div class="container" ng-show="!chargementOk && !loading">
 	<h3>Erreur de chargement des données</h3>
@@ -41,7 +41,7 @@
 					<label>T&eacute;l&eacute;phone</label>
 				</div>
 				<div class="col-sm-10">
-					<input type="text" ng-model="profil.telephone" size="50px"/>
+					<input type="text" ng-model="profil.phone" size="50px"/>
 				</div>
 			</div>
 			<div class="form-group">
@@ -49,7 +49,7 @@
 					<label>Adresse</label>
 				</div>
 				<div class="col-sm-10">
-					<input type="text" ng-model="profil.adresse" size="50px"/>
+					<input type="text" ng-model="profil.address" size="50px"/>
 				</div>
 			</div>
 			<div class="form-group">
@@ -57,7 +57,7 @@
 					<label>Code Postal</label>
 				</div>
 				<div class="col-sm-10">
-					<input type="text" ng-model="profil.codePostal" size="50px"/>
+					<input type="text" ng-model="profil.zipCode" size="50px"/>
 				</div>
 			</div>
 			<div class="form-group">
@@ -65,7 +65,7 @@
 					<label>Ville</label>
 				</div>
 				<div class="col-sm-10">
-					<input type="text" ng-model="profil.ville" size="50px"/>
+					<input type="text" ng-model="profil.city" size="50px"/>
 				</div>
 			</div>
 			<div class="form-group">
@@ -78,7 +78,7 @@
 			</div>
 			<div class="form-group">
 				<div class="control-label col-sm-2">
-					<label><img src="../../../assets/icons/facebook.svg" height="32px" /></label>
+					<label><img src="assets/icons/facebook.svg" height="32px" /></label>
 				</div>
 				<div class="col-sm-10">
 					<input type="text" ng-model="profil.facebook" size="50px"/>
@@ -86,7 +86,7 @@
 			</div>
 			<div class="form-group">
 				<div class="control-label col-sm-2">
-					<label><img src="../../../assets/icons/twitter.svg" height="32px" /></label></label>
+					<label><img src="assets/icons/twitter.svg" height="32px" /></label></label>
 				</div>
 				<div class="col-sm-10">
 					<input type="text" ng-model="profil.twitter" size="50px"/>
@@ -117,7 +117,7 @@
 				</div>
 				<div class="col-sm-10">
 					<input type="password" ng-model="checkpw" name="checkpw" size="50px"/>
-					<span style="color:red" ng-show="checkpw != profil.newPassword">
+					<span style="color:red" ng-show="checkpw != profil.newPassword && profil.newPassword != ''" >
 						Différent du nouveau mot de passe
 					</span>
 				</div>

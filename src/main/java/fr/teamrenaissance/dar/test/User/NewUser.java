@@ -9,7 +9,7 @@ public class NewUser {
         JSONObject obj = null;
         try {
             obj = UserManager.newUser("hellal","sarra","sarra_hellal@hotmail.com",
-                    "sarrro","Kiuiui7uip",
+                    "Sarra","Kiuiui7uip",
                     "rue des alouettes","","","","","","fontenay","94120");
         } catch (Exception e) {
             e.printStackTrace();

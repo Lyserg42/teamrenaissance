@@ -9,9 +9,9 @@ app.controller('modifierProfilCtrl', function($scope, $http, $uibModal, $log, $d
     
     var data = {typeRequest:"getUser", uName:""};
     var dataJSON = JSON.stringify(data);
-    
-    /* app/components/profil/profil.json */
+    /* app/components/profil/serveur/getUser.json */
   	$http.post("/user", dataJSON).then(
+
       function succes(response){
 
         $scope.loading = false;
@@ -129,39 +129,39 @@ app.controller('modifierProfilCtrl', function($scope, $http, $uibModal, $log, $d
 
 app.controller('modalInstCtrlProfil', function ($scope, $http, $uibModalInstance, profilValues) {
 
-	    $scope.profil = profilValues;
+	  $scope.profil = profilValues;
 
-	$scope.ok = function () {
+	  $scope.ok = function () {
 
     $scope.erreurMDP = false;
 
-		$scope.data = {	typeRequest:"setUserProfil",
-						name:$scope.profil.lastName,
-						firstname:$scope.profil.firstName,
-						email:$scope.profil.email,
-						address:$scope.profil.adresse,
-						postalCode:$scope.profil.codePostal,
-						city:$scope.profil.ville,
-						avatar:$scope.profil.avatar,
-						phoneNumber:$scope.profil.telephone,
-						dciNumber:$scope.profil.DCI,
-						facebook:$scope.profil.facebook,
-						twitter:$scope.profil.twitter,
-						password:$scope.password,
-						newPassword:$scope.profil.newPassword};
+		$scope.data = {  typeRequest:"setUserProfil",
+            name:$scope.profil.lastName,
+            firstname:$scope.profil.firstName,
+            email:$scope.profil.email,
+            address:$scope.profil.address,
+            zipCode:$scope.profil.zipCode,
+            city:$scope.profil.city,
+            avatar:$scope.profil.avatar,
+            phoneNumber:$scope.profil.phone,
+            dciNumber:$scope.profil.DCI,
+            facebook:$scope.profil.facebook,
+            twitter:$scope.profil.twitter,
+            password:$scope.password,
+            newPassword:$scope.profil.newPassword};
+
 
 
 		$scope.dataJSON = JSON.stringify($scope.data);
 
 		console.log($scope.dataJSON);
-    
-
-	  $http.post("/user", $scope.dataJSON).then(
+  
+	  $http.post("teamrenaissance/user", $scope.dataJSON).then(
         function succes(response){
           $uibModalInstance.close(1);
         },
         function echec(response){
-          if(response.status == -1){
+          if(response.status === -1){
             $uibModalInstance.close(-1);
           }
           else{

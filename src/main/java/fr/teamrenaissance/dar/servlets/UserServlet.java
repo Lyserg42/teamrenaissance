@@ -109,23 +109,28 @@ public class UserServlet extends HttpServlet {
                 else{
                     resp.setContentType("application/json");
                     resp.setStatus(HttpServletResponse.SC_OK);
-                    out.print(obj);
+                    out.print(obj.get("getUserSucces"));
 
                 }
 
             }
-           /* else if(typeRequest.equals("setUserProfil")){
+            else if(typeRequest.equals("setUserProfil")){
 
-                userSession = req.getSession();
-                String username =
-                        ((JSONObject) userSession.getAttribute(USER)).getString("login");
-                if(username== null){
-                    obj.put("setProfilFailed","you must to be connect");
-                } else{
+                userSession = req.getSession(false);
+                if(userSession==null) {
+                    resp.setContentType("application/json");
+                    resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                    obj.put("setUserProfil","Unknown error");
+                    out.print(obj);
+
+                }else{
+                    String username =
+                            ((JSONObject) userSession.getAttribute(USER)).getString("login");
                     String name = request.getString("name");
-                    String firstname = request.getString("firstname");
+                    String firstname = request.getString("firstName");
                     String email = request.getString("email");
                     String password = request.getString("password");
+                    String newPassword = request.getString("newPassword");
                     String address = request.getString("address");
                     String avatar = request.getString("avatar");
                     String phoneNumber = request.getString("phoneNumber");
@@ -134,14 +139,36 @@ public class UserServlet extends HttpServlet {
                     String tw = request.getString("twitter");
                     String city = request.getString("city");
                     String zipCode = request.getString("zipCode");
-                    obj= UserManager.setUserProfil(name,firstname,email,username,
-                            password,address,avatar,dciNumber,phoneNumber,
-                            fb,tw,city,zipCode);
+                    if(UserManager.isEqualsPassword(username,password)) {
+                        if(newPassword.equals("")){
+                            newPassword = password;
+                        }
+                        obj = UserManager.setUserProfil(name, firstname, email, username,
+                                newPassword, address, avatar, dciNumber, phoneNumber,
+                                fb, tw, city, zipCode);
+                        if(obj.has("setProfilFailed")){
+                            resp.setContentType("application/json");
+                            resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                            out.print(obj);
+
+                        }else{
+                            resp.setStatus(HttpServletResponse.SC_OK);
+
+                        }
+
+                    }else{
+                        resp.setContentType("application/json");
+                        obj.put("setUserProfil","Password error");
+                        resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                        out.print(obj);
+
+
+                    }
                 }
 
 
             }
-            else if(typeRequest.equals("deconnection")){
+           /* else if(typeRequest.equals("deconnection")){
                 userSession = req.getSession();
                 userSession.invalidate();
                 obj.put("deconnection","succes");

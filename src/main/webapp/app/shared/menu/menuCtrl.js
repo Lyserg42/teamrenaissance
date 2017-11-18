@@ -7,8 +7,6 @@ app.controller('menuCtrl', function($scope, $http) {
 
     }
 
-
-
     $scope.isTabActive = function(tabName){
     	if(tabName === $scope.activeTab){
     		return true;
