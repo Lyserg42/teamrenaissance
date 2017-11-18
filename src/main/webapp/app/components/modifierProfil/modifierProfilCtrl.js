@@ -140,7 +140,7 @@ app.controller('modalInstCtrlProfil', function ($scope, $http, $uibModalInstance
 						firstname:$scope.profil.firstName,
 						email:$scope.profil.email,
 						address:$scope.profil.adresse,
-						postalCode:$scope.profil.codePostal,
+						zipCode:$scope.profil.codePostal,
 						city:$scope.profil.ville,
 						avatar:$scope.profil.avatar,
 						phoneNumber:$scope.profil.telephone,

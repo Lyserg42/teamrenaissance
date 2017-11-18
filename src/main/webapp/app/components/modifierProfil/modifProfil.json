@@ -1,6 +1,5 @@
 { 
 	"typeRequest":"setUserProfil",
-	"uId":2,
 	"name":"Henry",
 	"firstName":"Julien",
 	"email":"julien.henry@gmx.com",
