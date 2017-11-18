@@ -118,7 +118,10 @@ public class UserServlet extends HttpServlet {
 
                 userSession = req.getSession(false);
                 if(userSession==null) {
+                    resp.setContentType("application/json");
                     resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                    obj.put("setUserProfil","Unknown error");
+                    out.print(obj);
 
                 }else{
                     String username =
@@ -136,10 +139,31 @@ public class UserServlet extends HttpServlet {
                     String tw = request.getString("twitter");
                     String city = request.getString("city");
                     String zipCode = request.getString("zipCode");
-                    //if(UserManager.getUser(username))
-                    obj= UserManager.setUserProfil(name,firstname,email,username,
-                            password,address,avatar,dciNumber,phoneNumber,
-                            fb,tw,city,zipCode);
+                    if(UserManager.isEqualsPassword(username,password)) {
+                        if(newPassword.equals("")){
+                            newPassword = password;
+                        }
+                        obj = UserManager.setUserProfil(name, firstname, email, username,
+                                newPassword, address, avatar, dciNumber, phoneNumber,
+                                fb, tw, city, zipCode);
+                        if(obj.has("setProfilFailed")){
+                            resp.setContentType("application/json");
+                            resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                            out.print(obj);
+
+                        }else{
+                            resp.setStatus(HttpServletResponse.SC_OK);
+
+                        }
+
+                    }else{
+                        resp.setContentType("application/json");
+                        obj.put("setUserProfil","Password error");
+                        resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                        out.print(obj);
+
+
+                    }
                 }
 
 
