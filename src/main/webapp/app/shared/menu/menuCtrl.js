@@ -2,23 +2,45 @@ app.controller('menuCtrl', function($scope, $http) {
 
     $scope.isConnected = false;
     $scope.activeTab = "Accueil"
-    $scope.justConnected = false;
-    $scope.justDisconnected = false;
 
-     $http.get("app/components/demandes/demandes.json").then(function(response){
-        
-     });
+    $scope.Wrefresh = function(){
 
-    $scope.deconnexion = function(){
-    	$scope.fermerConfirmationConnexion();
-    	$scope.isConnected = false;
-    	$scope.justDisconnected = true;
     }
 
-    $scope.connexion = function(){
-    	$scope.fermerConfirmationDeconnexion();
-    	$scope.isConnected = true;
-    	$scope.justConnected = true;
+    $scope.connexionMagique = function(){
+        $scope.isConnected = true;
+    }
+
+    $scope.refresh = function(){
+        $http.get("app/components/profil/profil.json").then(
+        function succes(response){
+            $scope.isConnected = true;
+            $scope.avatar = response.data.avatar;
+            $scope.pseudo = response.data.uName;
+        },
+        function echec(response){
+            $scope.isConnected = false;
+        }
+        );
+    }
+
+    $scope.refresh();
+
+    $scope.deconnexion = function(){
+    	$scope.isConnected = false;
+        $http.post("app/components/profil/profil.json").then(
+            function succes(response){
+
+            },
+            function echec(response){
+                if(response.status == -1){
+
+                }
+                else{
+                    
+                }
+            }
+        );
     }
 
     $scope.isTabActive = function(tabName){
@@ -34,16 +56,4 @@ app.controller('menuCtrl', function($scope, $http) {
     	$activeTab = tabName;
     };
 
-    $scope.fermerConfirmationConnexion = function(){
-    	$scope.justConnected = false;
-    };
-
-    $scope.fermerConfirmationDeconnexion = function(){
-    	$scope.justDisconnected = false;
-    };
-
-    $scope.fermerConfirmations = function(){
-    	$scope.fermerConfirmationConnexion();
-    	$scope.fermerConfirmationDeconnexion();
-    };
 });

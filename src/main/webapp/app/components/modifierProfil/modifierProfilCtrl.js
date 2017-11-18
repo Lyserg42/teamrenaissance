@@ -1,10 +1,12 @@
 app.controller('modifierProfilCtrl', function($scope, $http, $uibModal, $log, $document) {
 
-  $scope.loading = true;
   $scope.succesModification = false;
   $scope.erreurModification = false;
 
   $scope.refresh = function(){
+
+    $scope.loading = true;
+
   	$http.get("app/components/profil/profil.json").then(
       function succes(response){
 
@@ -23,6 +25,8 @@ app.controller('modifierProfilCtrl', function($scope, $http, $uibModal, $log, $d
       }
     );
   }
+
+  $scope.refresh();
 
 
   $scope.modifierProfil = function (){
@@ -72,9 +76,11 @@ app.controller('modifierProfilCtrl', function($scope, $http, $uibModal, $log, $d
       function ok(codeRetour) {
 			   if(codeRetour === 1){
           $scope.ouvrirSuccesModification();
+          $scope.refresh();
          }
          else if(codeRetour === -1){
           $scope.ouvrirErreurModification();
+          $scope.refresh();
          }
          else{
           console.log(codeRetour);
@@ -153,12 +159,12 @@ app.controller('modalInstCtrlProfil', function ($scope, $http, $uibModalInstance
           $uibModalInstance.close(1);
         },
         function echec(response){
-        if(response.status == -1){
-          $uibModalInstance.close(-1);
-        }
-        else{
-          $scope.erreurMDP = true;
-        }
+          if(response.status == -1){
+            $uibModalInstance.close(-1);
+          }
+          else{
+            $scope.erreurMDP = true;
+          }
        }
      ); 
 	    

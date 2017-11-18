@@ -1,6 +1,6 @@
 <div>
 <div class="container" ng-show="loading">
-	<img src="../../../assets/icons/loading.svg" class="loadingIcon">
+	<img src="../../../assets/icons/loading.svg" class="loadingIcon"></img>
 </div>
 <div class="container" ng-show="!chargementOk && !loading">
 	<h3>Erreur de chargement des données</h3>
@@ -18,9 +18,13 @@
 	</div>
 
 	<!--Confirmation de pret, hidden par default -->
-	<div class="alert alert-success" ng-hide="hideConfirmation">
-	  <button type="button" class="close" ng-click="fermerConfirmation()">&times;</button>
-	  <strong>Pr&ecirc;t valid&eacute; !</strong> Prenez contact avec la personne pour organiser les d&eacute;tails.
+	<div class="alert alert-danger" ng-show="erreurPret">
+	  <button type="button" class="close" ng-click="fermerErreurPret()">&times;</button>
+	  Prêt non enregistré : {{raisonErreur}}
+	</div>
+	<div class="alert alert-success" ng-show="succesPret">
+	  <button type="button" class="close" ng-click="fermerSuccesPret()">&times;</button>
+	  Prêt enregistré. Consultez <a href="#!mesprets">vos prêts</a> pour les détails.
 	</div>
 
 	<div class="form-group" ng-repeat="t in tournaments | filtreTournois : selectFiltreTournois">

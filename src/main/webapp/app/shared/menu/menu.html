@@ -2,36 +2,37 @@
   <div class="container-fluid">
     <ul class="nav navbar-nav">
       <li class="nav-item active">
-        <a href="#!accueil" ng-click="fermerConfirmations()" class="nav-link active">Accueil</a>
+        <a href="#!accueil" ng-click="Wrefresh()" class="nav-link active">Accueil</a>
       </li>
       <li class="nav-item">
-        <a href="#!emprunter" ng-click="fermerConfirmations()" ng-show="isConnected" class="nav-link">Emprunter</a>
+        <a href="#!emprunter" ng-click="Wrefresh()" ng-show="isConnected" class="nav-link">Emprunter</a>
       </li>
       <li class="nav-item">
-        <a href="#!mesprets" ng-click="fermerConfirmations()" ng-show="isConnected" class="nav-link">Mes Pr&ecirc;ts</a>
+        <a href="#!mesprets" ng-click="Wrefresh()" ng-show="isConnected" class="nav-link">Mes Pr&ecirc;ts</a>
       </li>
       <li class="">
-       <a href="#!profil" ng-click="fermerConfirmations()" ng-show="isConnected" class="nav-link">Profil</a>
+       <a href="#!profil" ng-click="Wrefresh()" ng-show="isConnected" class="nav-link">Profil</a>
       </li>
       <li class="nav-item">
         <a href="#!accueil" ng-click="deconnexion()" ng-show="isConnected" class="nav-link">D&eacute;connexion</a>
       </li>
       <li class="nav-item">
-        <a href="#!connexion" ng-click="connexion()" ng-show="!isConnected" class="nav-link">Connexion</a>
+        <a href="#!connexion" ng-click="Wrefresh()" ng-hide="isConnected" class="nav-link">Connexion</a>
       </li>
       <li class="nav-item">
-        <a href="#!inscription" ng-click="fermerConfirmations()" ng-show="!isConnected" class="nav-link">Inscription</a>
+        <a href="#!inscription" ng-click="Wrefresh()" ng-hide="isConnected" class="nav-link">Inscription</a>
+      </li>
+    </ul>
+    <ul class="nav navbar-nav navbar-right">
+      <li class="nav-item">
+        <a href="#" ng-click="connexionMagique()" class="nav-link" ng-hide="isConnected">Connexion Magique</a>
+      </li>
+      <li class="nav-item">
+        <span ng-show="isConnected">
+          {{pseudo}}
+          <img src="{{avatar}}" height="50px" ng-show="isConnected"></img>
+        </span>
       </li>
     </ul>
   </div>
 </nav>
-<!--Confirmation de connexion, hidden par default -->
-<div class="alert alert-success" ng-show="justConnected">
-  <button type="button" class="close" ng-click="fermerConfirmationConnexion()">&times;</button>
-  <strong>Succ&egrave;s !</strong> Vous &ecirc;tes d&eacute;sormais connect&eacute; !
-</div>
-<!--Confirmation de deconnexion, hidden par default -->
-<div class="alert alert-danger" ng-show="justDisconnected">
-  <button type="button" class="close" ng-click="fermerConfirmationDeconnexion()">&times;</button>
-  Vous &ecirc;tes d&eacute;sormais d&eacute;connect&eacute; !
-</div>

@@ -2,8 +2,9 @@ app.controller('demandesCtrl', function($scope, $http, $uibModal, $log, $documen
     $scope.loading = true;
     $scope.imgDemandes = new Array();
 
-    /* Booléen correspondant à l'affichage de la confirmation de prêt*/
-    $scope.hideConfirmation = true;
+    /* Booléens correspondant à l'affichage de la confirmation ou de l'echec de prêt*/
+    $scope.succesPret = false;
+    $scope.erreurPret = false;
 
     /* Nouvelle requete au serveur pour obtenir le fichier JSON et mise à jour des variables qui en dépendent*/
     $scope.refresh = function(){
@@ -82,13 +83,21 @@ app.controller('demandesCtrl', function($scope, $http, $uibModal, $log, $documen
     };
 
 
-    $scope.afficheConfirmation = function(){
-        $scope.hideConfirmation=false;
+    $scope.ouvrirSuccesPret = function(){
+        $scope.succesPret=true;
     }
 
-    $scope.fermerConfirmation = function(){
-        $scope.hideConfirmation=true;
+    $scope.fermerSuccesPret = function(){
+        $scope.succesPret=false;
     }
+    $scope.ouvrirErreurPret = function(){
+        $scope.ErreurPret=true;
+    }
+
+    $scope.fermerSuccesPret = function(){
+        $scope.ErreurPret=false;
+    }
+
 
 
 
@@ -118,10 +127,22 @@ app.controller('demandesCtrl', function($scope, $http, $uibModal, $log, $documen
           }
     });
 
-    modalInstance.result.then(function (selectedItem) {
-          $scope.refresh(); 
-          $scope.afficheConfirmation();
-        }, function () {
+    modalInstance.result.then(
+      function succes(codeRetour) {
+        $scope.refresh(); 
+        if(codeRetour === 1){
+          $scope.ouvrirSuccesPret();
+        }
+        else if(codeRetour === 0){
+          $scope.ouvrirErreurPret();
+          $scope.raisonErreur="Erreur interne au serveur";
+        }
+        else if(codeRetour === -1){
+          $scope.ouvrirErreurPret();
+          $scope.raisonErreur="Impossible de contacter le serveur";
+        }
+        }, 
+        function echec() {
           $log.info('Modal dismissed at: ' + new Date());
           $scope.fermerConfirmation();
         });
@@ -142,13 +163,15 @@ app.controller('demandesCtrl', function($scope, $http, $uibModal, $log, $documen
           }
     });
 
-    modalInstance.result.then(function () {
+    modalInstance.result.then(
+      function succes() {
           $scope.refresh(); 
           $scope.afficheConfirmation();
-        }, function () {
-          $log.info('modal-component dismissed at: ' + new Date());
-          $scope.fermerConfirmation();
-        });
+        }, 
+      function echec() {
+        $log.info('modal-component dismissed at: ' + new Date());
+        $scope.fermerConfirmation();
+      });
     };
 
 
@@ -175,10 +198,20 @@ app.controller('demandesCtrl', function($scope, $http, $uibModal, $log, $documen
 
         console.log(dataJSON);
 
-      /*  $http.post("/demande", dataJSON).then(function(){
-            $uibModalInstance.close();
-        }); */
-         $uibModalInstance.close();
+        $http.post("/teamrenaissance/loan", dataJSON).then(
+            function succes(response){
+              $uibModalInstance.close(1);
+            },
+            function echec(response){
+              if(response.status == -1){
+                $uibModalInstance.close(-1);
+              }
+              else{
+                $uibModalInstance.close(0);
+              }
+            }
+          );
+
         
     };
 
