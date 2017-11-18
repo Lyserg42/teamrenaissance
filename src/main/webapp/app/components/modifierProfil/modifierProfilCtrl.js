@@ -9,8 +9,8 @@ app.controller('modifierProfilCtrl', function($scope, $http, $uibModal, $log, $d
     
     var data = {typeRequest:"getUser", uName:""};
     var dataJSON = JSON.stringify(data);
-    
-  	$http.post("app/components/profil/serveur/getUser.json").then(
+    /* app/components/profil/serveur/getUser.json */
+  	$http.post("teamrenaissance/user",dataJSON).then(
       function succes(response){
 
         $scope.loading = false;
@@ -18,7 +18,7 @@ app.controller('modifierProfilCtrl', function($scope, $http, $uibModal, $log, $d
 
         /* On stocke les données récupérées*/
         $scope.profil = response.data;
-        
+
         /* On copie l'url de l'avatar pour ne pas qu'elle soit modifiee à la volée */
         $scope.avatar = $scope.profil.avatar;
       },
