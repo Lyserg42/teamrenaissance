@@ -27,7 +27,7 @@ app.controller('appCtrl', function($scope, $http) {
         $scope.data = {typeRequest:"deconnexion"};
         $scope.dataJSON = JSON.stringify($scope.data);
 
-        $http.post("/teamrenaissance/user", $scope.dataJSON).then(
+        $http.post("/user", $scope.dataJSON).then(
             function succes(response){
 
             },

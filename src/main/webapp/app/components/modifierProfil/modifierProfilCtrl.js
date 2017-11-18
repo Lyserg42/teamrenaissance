@@ -11,7 +11,7 @@ app.controller('modifierProfilCtrl', function($scope, $http, $uibModal, $log, $d
     var dataJSON = JSON.stringify(data);
     
     /* app/components/profil/profil.json */
-  	$http.post("/teamrenaissance/user", dataJSON).then(
+  	$http.post("/user", dataJSON).then(
       function succes(response){
 
         $scope.loading = false;

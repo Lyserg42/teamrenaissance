@@ -10,43 +10,8 @@ public class Entry {
     private EntryId id;
     private boolean participate;
 
-    /*
-    public Entry(Tournament tournament, User user, boolean participate) {
-        this.tournament = tournament;
-        this.user = user;
-        this.participate = participate;
-    }
-    */
 
     public Entry(){}
-
-    /*
-    @Id
-    @ManyToOne
-    @JoinColumn(name = "tournamentID",
-            foreignKey = @ForeignKey(name = "FK_Entry_Tournament")
-    )
-    public Tournament getTournament() {
-        return tournament;
-    }
-
-    public void setTournament(Tournament tournament) {
-        this.tournament = tournament;
-    }
-
-    @Id
-    @ManyToOne
-    @JoinColumn(name = "userID",
-            foreignKey = @ForeignKey(name = "FK_Entry_User")
-    )
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User unser) {
-        this.user = unser;
-    }
-    */
 
     public EntryId getId() {
         return id;

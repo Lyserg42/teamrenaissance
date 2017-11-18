@@ -113,6 +113,23 @@ public class CardManager {
         }
         return card;
     }
+
+    public static void insertCard(Card card){
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = null;
+        try {
+            tx = session.beginTransaction();
+            session.save(card);
+            session.flush();
+            tx.commit();
+        } catch (Exception e) {
+            if (tx != null) tx.rollback();
+            //throw e;
+        } finally {
+            session.close();
+        }
+    }
+
  /**** method not use **/
 
     // ask several cards
@@ -158,7 +175,7 @@ public class CardManager {
 
     /* only use in this classe */
     /* not use here to remove ?*/
-    private static Card getCard(int cardID){
+    public static Card getCard(int cardID){
         Session session = HibernateUtil.getSessionFactory().openSession();
         Card card = null;
         Transaction tx = null;
@@ -209,21 +226,4 @@ public class CardManager {
 
     }
 
-
-
-    public static void insertCard(Card card){
-        Session session = HibernateUtil.getSessionFactory().openSession();
-        Transaction tx = null;
-        try {
-            tx = session.beginTransaction();
-            session.save(card);
-            session.flush();
-            tx.commit();
-        } catch (Exception e) {
-            if (tx != null) tx.rollback();
-            //throw e;
-        } finally {
-            session.close();
-        }
-    }
 }

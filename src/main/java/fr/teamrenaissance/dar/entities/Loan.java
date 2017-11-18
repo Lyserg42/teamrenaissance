@@ -48,7 +48,7 @@ public class Loan {
         this.loanID = loanID;
     }
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "tournamentID",
             foreignKey = @ForeignKey(name = "FK_Loan_Tournament")
     )
@@ -60,7 +60,7 @@ public class Loan {
         this.tournament = tournament;
     }
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cardID",
             foreignKey = @ForeignKey(name = "FK_Loan_Card")
     )
@@ -72,7 +72,7 @@ public class Loan {
         this.card = card;
     }
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "borrowerID",
             foreignKey = @ForeignKey(name = "FK_Loan_borrower")
     )
@@ -84,7 +84,7 @@ public class Loan {
         this.borrower = borrower;
     }
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(columnDefinition="integer", name = "lenderID",
             foreignKey = @ForeignKey(name = "FK_Loan_lender")
     )

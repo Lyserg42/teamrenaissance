@@ -203,7 +203,7 @@ public class User {
         this.twitter = twitter;
     }
 
-    @OneToMany(mappedBy = "lender")
+    @OneToMany(mappedBy = "lender", fetch = FetchType.LAZY)
     public Set<Loan> getLenderLoans() {
         return lenderLoans;
     }
@@ -212,7 +212,7 @@ public class User {
         this.lenderLoans = lenderLoans;
     }
 
-    @OneToMany(mappedBy = "borrower")
+    @OneToMany(mappedBy = "borrower", fetch = FetchType.LAZY)
     public Set<Loan> getBorrowerLoans() {
         return borrowerLoans;
     }
