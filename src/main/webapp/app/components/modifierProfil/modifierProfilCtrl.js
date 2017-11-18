@@ -131,9 +131,7 @@ app.controller('modalInstCtrlProfil', function ($scope, $http, $uibModalInstance
 
     $scope.erreurMDP = false;
 
-		/*TODO Remplacer uId:"1" par l'id de l'utilisateur connecte*/
 		$scope.data = {	typeRequest:"setUserProfil",
-						uId:"1",
 						name:$scope.profil.lastName,
 						firstname:$scope.profil.firstName,
 						email:$scope.profil.email,

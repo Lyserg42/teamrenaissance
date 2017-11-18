@@ -4,10 +4,10 @@ app.controller('profilCtrl', function($scope, $http, $routeParams) {
 
 	/* TODO Remplacer "Lyserg" par le nom de l'utilisateur connecte actuellement */
 	var data = {typeRequest:"getUser",
-				login:""};
+				uName:""};
 
 	if (typeof $routeParams.uName !== 'undefined') {
-    	data.login = $routeParams.uName;
+    	data.uName = $routeParams.uName;
 	}
 
     var dataJSON = JSON.stringify(data);
