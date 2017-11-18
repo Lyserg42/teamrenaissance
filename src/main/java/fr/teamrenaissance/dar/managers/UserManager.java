@@ -150,18 +150,19 @@ public class UserManager {
         } else {
 
             try {
-                obj.put("name", u.getName());
+                obj.put("lastName", u.getName());
                 obj.put("uId",u.getUserID());
-                obj.put("firstname", u.getFirstname());
+                obj.put("firstName", u.getFirstname());
                 obj.put("email", u.getEmail());
                 obj.put("address", u.getAddress());
                 obj.put("avatar", u.getAvatar());
-                obj.put("phone number", u.getPhoneNumber());
+                obj.put("phone", u.getPhoneNumber());
                 obj.put("facebook", u.getFacebook());
                 obj.put("twitter", u.getTwitter());
                 obj.put("uName", u.getUsername());
                 obj.put("city",u.getCity());
                 obj.put("zipCode",u.getZipCode());
+                obj.put("DCI",u.getDciNumber());
                 obju.put("getUserSucces", obj);
             } catch (JSONException e) {
                 e.printStackTrace();

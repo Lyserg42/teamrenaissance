@@ -90,12 +90,31 @@ public class UserServlet extends HttpServlet {
 
 
             }
-           /* else if(typeRequest.equals("getUser")){
-                String login = request.getString("uName");
-                obj=  UserManager.getUser(login);
+            else if(typeRequest.equals("getUser")){
+                String uName = request.getString("uName");
+                if(uName.equals("")){
+                  userSession=  req.getSession(false);
+                  if(userSession== null){
+                      resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                  }
+                  else{
+                      uName = ((JSONObject)
+                              userSession.getAttribute(USER)).getString("login");
+                  }
+                }
+                obj=  UserManager.getUser(uName);
+                if(obj.has("getUserFailed")){
+                    resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                }
+                else{
+                    resp.setContentType("application/json");
+                    resp.setStatus(HttpServletResponse.SC_OK);
+                    out.print(obj);
+
+                }
 
             }
-            else if(typeRequest.equals("setUserProfil")){
+           /* else if(typeRequest.equals("setUserProfil")){
 
                 userSession = req.getSession();
                 String username =
