@@ -1,5 +1,9 @@
 app.controller('mesPretsController', function($scope, $http, $uibModal, $log, $document) {
 
+    $scope.if = true;
+    $scope.succesModifPret = false;
+    $scope.erreurModifPret = false;
+
     $scope.refresh = function(){
 
         /* Tableau contenant les noms des tournois pour le selectTournoi */
@@ -49,22 +53,14 @@ app.controller('mesPretsController', function($scope, $http, $uibModal, $log, $d
 
     $scope.refresh();
 
-    $scope.validerLent = function(){
-
-        var data = {uId:$scope.modal.uId,tId:$scope.modal.tId, cards:$scope.modifPret};
-        var dataJSON = JSON.stringify(data);
-
-        console.log(dataJSON);
-
-        $http.post("/pret", dataJSON).then(function(){
-            $scope.refresh();
-            $scope.afficheConfirmation();
-        });
-    };
-
 
     $scope.modification = function(iParent, i, typeModif){
+
+        $scope.fermerSuccesModifPret();
+        $scope.fermerErreurModifPret();
+
         $scope.typeModif = typeModif;
+
         if($scope.typeModif==="emprunt"){
             $scope.modal = {
                 uName:$scope.tournaments[iParent].borrowedCards[i].uName,
@@ -74,7 +70,7 @@ app.controller('mesPretsController', function($scope, $http, $uibModal, $log, $d
                 cards: $scope.tournaments[iParent].borrowedCards[i].cards
             };
         }
-        else{
+        else if($scope.typeModif==="pret"){
             $scope.modal = {
                 uName:$scope.tournaments[iParent].lentCards[i].uName,
                 uId:$scope.tournaments[iParent].lentCards[i].uId,
@@ -82,7 +78,13 @@ app.controller('mesPretsController', function($scope, $http, $uibModal, $log, $d
                 tId:$scope.tournaments[iParent].tId,
                 cards: $scope.tournaments[iParent].lentCards[i].cards
             };
-            
+        }
+        else{
+            $scope.modal = {
+                tournament:$scope.tournaments[i].tName,
+                tId:$scope.tournaments[i].tId,
+                cards: $scope.tournaments[i].demands
+            };
         }
         $scope.modifIds = new Array();
         $scope.modal.cards.forEach(function(card,i){
@@ -92,33 +94,23 @@ app.controller('mesPretsController', function($scope, $http, $uibModal, $log, $d
         $scope.open();
     };
 
-    $scope.validerBorrow = function(){
 
-        var data = {uId:$scope.modal.uId,tId:$scope.modal.tId, cards:$scope.modifEmprunts};
-        var dataJSON = JSON.stringify(data);
+    $scope.ouvrirSuccesModifPret = function(){
+        $scope.succesModifPret=true;
+    }
 
-        console.log(dataJSON);
+    $scope.fermerSuccesModifPret = function(){
+        $scope.succesModifPret=false;
+    }
+    $scope.ouvrirErreurModifPret = function(){
+        $scope.erreurModifPret=true;
+    }
 
-        $http.post("/emprunt", dataJSON).then(function(){
-            $scope.refresh();
-            $scope.afficheConfirmation();
-        });
-    };
+    $scope.fermerErreurModifPret = function(){
+        $scope.erreurModifPret=false;
+    }
 
-
-
-    /*annuler un prêt/emprunts*/
-
-    /*clic sur le profil de preteur/emprunteur*/
-
-    /*clic prêt effectué*/
-
-    /*clic rendu effectué*/
-
-    /*missing cards*/
-
-
-
+    /* Gestion du modal */
     $scope.animationsEnabled = true;
 
     $scope.open = function (size) {
@@ -146,9 +138,23 @@ app.controller('mesPretsController', function($scope, $http, $uibModal, $log, $d
             }
         });
 
-        modalInstance.result.then(function (selectedItem) {
+        modalInstance.result.then(
+        function succes(codeRetour) {
             $scope.refresh();
-        }, function () {
+            if(codeRetour === 1){
+                $scope.ouvrirSuccesModifPret();
+            }
+            else{
+                $scope.ouvrirErreurModifPret();
+                if(codeRetour === 0){
+                    $scope.raisonErreur = "Erreur interne au serveur.";
+                }
+                else{
+                    $scope.raisonErreur = "Impossible de contacter le serveur.";
+                }
+            }
+        }, 
+        function echec() {
             $log.info('Modal dismissed at: ' + new Date());
         });
 
@@ -172,11 +178,23 @@ app.controller('mesPretsController', function($scope, $http, $uibModal, $log, $d
             }
         });
 
-        modalInstance.result.then(function () {
+        modalInstance.result.then(function succes(codeRetour) {
             $scope.refresh();
+            if(codeRetour === 1){
+                $scope.ouvrirSuccesModifPret();
+            }
+            else{
+                $scope.ouvrirErreurModifPret();
+                if(codeRetour === 0){
+                    $scope.raisonErreur = "Erreur interne au serveur.";
+                }
+                else{
+                    $scope.raisonErreur = "Impossible de contacter le serveur.";
+                }
+            }
         }, 
-        function () {
-            $log.info('modal-component dismissed at: ' + new Date());
+        function echec() {
+            $log.info('Modal dismissed at: ' + new Date());
         });
     };
 
@@ -193,13 +211,29 @@ app.controller('modalInstCtrlPrets', function ($scope, $http, $uibModalInstance,
 
     $scope.modal = modalValues;
     $scope.modifIds = cartesIds;
+    $scope.type = typeModif;
 
     $scope.ok = function () {
-        var data = {tId:$scope.modal.tId, uId:$scope.modal.uId, type:$scope.typeModif,  cards:$scope.modifIds};
+        var data = {tId:$scope.modal.tId, uId:$scope.modal.uId, type:$scope.type, cards:$scope.modifIds};
         var dataJSON = JSON.stringify(data);
         console.log(dataJSON);
-        $uibModalInstance.close();
 
+        $http.post("/teamrenaissance/loan",dataJSON).then(
+            function succes(response){
+                $uibModalInstance.close(1);
+            },
+            function echec(response){
+                if(response.status === -1){
+                    $uibModalInstance.close(-1);
+                }
+                else{
+                    $uibModalInstance.close(0);
+                }
+            }
+        );
+
+
+        
     };
 
     $scope.cancel = function () {

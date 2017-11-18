@@ -94,7 +94,7 @@ app.controller('demandesCtrl', function($scope, $http, $uibModal, $log, $documen
         $scope.ErreurPret=true;
     }
 
-    $scope.fermerSuccesPret = function(){
+    $scope.fermerErreurPret = function(){
         $scope.ErreurPret=false;
     }
 

@@ -1,6 +1,15 @@
 <div class="container">
     <h2>Mes prêts </h2>
 
+    <div class="alert alert-danger" ng-show="erreurModifPret">
+      <button type="button" class="close" ng-click="fermerErreurModifPret()">&times;</button>
+      Modification non enregistrée : {{raisonErreur}}
+    </div>
+    <div class="alert alert-success" ng-show="succesModifPret">
+      <button type="button" class="close" ng-click="fermerSuccesModifPret()">&times;</button>
+      Modification enregistrée.
+    </div>
+
     <div class="row">
         <div class="col-md-4">
             <select class="form-control" ng-model="selectFiltreTournois" ng-options="t for t in selectTournament">
@@ -9,24 +18,16 @@
         </div>
     </div>
 
-    <br> </br>
-
     <div class="form-group" ng-repeat="t in tournaments | filtreTournois : selectFiltreTournois">
         <button class="btn btn-outline-primary" type="button" ng-click="isCollapsed= !isCollapsed" title="voir mes prêts pour {{t.tName}}">
             <h5> {{t.tName}} du {{t.date}} </h5>
         </button>
 
-        <br></br>
-        <div id="collapseExample{{$index}}" uib-collapse="isCollapsed" >
-            <h4 class="panel-title">
-                <button class="btn btn-primary" type="button" ng-click="isCollapsed2= !isCollapsed2" data-target="#prets{{$index}}" title = "voir ce que je prête">
-                    <h5> Je prête </h5>
-                </button>
-            </h4>
-
-
-            <!--PRETS-->
-            <div id="prets{{$index}}" uib-collapse="!isCollapsed2">
+        <div id="collapseExample{{$index}}" uib-collapse="isCollapsed" class="row">
+             <!--PRETS-->
+             <div class="col-sm-4">
+                <h4> Je prête </h4>
+               
                 <div id="lender" ng-repeat="l in t.lentCards">
                     <div class="row">
                         <div class="col-sm-9">
@@ -42,17 +43,11 @@
                 </div>
             </div>
 
-            <br> </br>
-
-
             <!--EMPRUNTS-->
-            <h4 class="panel-title">
-                <button class="btn btn-primary" type="button" ng-click="isCollapsed3= !isCollapsed3" data-target="#emprunt{{$index}}"  title = "voir ce que l'on me prête" >
-                    <h5> On me prête </h5>
-                </button>
-            </h4>
-
-            <div id="emprunt{{$index}}" uib-collapse="!isCollapsed3">
+            <div class="col-sm-4">
+                <h4>
+                    On me prête
+                </h4>
                 <div ng-repeat="b in t.borrowedCards">
                     <div class="row">
                         <div class="col-sm-9">
@@ -62,30 +57,22 @@
                                     <p> {{c.qty}} {{c.cName}} </p>
                                 </div>
                             </div>
-
                         </div>
                     </div>
-                    <button type="button" class="btn" ng-click="modification($parent.$index,$index, 'emprunt')"> Modifier  </button>
+                    <button type="button" class="btn" ng-click="modification($parent.$index, $index, 'pret')"> Modifier </button>
                 </div>
-            </div>
-            <br> </br>
 
+            </div>
 
             <!--NEED-->
-            <h4 class="panel-title">
-                <button class="btn btn-primary " type="button"  ng-click="isCollapsed4= !isCollapsed4" data-target="#need{{$index}}"  title = "voir ce qu'il me manque">
-                    <h5> Il me manque </h5>
-                </button>
-            </h4>
+            <div class="col-sm-4">
+                <h4> Il me manque </h4>
 
-            <div id="need{{$index}}" uib-collapse="!isCollapsed4">
                 <div ng-repeat="c in t.demands">
                     <p> {{c.qty}} {{c.cName}} </p>
                 </div>
-                <a href="#!emprunter" ><button class="btn" type="button" href="#!emprunter">Ajouter</button></a>
-                <br> </br>
+                <button type="button" class="btn" ng-click="modification($parent.$index, $index, 'demande')"> Modifier </button>
             </div>
-            <br> </br>
 
         </div>
     </div>
@@ -110,6 +97,8 @@
             </form>
         </div>
         <div class="modal-footer">
+
+            <a href="#!emprunter" ><button class="btn" type="button" href="#!emprunter" ng-if="type==='demande'" ng-click="cancel()">Ajouter des cartes</button></a>
             <button class="btn btn-primary" type="button" ng-click="ok()">OK</button>
             <button class="btn btn-warning" type="button" ng-click="cancel()">Cancel</button>
         </div>
