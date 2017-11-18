@@ -1,7 +1,7 @@
 
 <div>
 	<div class="container" ng-show="loading">
-	<img src="../../../assets/icons/loading.svg" class="loadingIcon"></img>
+	<img src="assets/icons/loading.svg" class="loadingIcon"></img>
 	</div>
 	<div class="container" ng-show="!chargementOk && !loading">
 		<h3>Erreur de chargement des données</h3>
@@ -18,8 +18,8 @@
 			<div>Adresse</div>
 			<p>{{profil.adress+"\n"+profil.zipCode+" "+profil.city}}</p>
 			<div>Email : {{profil.email}}</div>
-			<a href="{{profil.facebook}}" ng-hide="profil.facebook === ''"><img src="../../../assets/icons/facebook.svg" height="32px"></img></a>
-			<a href="{{profil.twitter}}" ng-hide="profil.twitter === ''"><img src="../../../assets/icons/twitter.svg" height="32px"></img></a>
+			<a href="{{profil.facebook}}" ng-hide="profil.facebook === ''"><img src="assets/icons/facebook.svg" height="32px"></img></a>
+			<a href="{{profil.twitter}}" ng-hide="profil.twitter === ''"><img src="assets/icons/twitter.svg" height="32px"></img></a>
 			<a href="#!modifierprofil" ng-hide=""><button>Modifier Profil</button></a>
 		</div>
 	</div>
