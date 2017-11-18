@@ -9,8 +9,8 @@ public class SetUserProfil {
         JSONObject obj = null;
         try {
             obj = UserManager.setUserProfil("hellal","sarra","sarra_hellal@hotmail.com",
-                    "sarrro","Kiuiui7uip","ZZZ",
-                    "","",
+                    "Sarra","Kiuiui7uip","ZZZ",
+                    "https://wamiz.com/uploads/images/shutterstock_322496870.jpg","",
                     "1236445","yyyyyy","","","");
 
         } catch (Exception e) {

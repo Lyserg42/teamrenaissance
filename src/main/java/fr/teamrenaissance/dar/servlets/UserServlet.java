@@ -130,7 +130,6 @@ public class UserServlet extends HttpServlet {
                     String firstname = request.getString("firstName");
                     String email = request.getString("email");
                     String password = request.getString("password");
-                    String newPassword = request.getString("newPassword");
                     String address = request.getString("address");
                     String avatar = request.getString("avatar");
                     String phoneNumber = request.getString("phoneNumber");
@@ -140,11 +139,11 @@ public class UserServlet extends HttpServlet {
                     String city = request.getString("city");
                     String zipCode = request.getString("zipCode");
                     if(UserManager.isEqualsPassword(username,password)) {
-                        if(newPassword.equals("")){
-                            newPassword = password;
+                        if(request.has("newPassword")){
+                            password = request.getString("newPassword");
                         }
                         obj = UserManager.setUserProfil(name, firstname, email, username,
-                                newPassword, address, avatar, dciNumber, phoneNumber,
+                                password, address, avatar, dciNumber, phoneNumber,
                                 fb, tw, city, zipCode);
                         if(obj.has("setProfilFailed")){
                             resp.setContentType("application/json");
