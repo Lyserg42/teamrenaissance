@@ -16,7 +16,7 @@ import org.json.JSONObject;
 
 @WebServlet(name = "UserServlet")
 public class UserServlet extends HttpServlet {
-    private static final String USER = "user";
+    public static final String USER = "user";
     private static final String SUCCESCONNECTION ="userSuccesConnection";
     private static final String DEFAULT_AVATAR = "";
 

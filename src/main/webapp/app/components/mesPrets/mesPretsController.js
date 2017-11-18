@@ -26,7 +26,7 @@ app.controller('mesPretsController', function($scope, $http, $uibModal, $log, $d
            Apres un nouveau pret, on fait un refresh et elle est reset donc l'utilisateur perd la selection de tournois faite.
            On peut la garder mais ca peut poser probleme dans le cas ou le nouveau pret remplit exactement toutes les demandes restantes pour un tournoi*/
         $scope.selectFiltreTournois = "Tous les tournois";
-        $http.get("app/components/mesPrets/mesPrets.json").then(function(response){
+        $http.get("/loan?request=mesprets").then(function(response){
 
             /* On stocke les données récupérées*/
             $scope.tournaments = response.data.tournaments;
@@ -218,7 +218,7 @@ app.controller('modalInstCtrlPrets', function ($scope, $http, $uibModalInstance,
         var dataJSON = JSON.stringify(data);
         console.log(dataJSON);
 
-        $http.post("/teamrenaissance/loan",dataJSON).then(
+        $http.delete("/loan",dataJSON).then(
             function succes(response){
                 $uibModalInstance.close(1);
             },

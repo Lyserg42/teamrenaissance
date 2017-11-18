@@ -114,6 +114,7 @@ public class UserManager {
             } else {
 
                 try {
+                    obj.put("userId", u.getUserID());
                     obj.put("name", u.getName());
                     obj.put("firstname", u.getFirstname());
                     obj.put("email", u.getEmail());

@@ -83,7 +83,6 @@ app.controller('emprunterCtrl', function($scope, $http, $uibModal, $log, $docume
             var data = {tId:$scope.selectedTournament.tId, cards:cardListObjects};
             var dataJSON = JSON.stringify(data);
 
-            /* TODO  Envoyer la string au serveur */
             console.log(data);
             $http.post("/loan", dataJSON).then(
                 function succes(response){

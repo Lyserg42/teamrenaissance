@@ -14,9 +14,11 @@ import org.json.JSONObject;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import javax.transaction.Transactional;
 import java.util.*;
 import java.util.stream.Collectors;
 
+@Transactional
 public class LoanManager {
 
     /************** POST ******************/
@@ -215,6 +217,63 @@ public class LoanManager {
         }
     }
 
+    /**
+     * Returns the JSON array containing the cards demanded by all the users for a given tournament and which have not yet find a lender.
+     * @param tournamentID the ID of the tournament where the cards are lent
+     * @throws JSONException
+     */
+    public static JSONArray getAllDemandsJson(int tournamentID) throws JSONException{
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = null;
+        try {
+            tx = session.beginTransaction();
+
+            CriteriaQuery<User> cq = session.getCriteriaBuilder().createQuery(User.class);
+            cq.from(User.class);
+            List<User> users = session.createQuery(cq).getResultList();
+
+            JSONArray demands = new JSONArray();
+            for(User user : users){
+                JSONObject userJson = new JSONObject();
+                HashMap<Card, Integer> cards = new HashMap<>();
+                for(Loan loan : user.getBorrowerLoans()){
+                    if(loan.getLender() != null || loan.getTournament().getTournamentID() != tournamentID) continue;
+                    Card card = loan.getCard();
+                    int qty;
+                    if(cards.containsKey(card)){
+                        qty = cards.get(card) + 1;
+                    } else {
+                        qty = 1;
+                    }
+                    cards.put(card, qty);
+                }
+                if(!cards.isEmpty()){
+                    userJson.put("uId", user.getUserID());
+                    userJson.put("uName", user.getUsername());
+                    JSONArray cardsArray = new JSONArray();
+                    for(Card card : cards.keySet()){
+                        JSONObject cardJson = new JSONObject();
+                        cardJson.put("cName", card.getName());
+                        cardJson.put("cId", card.getCardID());
+                        cardJson.put("img", card.getPicture());
+                        cardJson.put("qty", cards.get(card));
+                        cardsArray.put(cardJson);
+                    }
+                    userJson.put("cards", cardsArray);
+                    demands.put(userJson);
+                }
+            }
+            return demands;
+
+        } catch (JSONException e){
+            throw e;
+        }catch (Exception e) {
+            if (tx != null) tx.rollback();
+            throw e;
+        } finally {
+            session.close();
+        }
+    }
 
     /************** DELETE ******************/
 
@@ -302,6 +361,38 @@ public class LoanManager {
             for(int i = 0; i < toDelete; i++){
                 Loan loan = loans.get(i);
                 loan.setLender(null);
+                session.update(loan);
+                session.flush();
+            }
+
+            tx.commit();
+
+        }catch (Exception e) {
+            if (tx != null) tx.rollback();
+            throw e;
+        } finally {
+            session.close();
+        }
+    }
+
+    /************** DELETE ******************/
+
+    public static void setLender(Integer borrowerID, Integer lenderID, int tournamentID, int cardID, int qty){
+        if(lenderID == null){
+            throw new IllegalArgumentException("the lender can not be null");
+        }
+        List<Loan> loans = getLoans(borrowerID, null, tournamentID, cardID);
+
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = null;
+        try {
+            tx = session.beginTransaction();
+            User lender = session.get(User.class, lenderID);
+            //set the lender of the loans
+            int toSet = loans.size() < qty ? loans.size() : qty;
+            for(int i = 0; i < toSet; i++){
+                Loan loan = loans.get(i);
+                loan.setLender(lender);
                 session.update(loan);
                 session.flush();
             }
