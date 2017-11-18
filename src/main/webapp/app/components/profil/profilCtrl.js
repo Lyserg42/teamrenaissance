@@ -2,7 +2,6 @@ app.controller('profilCtrl', function($scope, $http, $routeParams) {
 
     $scope.loading = true;
 
-	/* TODO Remplacer "Lyserg" par le nom de l'utilisateur connecte actuellement */
 	var data = {typeRequest:"getUser",
 				uName:""};
 
@@ -15,7 +14,7 @@ app.controller('profilCtrl', function($scope, $http, $routeParams) {
     console.log(data);
 
     /* TOOD mettre /user en premier parametre et dataJSON en second parametre */
-	$http.post("/teamrenaissance/user").then(
+	$http.post("/teamrenaissance/user",data).then(
         function succes(response){
 
             console.log("Succes communication serveur");

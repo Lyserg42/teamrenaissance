@@ -3,7 +3,7 @@ app.controller('connexionCtrl', function($scope, $http, $route) {
 	$scope.erreurConnexion = false;
     $scope.succesConnexion = false;
 
-	 $scope.connexion = function () {
+	$scope.connexion = function () {
 	 	$scope.fermerErreurConnexion();
         $scope.fermerSuccesConnexion();
 	 	
@@ -14,12 +14,14 @@ app.controller('connexionCtrl', function($scope, $http, $route) {
 
       	$http.post("/teamrenaissance/user", dataJSON).then(
             function success(response){
+                $scope.refresh();
                 $scope.ouvrirSuccesConnexion();
                 console.log("succes");
                 console.log(response.status);
           		console.log(response.data);
             },
             function error(response){
+                $scope.refresh();
                 $scope.ouvrirErreurConnexion();
                 if(response.status != -1){
                     $scope.raisonEchecConnexion = "Combinaison Login / Mot de passe incorrecte.";

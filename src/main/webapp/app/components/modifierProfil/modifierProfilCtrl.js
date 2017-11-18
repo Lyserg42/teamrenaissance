@@ -6,8 +6,12 @@ app.controller('modifierProfilCtrl', function($scope, $http, $uibModal, $log, $d
   $scope.refresh = function(){
 
     $scope.loading = true;
-
-  	$http.get("app/components/profil/profil.json").then(
+    
+    var data = {typeRequest:"getUser", uName:""};
+    var dataJSON = JSON.stringify(data);
+    
+    /* app/components/profil/profil.json */
+  	$http.post("/teamrenaissance/user", dataJSON).then(
       function succes(response){
 
         $scope.loading = false;
