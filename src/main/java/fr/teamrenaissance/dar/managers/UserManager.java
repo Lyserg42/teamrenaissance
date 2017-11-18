@@ -242,6 +242,41 @@ public class UserManager {
 
     }
 
+    public static boolean isEqualsPassword(String login,String password){
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        boolean res = false;
+        String passwordHash = hash256(password);
+        Transaction tx = null;
+        try {
+            tx = session.beginTransaction();
+            CriteriaQuery<User> cq = session.getCriteriaBuilder().createQuery(User.class);
+            cq.from(User.class);
+            List<User> users = session.createQuery(cq).getResultList();
+            for(User u: users){
+                if(u.getUsername().equals(login)){
+                    if(u.getPassword().equals(passwordHash)){
+                        res = true;
+                    }else{
+                        res = false;
+                        break;
+                    }
+
+                }
+
+            }
+
+            tx.commit();
+
+        } catch (Exception e) {
+            if (tx != null) tx.rollback();
+            throw e;
+        } finally {
+            session.close();
+
+        }
+        return res;
+    }
+
     /*
     return JsonObject contains userId and list of his cards ask and not yet received
     not use so to remove ???
