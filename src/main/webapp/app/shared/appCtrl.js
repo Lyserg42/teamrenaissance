@@ -7,7 +7,11 @@ app.controller('appCtrl', function($scope, $http) {
     }
 
     $scope.refresh = function(){
-        $http.get("app/components/profil/profil.json").then(
+        var data = {typeRequest:"getUser", Name:""};
+        var dataJSON = JSON.stringify(data);
+        console.log(dataJSON);
+        /* app/components/profil/serveur/getUser.json */
+        $http.post("/teamrenaissance/user", dataJSON).then(
         function succes(response){
             $scope.isConnected = true;
             $scope.avatar = response.data.avatar;
@@ -22,21 +26,21 @@ app.controller('appCtrl', function($scope, $http) {
     $scope.refresh();
 
     $scope.deconnexion = function(){
-    	$scope.isConnected = false;
-        
+    	
         $scope.data = {typeRequest:"deconnexion"};
         $scope.dataJSON = JSON.stringify($scope.data);
 
         $http.post("/teamrenaissance/user", $scope.dataJSON).then(
             function succes(response){
-
+                $scope.isConnected = false;
+                console.log("deconnexion reussie");
             },
             function echec(response){
-                if(response.status == -1){
-
+                if(response.status === -1){
+                    console.log("deconnexion ratee : impossible de contacter le serveur");
                 }
                 else{
-                    
+                    console.log("deconnexion ratee : erreur serveur");
                 }
             }
         );
