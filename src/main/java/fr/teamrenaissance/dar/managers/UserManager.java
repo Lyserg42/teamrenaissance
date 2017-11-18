@@ -184,15 +184,19 @@ public class UserManager {
         JSONObject obj = new JSONObject();
         JSONObject newUserProfil = new JSONObject();
         if (!passwordSolid(password)) {
-            obj.put("setProfilFailed", "password not valide");
+            obj.put("setProfilFailed", "Unknown error");
             return obj;
         }
         if (!isEnteredField(name, firstname, username, mail,password)) {
-            obj.put("setProfilFailed", "mandatory fields are not entered");
+            obj.put("setProfilFailed", "Unknown error");
             return obj;
         }
         if(!isValidPhone(phoneNumber)){
-            obj.put("setProfilFailed","phone number");
+            obj.put("setProfilFailed","Unknown error");
+            return obj;
+        }
+        if(existMail(mail,username)){
+            obj.put("setProfilFailed","Mail already exist");
             return obj;
         }
 
@@ -206,7 +210,7 @@ public class UserManager {
 
 
         if (u == null) {
-            obj.put("setUserProfil", "user not exist");
+            obj.put("setProfilFailed", "Unknown error");
             return obj;
         }
         String passwordHash256 = hash256(password);
@@ -407,6 +411,30 @@ public class UserManager {
         tx.commit();
         session.close();
         return result;
+    }
+
+
+    /* test if email exist in DB regardless user's mail*/
+    private static boolean existMail(String mail,String login){
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = session.beginTransaction();
+        CriteriaQuery<User> cq = session.getCriteriaBuilder().createQuery(User.class);
+        cq.from(User.class);
+        boolean res = false;
+        List<User> users = session.createQuery(cq).getResultList();
+        for(User u:users) {
+            if(u.getUsername().equals(login)) {
+
+            }else{
+                if(u.getEmail().equals(mail)){
+                    res = true;
+                    break;
+                }
+            }
+        }
+        tx.commit();
+        session.close();
+        return res;
     }
 
     /* test if password pssw is solid*/
