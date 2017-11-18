@@ -7,7 +7,7 @@ app.controller('appCtrl', function($scope, $http) {
     }
 
     $scope.refresh = function(){
-        var data = {typeRequest:"getUser", Name:""};
+        var data = {typeRequest:"getUser", uName:""};
         var dataJSON = JSON.stringify(data);
         console.log(dataJSON);
         /* app/components/profil/serveur/getUser.json */
