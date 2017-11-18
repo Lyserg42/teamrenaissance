@@ -135,20 +135,36 @@ app.controller('modalInstCtrlProfil', function ($scope, $http, $uibModalInstance
 
     $scope.erreurMDP = false;
 
-		$scope.data = {	typeRequest:"setUserProfil",
-						name:$scope.profil.lastName,
-						firstname:$scope.profil.firstName,
-						email:$scope.profil.email,
-						address:$scope.profil.adresse,
-						zipCode:$scope.profil.codePostal,
-						city:$scope.profil.ville,
-						avatar:$scope.profil.avatar,
-						phoneNumber:$scope.profil.telephone,
-						dciNumber:$scope.profil.DCI,
-						facebook:$scope.profil.facebook,
-						twitter:$scope.profil.twitter,
-						password:$scope.password,
-						newPassword:$scope.profil.newPassword};
+		$scope.data = {	typeRequest:"",
+						name:"",
+						firstname:"",
+						email:"",
+						address:"",
+						zipCode:"",
+						city:"",
+						avatar:"",
+						phoneNumber:"",
+						dciNumber:"",
+						facebook:"",
+						twitter:"",
+						password:"",
+						newPassword:""};
+
+    $scope.data.typeRequest = "setUserProfil";
+    $scope.data.name = $scope.profil.lastName;
+    $scope.data.firstname = $scope.profil.firstName;
+    $scope.data.email = $scope.profil.email;
+    $scope.data.address = $scope.profil.adresse;
+    $scope.data.zipCode = $scope.profil.codePostal;
+    $scope.data.city = $scope.profil.ville;
+    $scope.data.avatar = $scope.profil.avatar;
+    $scope.data.phoneNumber = $scope.profil.telephone;
+    $scope.data.dciNumber = $scope.profil.DCI;
+    $scope.data.facebook = $scope.profil.facebook;
+    $scope.data.twitter = $scope.profil.twitter;
+    $scope.data.password = $scope.password;
+    $scope.data.newPassword = $scope.profil.newPassword;
+
 
 
 		$scope.dataJSON = JSON.stringify($scope.data);
