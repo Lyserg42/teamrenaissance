@@ -23,78 +23,79 @@ public class UserServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-       doPost(req,resp);
+      // doPost(req,resp);
+        resp.setStatus(HttpServletResponse.SC_ACCEPTED);
+
 
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try{
-            JSONObject obj = new JSONObject();
+
+           JSONObject obj = new JSONObject();
             HttpSession userSession ;
             JSONObject request =  ServletUtils.getJsonFromRequest(req);
-            String typeRequeste = request.getString("typeRequest");
-            if(typeRequeste.equals("inscription")){
-
+            String typeRequest = request.getString("typeRequest");
+            PrintWriter out = resp.getWriter();
+            if(typeRequest.equals("inscription")){
                 String name = request.getString("name");
-                String firstanme = request.getString("firstname");
+                String firstname = request.getString("firstname");
                 String username = request.getString("login");
                 String email = request.getString("email");
                 String password = request.getString("password");
-                //String address = request.getString("address");
-                //String avatar = request.getString("avatar");
-                //String phoneNumber = request.getString("phoneNumber");
-                //String dciNumber = request.getString("dciNumber");
-                //String fb = request.getString("facebook");
-                //String tw = request.getString("twitter");
-                /*String name = req.getParameter("name");
-                String firstanme = req.getParameter("firstname");
-                String username = req.getParameter("login");
-                String email = req.getParameter("email");
-                String password = req.getParameter("password");
-                String address = req.getParameter("address");
-                String avatar = req.getParameter("avatar");
-                String phoneNumber = req.getParameter("phoneNumber");
-                String dciNumber = req.getParameter("dciNumber");
-                String fb = req.getParameter("facebook");
-                String tw = req.getParameter("twitter");*/
 
-                obj = UserManager.newUser(name,firstanme,email,username,password,
-                        "",DEFAULT_AVATAR,"","","","");
+               obj = UserManager.newUser(name,firstname,email,
+               username,password, "",DEFAULT_AVATAR,
+                       "","",
+                       "","","","");
+
+
+               if(!obj.get("newuser").equals("succes")){
+                   resp.setContentType("application/json");
+
+                   resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                   out.print(obj);
+
+               }else{
+                   resp.setContentType("text/plain");
+
+                   resp.setStatus(HttpServletResponse.SC_OK);
+
+               }
             }
 
-            if(typeRequeste.equals("connexion")){
+            else if(typeRequest.equals("connexion")){
+                resp.setContentType("text/plain");
+
                 String login = request.getString("login");
-                String password = request.getString("pasword");
-               /* String login = req.getParameter("login");
-                String password = req.getParameter("password");*/
+                String password = request.getString("password");
                 userSession = req.getSession();
                if(!userSession.isNew()){
-                   obj.put("userFailedConnection","you must to disconnect");
-
+                   obj.put("userFailedConnection","you must disconnect");
+                   resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
                }else {
 
                    obj = UserManager.connectionUser(login, password);
                    if (obj.has(SUCCESCONNECTION)) {
 
                        userSession.setAttribute(USER, obj.get("userSuccesConnection"));
+                       resp.setStatus(HttpServletResponse.SC_OK);
+
                    } else {
                        userSession.invalidate();
+                       resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
                    }
                }
 
 
             }
-            if(typeRequeste.equals("getUser")){
+           /* else if(typeRequest.equals("getUser")){
                 String login = request.getString("uName");
                 obj=  UserManager.getUser(login);
 
             }
-            if(typeRequeste.equals("setUserProfil")){
-
-                //String username = newUserProfil.getString("login");
-               // String username =
-                //        ((JSONObject) userSession.getAttribute("user")).getString("login");
+            else if(typeRequest.equals("setUserProfil")){
 
                 userSession = req.getSession();
                 String username =
@@ -112,34 +113,28 @@ public class UserServlet extends HttpServlet {
                     String dciNumber = request.getString("dciNumber");
                     String fb = request.getString("facebook");
                     String tw = request.getString("twitter");
-
-                    //String username = req.getParameter("login");
-                   /* String name = req.getParameter("name");
-                    String firstname = req.getParameter("firstname");
-                    String email = req.getParameter("email");
-                    String password = req.getParameter("password");
-                    String address = req.getParameter("address");
-                    String avatar = req.getParameter("avatar");
-                    String phoneNumber = req.getParameter("phoneNumber");
-                    String dciNumber = req.getParameter("dciNumber");
-                    String fb = req.getParameter("facebook");
-                    String tw = req.getParameter("twitter");*/
+                    String city = request.getString("city");
+                    String zipCode = request.getString("zipCode");
                     obj= UserManager.setUserProfil(name,firstname,email,username,
                             password,address,avatar,dciNumber,phoneNumber,
-                            fb,tw);
+                            fb,tw,city,zipCode);
                 }
 
 
             }
-            if(typeRequeste.equals("deconnection")){
+            else if(typeRequest.equals("deconnection")){
                 userSession = req.getSession();
                 userSession.invalidate();
                 obj.put("deconnection","succes");
             }
-            resp.setContentType("application/json");
-            PrintWriter out = resp.getWriter();
-            out.print(obj);
+            else {
+                resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            }*/
+
+
+
             out.flush();
+            out.close();
 
         } catch(Exception e){
             System.err.println("user not inserted");

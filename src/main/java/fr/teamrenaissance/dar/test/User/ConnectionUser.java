@@ -9,15 +9,15 @@ public class ConnectionUser {
     public static void main(String args[]){
 
         JSONObject obj = null;
-        try {
+       // try {
             obj = UserManager.connectionUser("sarro","Oii7lllllllll");
-            if(obj.has("userSuccesConnection")){
+            /*if(obj.has("userSuccesConnection")){
                 System.out.println(obj.get("userSuccesConnection"));
-            }
+            }*/
 
-        } catch (JSONException j) {
+       /* } catch (JSONException j) {
             j.printStackTrace();
-        }
+        }*/
         System.out.println(obj.toString());
     }
 }

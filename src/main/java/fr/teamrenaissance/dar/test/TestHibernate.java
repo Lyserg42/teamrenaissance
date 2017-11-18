@@ -16,7 +16,7 @@ public class TestHibernate {
 */
             manager.insertUser(new User("Gamain", "Jeanne", "test", "test@",
                     "helloooo", "xxx", null, null, "0777777777",
-                    null, null));
+                    null, null,"",""));
 
             User user = null;
             user = manager.getUser(1);

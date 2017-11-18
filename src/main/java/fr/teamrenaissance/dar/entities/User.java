@@ -15,6 +15,8 @@ public class User {
     private static final int EMAIL_LENGTH = 50;
     private static final int URL_LENGTH = 300;
     private static final int PHONE_LENGTH = 15;
+    private static final int PASSWORD_LENGTH = 100;
+    private static final int ZIPCODE_LENGTH = 5;
 
     private Integer userID;
     private String name;
@@ -28,6 +30,8 @@ public class User {
     private String phoneNumber;
     private String facebook;
     private String twitter;
+    private String city;
+    private String zipCode;
 
     /**
      * Loans where the user is the lender.
@@ -40,7 +44,7 @@ public class User {
 
 
     public User(String n, String p, String ps, String m, String pass, String ad, String av, String dci, String tel,
-                String fb, String tw){
+                String fb, String tw, String city,String zipCode){
         this.name=n;
         this.firstname=p;
         this.username=ps;
@@ -52,6 +56,8 @@ public class User {
         this.phoneNumber = tel;
         this.facebook = fb;
         this.twitter = tw;
+        this.city = city;
+        this.zipCode = zipCode;
     }
 
     public User(){}
@@ -114,7 +120,7 @@ public class User {
         this.email = email;
     }
 
-    @Column(name = "password", length = NAME_LENGTH, nullable = false)
+    @Column(name = "password", length = PASSWORD_LENGTH, nullable = false)
     public String getPassword() {
         return password;
     }
@@ -122,8 +128,8 @@ public class User {
     public void setPassword(String password) throws Exception {
         if(password == null || password.length() < PASS_MIN_LENGTH)
             throw new Exception("Votre mot de passe doit contenir au moins 6 caractères.");
-        if(password.length() > NAME_LENGTH)
-            throw new Exception("Désolé, le mot de passe est limité à "+NAME_LENGTH+" caractères.");
+        if(password.length() > PASSWORD_LENGTH)
+            throw new Exception("Désolé, le mot de passe est limité à "+PHONE_LENGTH+" caractères.");
 
         this.password = password;
     }
@@ -213,6 +219,21 @@ public class User {
 
     public void setBorrowerLoans(Set<Loan> borrowerLoans) {
         this.borrowerLoans = borrowerLoans;
+    }
+
+    @Column(name = "city", length = URL_LENGTH, nullable = true)
+    public String getCity(){
+        return city;
+    }
+    public void setCity(String city){
+        this.city = city;
+    }
+    @Column(name = "zipCode", length = ZIPCODE_LENGTH, nullable = true)
+    public String getZipCode(){
+        return zipCode;
+    }
+    public void setZipCode(String zipCode){
+        this.zipCode=zipCode;
     }
 
     @Override
