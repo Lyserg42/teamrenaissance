@@ -10,8 +10,7 @@ app.controller('modifierProfilCtrl', function($scope, $http, $uibModal, $log, $d
     var data = {typeRequest:"getUser", uName:""};
     var dataJSON = JSON.stringify(data);
     
-    /* app/components/profil/serveur/getUser.json */
-  	$http.post("/teamrenaissance/user", dataJSON).then(
+  	$http.post("app/components/profil/serveur/getUser.json").then(
       function succes(response){
 
         $scope.loading = false;
@@ -19,7 +18,7 @@ app.controller('modifierProfilCtrl', function($scope, $http, $uibModal, $log, $d
 
         /* On stocke les données récupérées*/
         $scope.profil = response.data;
-
+        
         /* On copie l'url de l'avatar pour ne pas qu'elle soit modifiee à la volée */
         $scope.avatar = $scope.profil.avatar;
       },
@@ -129,55 +128,39 @@ app.controller('modifierProfilCtrl', function($scope, $http, $uibModal, $log, $d
 
 app.controller('modalInstCtrlProfil', function ($scope, $http, $uibModalInstance, profilValues) {
 
-	    $scope.profil = profilValues;
+	  $scope.profil = profilValues;
 
-	$scope.ok = function () {
+	  $scope.ok = function () {
 
     $scope.erreurMDP = false;
 
-		$scope.data = {	typeRequest:"",
-						name:"",
-						firstname:"",
-						email:"",
-						address:"",
-						zipCode:"",
-						city:"",
-						avatar:"",
-						phoneNumber:"",
-						dciNumber:"",
-						facebook:"",
-						twitter:"",
-						password:"",
-						newPassword:""};
-
-    $scope.data.typeRequest = "setUserProfil";
-    $scope.data.name = $scope.profil.lastName;
-    $scope.data.firstname = $scope.profil.firstName;
-    $scope.data.email = $scope.profil.email;
-    $scope.data.address = $scope.profil.adresse;
-    $scope.data.zipCode = $scope.profil.codePostal;
-    $scope.data.city = $scope.profil.ville;
-    $scope.data.avatar = $scope.profil.avatar;
-    $scope.data.phoneNumber = $scope.profil.telephone;
-    $scope.data.dciNumber = $scope.profil.DCI;
-    $scope.data.facebook = $scope.profil.facebook;
-    $scope.data.twitter = $scope.profil.twitter;
-    $scope.data.password = $scope.password;
-    $scope.data.newPassword = $scope.profil.newPassword;
+		$scope.data = {  typeRequest:"setUserProfil",
+            name:$scope.profil.lastName,
+            firstname:$scope.profil.firstName,
+            email:$scope.profil.email,
+            address:$scope.profil.address,
+            zipCode:$scope.profil.zipCode,
+            city:$scope.profil.city,
+            avatar:$scope.profil.avatar,
+            phoneNumber:$scope.profil.phone,
+            dciNumber:$scope.profil.DCI,
+            facebook:$scope.profil.facebook,
+            twitter:$scope.profil.twitter,
+            password:$scope.password,
+            newPassword:$scope.profil.newPassword};
 
 
 
 		$scope.dataJSON = JSON.stringify($scope.data);
 
 		console.log($scope.dataJSON);
-    
-
-	  $http.post("/user", $scope.dataJSON).then(
+  
+	  $http.post("teamrenaissance/user", $scope.dataJSON).then(
         function succes(response){
           $uibModalInstance.close(1);
         },
         function echec(response){
-          if(response.status == -1){
+          if(response.status === -1){
             $uibModalInstance.close(-1);
           }
           else{
