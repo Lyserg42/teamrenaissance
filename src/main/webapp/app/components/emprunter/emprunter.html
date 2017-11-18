@@ -1,12 +1,13 @@
-<div>
-<div class="container" ng-show="loading">
+<div class="container">
+<h1>Demander des cartes</h1>
+<div  ng-show="loading">
 	<img src="../../../assets/icons/loading.svg" class="loadingIcon"/>
 </div>
-<div class="container" ng-show="!chargementOk && !loading">
-	<h3>Erreur de chargement des données</h3>
+<div ng-show="!chargementOk && !loading">
+	<h4>Erreur de chargement des données</h4>
 	<h4>Essayez d'actualiser la page</h4>
 </div>
-<div class="container" ng-show="chargementOk && !loading">
+<div ng-show="chargementOk && !loading">
 	<!--Confirmation de pret, hidden par default -->
 	<div class="alert alert-success" ng-hide="hideCodeRetour">
 	  <button type="button" class="close" ng-click="fermerConfirmation()">&times;</button>

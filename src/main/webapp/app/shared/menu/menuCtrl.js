@@ -28,7 +28,11 @@ app.controller('menuCtrl', function($scope, $http) {
 
     $scope.deconnexion = function(){
     	$scope.isConnected = false;
-        $http.post("app/components/profil/profil.json").then(
+        
+        $scope.data = {typeRequest:"deconnexion"};
+        $scope.dataJSON = JSON.stringify($scope.data);
+
+        $http.post("/teamrenaissance/user", $scope.dataJSON).then(
             function succes(response){
 
             },

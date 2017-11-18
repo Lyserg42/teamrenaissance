@@ -4,7 +4,7 @@ app.controller('profilCtrl', function($scope, $http, $routeParams) {
 
 	/* TODO Remplacer "Lyserg" par le nom de l'utilisateur connecte actuellement */
 	var data = {typeRequest:"getUser",
-				login:"Lyserg"};
+				login:""};
 
 	if (typeof $routeParams.uName !== 'undefined') {
     	data.login = $routeParams.uName;
@@ -15,9 +15,10 @@ app.controller('profilCtrl', function($scope, $http, $routeParams) {
     console.log(data);
 
     /* TOOD mettre /user en premier parametre et dataJSON en second parametre */
-	$http.get("app/components/profil/profil.json").then(
+	$http.post("/teamrenaissance/user").then(
         function succes(response){
 
+            console.log("Succes communication serveur");
             $scope.loading = false;
             $scope.chargementOk = true;
 
@@ -27,6 +28,12 @@ app.controller('profilCtrl', function($scope, $http, $routeParams) {
             /*console.log($scope.map);*/
         },
         function echec(response){
+            if(response.status === -1){
+                console.log("Impossible de contacter le serveur");
+            }
+            else{
+                console.log("Erreur Serveur");
+            }
             $scope.loading = false;
             $scope.chargementOk = false;
         }
