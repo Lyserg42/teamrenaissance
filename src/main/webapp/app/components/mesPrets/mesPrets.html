@@ -31,7 +31,7 @@
                 <div id="lender" ng-repeat="l in t.lentCards">
                     <div class="row">
                         <div class="col-sm-9">
-                            <a role= "button" class ="btn btn-outline-info" href="#!profil?uName={{l.uName}}">{{l.uName}}</a>
+                            <h4><a class="nav-link active" href="#!profil?uName={{l.uName}}">{{l.uName}}</a></h4>
                             <div id="pret{{$parent.$index}}.{{$index}}">
                                 <div ng-repeat="c in l.cards">
                                     <p> {{c.qty}} {{c.cName}} </p>
@@ -39,7 +39,7 @@
                             </div>
                         </div>
                     </div>
-                    <button type="button" class="btn" ng-click="modification($parent.$index, $index, 'pret')"> Modifier </button>
+                    <button type="button" class="btn btn-primary" ng-click="modification($parent.$index, $index, 'pret')"> Modifier </button>
                 </div>
             </div>
 
@@ -51,7 +51,7 @@
                 <div ng-repeat="b in t.borrowedCards">
                     <div class="row">
                         <div class="col-sm-9">
-                            <a role= "button" class ="btn btn-outline-info" href="#!profil?uName={{b.uName}}">{{b.uName}}</a>
+                            <h4><a class="nav-link active" href="#!profil?uName={{b.uName}}">{{b.uName}}</a></h4>
                             <div id="emprunt{{$parent.$index}}.{{$index}}" >
                                 <div ng-repeat="c in b.cards" >
                                     <p> {{c.qty}} {{c.cName}} </p>
@@ -59,7 +59,7 @@
                             </div>
                         </div>
                     </div>
-                    <button type="button" class="btn" ng-click="modification($parent.$index, $index, 'pret')"> Modifier </button>
+                    <button type="button" class="btn btn-primary" ng-click="modification($parent.$index, $index, 'pret')"> Modifier </button>
                 </div>
 
             </div>
@@ -71,7 +71,7 @@
                 <div ng-repeat="c in t.demands">
                     <p> {{c.qty}} {{c.cName}} </p>
                 </div>
-                <button type="button" class="btn" ng-click="modification($parent.$index, $index, 'demande')"> Modifier </button>
+                <button type="button" class="btn btn-primary" ng-click="modification($parent.$index, $index, 'demande')"> Modifier </button>
             </div>
 
         </div>
