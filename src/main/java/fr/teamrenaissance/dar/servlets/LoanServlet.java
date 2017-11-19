@@ -175,7 +175,7 @@ public class LoanServlet extends HttpServlet {
             resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
         }
     }
-    
+
     /**
      * preter : une demande de prêt a reçu une réponse, ajouter le 'lender' au prêt.
      *
