@@ -135,7 +135,7 @@ app.controller('modalInstCtrlProfil', function ($scope, $http, $uibModalInstance
 
 		$scope.data = {  typeRequest:"setUserProfil",
             name:$scope.profil.lastName,
-            firstname:$scope.profil.firstName,
+            firstName:$scope.profil.firstName,
             email:$scope.profil.email,
             address:$scope.profil.address,
             zipCode:$scope.profil.zipCode,
