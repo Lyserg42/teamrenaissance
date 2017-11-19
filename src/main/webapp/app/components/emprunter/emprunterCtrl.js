@@ -5,7 +5,7 @@ app.controller('emprunterCtrl', function($scope, $http, $uibModal, $log, $docume
         $scope.listeNonValide = false;
 
         /* app/components/emprunter/tournaments.json */
-        $http.get("/tournaments").then(
+        $http.get("/tournament").then(
             function succes(response){
                 $scope.loading = false;
                 $scope.chargementOk = true;

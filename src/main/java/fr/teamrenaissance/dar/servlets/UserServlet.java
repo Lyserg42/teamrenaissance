@@ -167,14 +167,15 @@ public class UserServlet extends HttpServlet {
 
 
             }
-           /* else if(typeRequest.equals("deconnection")){
+            else if(typeRequest.equals("deconnexion")){
                 userSession = req.getSession();
                 userSession.invalidate();
-                obj.put("deconnection","succes");
+                obj.put("deconnexion","succes");
+                resp.setStatus(HttpServletResponse.SC_OK);
             }
             else {
                 resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            }*/
+            }
 
 
 
