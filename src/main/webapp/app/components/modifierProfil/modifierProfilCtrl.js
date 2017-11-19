@@ -78,16 +78,14 @@ app.controller('modifierProfilCtrl', function($scope, $http, $uibModal, $log, $d
 
     modalInstance.result.then(
       function ok(codeRetour) {
-			   if(codeRetour === 1){
+			   if(codeRetour === "Succès."){
           $scope.ouvrirSuccesModification();
           $scope.refresh();
          }
-         else if(codeRetour === -1){
+         else {
+          $scope.raisonErreur = codeRetour;
           $scope.ouvrirErreurModification();
           $scope.refresh();
-         }
-         else{
-          console.log(codeRetour);
          }
 
       }, 
@@ -156,16 +154,22 @@ app.controller('modalInstCtrlProfil', function ($scope, $http, $uibModalInstance
 
 		console.log($scope.dataJSON);
   
-	  $http.post("teamrenaissance/user", $scope.dataJSON).then(
+	  $http.post("/user", $scope.dataJSON).then(
         function succes(response){
-          $uibModalInstance.close(1);
+          $uibModalInstance.close("Succès.");
         },
         function echec(response){
           if(response.status === -1){
-            $uibModalInstance.close(-1);
+            $uibModalInstance.close("Impossible de contacter le serveur");
           }
-          else{
+          else if (response.data.setUserProfil === "Password error"){
             $scope.erreurMDP = true;
+          }
+          else if (response.data.setUserProfil === "Mail already exist"){
+            $uibModalInstance.close("Cet e-mail est déjà utilisé.");
+          }
+          else {
+            $uibModalInstance.close("Erreur interne au serveur.");
           }
        }
      ); 

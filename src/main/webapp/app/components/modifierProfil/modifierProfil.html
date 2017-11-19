@@ -9,7 +9,7 @@
 <div class="container" ng-show="chargementOk && !loading">
 	<div class="alert alert-danger" ng-show="erreurModification">
 	  <button type="button" class="close" ng-click="fermerErreurModification()">&times;</button>
-	  Modifications non effectuées : impossible de contacter le serveur.
+	  Modifications non effectuées : {{raisonErreur}}.
 	</div>
 	<div class="alert alert-success" ng-show="succesModification">
 	  <button type="button" class="close" ng-click="fermerSuccesModification()">&times;</button>
