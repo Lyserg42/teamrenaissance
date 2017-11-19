@@ -2,10 +2,6 @@ app.controller('appCtrl', function($scope, $http) {
 
     $scope.isConnected = false;
 
-    $scope.connexionMagique = function(){
-        $scope.isConnected = true;
-    }
-
     $scope.refresh = function(){
         var data = {typeRequest:"getUser", uName:""};
         var dataJSON = JSON.stringify(data);
