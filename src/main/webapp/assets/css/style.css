@@ -9,4 +9,9 @@ img.loadingIcon {
 img.avatar {
 	width:100%;
     max-width:180px;
+    float: right;
+}
+
+.map {
+	padding:10px;
 }

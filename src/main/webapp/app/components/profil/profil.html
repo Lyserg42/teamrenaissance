@@ -9,26 +9,76 @@
 	</div>
 	<div class="container" ng-show="chargementOk && !loading">
 		<div>
-			<h1>{{profil.uName}}</h1>
-			<img class="avatar" src="{{profil.avatar}}"></img>
-			<div>{{profil.firstName+" "+profil.lastName}}</div>
-			<div>T&eacute;l&eacute;phone : {{profil.phone}}</div>
-			<div>DCI : {{profil.DCI}}</div>
-			<br/>
-			<div>Adresse</div>
-			<p>{{profil.address+"\n"+profil.zipCode+" "+profil.city}}</p>
-			<div>Email : {{profil.email}}</div>
-			<a href="{{profil.facebook}}" ng-hide="profil.facebook === ''"><img src="assets/icons/facebook.svg" height="32px"></img></a>
-			<a href="{{profil.twitter}}" ng-hide="profil.twitter === ''"><img src="assets/icons/twitter.svg" height="32px"></img></a>
-			<a href="#!modifierprofil" ng-hide=""><button>Modifier Profil</button></a>
+			<div class="row">
+				<div class="col-sm-8">
+					
+					<div class="row">
+						<div class="control-label col-sm-12">
+							<h3>{{profil.uName}}</h3>
+						</div>
+					</div>
+					<div class="row">
+						<div class="control-label col-sm-2">
+							<label>Nom</label>
+						</div>
+						<div class="col-sm-10">
+							{{profil.firstName+" "+profil.lastName}}
+						</div>
+					</div>
+					<div class="row">
+						<div class="control-label col-sm-2">
+							<label>Téléphone</label>
+						</div>
+						<div class="col-sm-10">
+							{{profil.phone}}
+						</div>
+					</div>
+					<div class="row">
+						<div class="control-label col-sm-2">
+							<label>DCI</label>
+						</div>
+						<div class="col-sm-10">
+							{{profil.DCI}}
+						</div>
+					</div>
+					<div class="row">
+						<div class="control-label col-sm-2">
+							<label>Adresse</label>
+						</div>
+						<div class="col-sm-10">
+							<div>{{profil.address}}</div>
+							<div>{{profil.zipCode+" "+profil.city}}</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="control-label col-sm-2">
+							<label>E-mail</label>
+						</div>
+						<div class="col-sm-10">
+							{{profil.email}}
+						</div>
+					</div>
+					<div class="row">
+						<div class="control-label col-sm-12">
+							<a href="{{profil.facebook}}" ng-hide="profil.facebook === ''"><img src="assets/icons/facebook.svg" height="32px"></img></a>
+							<a href="{{profil.twitter}}" ng-hide="profil.twitter === ''"><img src="assets/icons/twitter.svg" height="32px"></img></a>
+						</div>
+					</div>
+				</div>
+				<div class="col-sm-4"><img class="avatar" src="{{profil.avatar}}"></img></div>
+			</div>
+			<div class="row">
+				<div class="col-sm-8">
+					<a href="#!modifierprofil" ng-show="isMyProfile"><button>Modifier Profil</button></a>
+				</div>
+				<div class="col-sm-4">
+					<div class="map">
+			    		<iframe width="400" height="400" frameborder="0" style="border:0" ng-src="{{trustedMapUrl}}" allowfullscreen></iframe>
+			    	</div>
+				</div>
+			</div>
+			
+			
 		</div>
+		
 	</div>
-	<div><!--
-		<div my-map=""></div>
-		<iframe width="600" height="450" frameborder="0" style="border:0" src="{{map}}"></iframe> -->
-		 <!-- src="https://www.google.com/maps/embed/v1/place?key=AIzaSyD91MpqapwxhA44W0VvxzNTqmfohKGDraI&amp;q=36 Avenue du President+Wilson+Cachan" allowfullscreen> -->
-		<!-- '+profil.adresse+'+'+profil.ville 
-	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD91MpqapwxhA44W0VvxzNTqmfohKGDraI&callback=window.initMap()"  async defer></script>-->
-		<!-- {{profil.adresse}} -->
-	</div>
-</div>
