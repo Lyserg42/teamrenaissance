@@ -5,3 +5,8 @@ img.loadingIcon {
     margin-right: -50%;
     transform: translate(-50%, -50%)
 }
+
+img.avatar {
+	width:100%;
+    max-width:180px;
+}

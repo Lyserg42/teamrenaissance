@@ -220,9 +220,10 @@ public class LoanManager {
     /**
      * Returns the JSON array containing the cards demanded by all the users for a given tournament and which have not yet find a lender.
      * @param tournamentID the ID of the tournament where the cards are lent
+     * @param userID user to exclude from the result (optional)
      * @throws JSONException
      */
-    public static JSONArray getAllDemandsJson(int tournamentID) throws JSONException{
+    public static JSONArray getAllDemandsJson(int tournamentID, Optional<Integer> userID) throws JSONException{
         Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction tx = null;
         try {
@@ -234,10 +235,15 @@ public class LoanManager {
 
             JSONArray demands = new JSONArray();
             for(User user : users){
+                //exclude the given user
+                if(userID.isPresent() && userID.get().equals(user.getUserID())) continue;
+
                 JSONObject userJson = new JSONObject();
                 HashMap<Card, Integer> cards = new HashMap<>();
                 for(Loan loan : user.getBorrowerLoans()){
+                    //gets only the loans without lender and for the given tournament
                     if(loan.getLender() != null || loan.getTournament().getTournamentID() != tournamentID) continue;
+
                     Card card = loan.getCard();
                     int qty;
                     if(cards.containsKey(card)){

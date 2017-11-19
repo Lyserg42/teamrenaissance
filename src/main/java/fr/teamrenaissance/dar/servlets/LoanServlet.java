@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 
 public class LoanServlet extends HttpServlet {
@@ -45,6 +46,13 @@ public class LoanServlet extends HttpServlet {
 
             //gets the demands of all the users for each tournament
             if(request.equals("demandes")){
+                //get the connected user if there is one
+                HttpSession session = req.getSession(false);
+                Optional<Integer> userId = Optional.empty();
+                if(session != null){
+                    JSONObject sessionJson = (JSONObject) session.getAttribute(UserServlet.USER);
+                    userId = Optional.of(sessionJson.getInt("userId"));
+                }
 
                 for (Tournament tournament : tournaments) {
                     JSONObject tournamentJson = new JSONObject();
@@ -52,7 +60,7 @@ public class LoanServlet extends HttpServlet {
                     tournamentJson.put("tName", tournament.getName());
                     tournamentJson.put("date", tournament.getDate());
 
-                    JSONArray demands = LoanManager.getAllDemandsJson(tournament.getTournamentID());
+                    JSONArray demands = LoanManager.getAllDemandsJson(tournament.getTournamentID(), userId);
                     if(demands.length() == 0) continue;
                     tournamentJson.put("demandes", demands);
                     tournamentsArray.put(tournamentJson);
@@ -185,19 +193,19 @@ public class LoanServlet extends HttpServlet {
 
             JSONObject modifierPret = ServletUtils.getJsonFromRequest(req);
             Integer borrowerId, lenderId;
-            boolean emprunt = modifierPret.getString("type").equals("emprunt");
+            boolean pret = modifierPret.getString("type").equals("pret");
 
-            borrowerId = emprunt ? sessionUserId : modifierPret.getInt("uId");
-            lenderId = emprunt ? modifierPret.getInt("uId") : sessionUserId;
+            lenderId = pret ? sessionUserId : modifierPret.getInt("uId");
+            borrowerId = pret ? modifierPret.getInt("uId") : sessionUserId;
 
             int tournamentID = modifierPret.getInt("tId");
             JSONArray cardsArray = modifierPret.getJSONArray("cards");
             for(int i = 0; i < cardsArray.length(); i++){
                 JSONObject obj = cardsArray.getJSONObject(i);
-                if(emprunt){
-                    LoanManager.deleteLoans(borrowerId, lenderId, tournamentID, obj.getInt("cId"), obj.getInt("qty"));
-                } else {
+                if(pret){
                     LoanManager.deleteLender(borrowerId, lenderId, tournamentID, obj.getInt("cId"), obj.getInt("qty"));
+                } else {
+                    LoanManager.deleteLoans(borrowerId, lenderId, tournamentID, obj.getInt("cId"), obj.getInt("qty"));
                 }
             }
             resp.setStatus(HttpServletResponse.SC_OK);
