@@ -218,7 +218,7 @@ app.controller('modalInstCtrlPrets', function ($scope, $http, $uibModalInstance,
         var dataJSON = JSON.stringify(data);
         console.log(dataJSON);
 
-        $http.delete("/loan",dataJSON).then(
+        $http.put("/loan?request=modifier",dataJSON).then(
             function succes(response){
                 $uibModalInstance.close(1);
             },

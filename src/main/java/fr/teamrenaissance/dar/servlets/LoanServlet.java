@@ -175,76 +175,80 @@ public class LoanServlet extends HttpServlet {
             resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
         }
     }
-
+    
     /**
-     * Annuler un prêt ou une demande d'emprunt.
-     */
-    @Override
-    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        try {
-            //gets the connected user
-            HttpSession session = req.getSession(false);
-            if(session == null){
-                resp.sendError(HttpServletResponse.SC_UNAUTHORIZED, ServletUtils.CONNECTION_NEEDED_MESSAGE);
-                return;
-            }
-            JSONObject sessionJson = (JSONObject) session.getAttribute(UserServlet.USER);
-            Integer sessionUserId = sessionJson.getInt("userId");
-
-            JSONObject modifierPret = ServletUtils.getJsonFromRequest(req);
-            Integer borrowerId, lenderId;
-            boolean pret = modifierPret.getString("type").equals("pret");
-
-            lenderId = pret ? sessionUserId : modifierPret.getInt("uId");
-            borrowerId = pret ? modifierPret.getInt("uId") : sessionUserId;
-
-            int tournamentID = modifierPret.getInt("tId");
-            JSONArray cardsArray = modifierPret.getJSONArray("cards");
-            for(int i = 0; i < cardsArray.length(); i++){
-                JSONObject obj = cardsArray.getJSONObject(i);
-                if(pret){
-                    LoanManager.deleteLender(borrowerId, lenderId, tournamentID, obj.getInt("cId"), obj.getInt("qty"));
-                } else {
-                    LoanManager.deleteLoans(borrowerId, lenderId, tournamentID, obj.getInt("cId"), obj.getInt("qty"));
-                }
-            }
-            resp.setStatus(HttpServletResponse.SC_OK);
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
-        } catch (Exception e){
-            e.printStackTrace();
-            resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
-        }
-    }
-
-    /**
-     * Mettre à jour un prêt : une demande de prêt a reçu une réponse, ajouter le 'lender' au prêt.
+     * preter : une demande de prêt a reçu une réponse, ajouter le 'lender' au prêt.
+     *
+     * modifier : Annuler un prêt ou une demande d'emprunt.
+     *
      */
     @Override
     protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String request = req.getParameter("request");
+        if(request == null){
+            resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            return;
+        }
+
         try {
-            //gets the connected user
-            HttpSession session = req.getSession(false);
-            if(session == null){
-                resp.sendError(HttpServletResponse.SC_UNAUTHORIZED, ServletUtils.CONNECTION_NEEDED_MESSAGE);
-                return;
-            }
-            JSONObject sessionJson = (JSONObject) session.getAttribute(UserServlet.USER);
-            Integer lenderId = sessionJson.getInt("userId");
-            User lender = UserManager.getUser(lenderId);
+            if(request.equals("preter")) {
+                //gets the connected user
+                HttpSession session = req.getSession(false);
+                if (session == null) {
+                    resp.sendError(HttpServletResponse.SC_UNAUTHORIZED, ServletUtils.CONNECTION_NEEDED_MESSAGE);
+                    return;
+                }
+                JSONObject sessionJson = (JSONObject) session.getAttribute(UserServlet.USER);
+                Integer lenderId = sessionJson.getInt("userId");
+                User lender = UserManager.getUser(lenderId);
 
-            JSONObject nouveauPret = ServletUtils.getJsonFromRequest(req);
-            Integer borrowerId = nouveauPret.getInt("uId");
+                JSONObject nouveauPret = ServletUtils.getJsonFromRequest(req);
+                Integer borrowerId = nouveauPret.getInt("uId");
 
-            int tournamentID = nouveauPret.getInt("tId");
-            JSONArray cardsArray = nouveauPret.getJSONArray("cards");
-            for(int i = 0; i < cardsArray.length(); i++){
-                JSONObject obj = cardsArray.getJSONObject(i);
-                LoanManager.setLender(borrowerId, lenderId, tournamentID, obj.getInt("cId"), obj.getInt("qty"));
+                int tournamentID = nouveauPret.getInt("tId");
+                JSONArray cardsArray = nouveauPret.getJSONArray("cards");
+                for (int i = 0; i < cardsArray.length(); i++) {
+                    JSONObject obj = cardsArray.getJSONObject(i);
+                    LoanManager.setLender(borrowerId, lenderId, tournamentID, obj.getInt("cId"), obj.getInt("qty"));
+                }
+                resp.setStatus(HttpServletResponse.SC_OK);
             }
-            resp.setStatus(HttpServletResponse.SC_OK);
+            else if(request.equals("modifier")){
+                //gets the connected user
+                HttpSession session = req.getSession(false);
+                if(session == null){
+                    resp.sendError(HttpServletResponse.SC_UNAUTHORIZED, ServletUtils.CONNECTION_NEEDED_MESSAGE);
+                    return;
+                }
+                JSONObject sessionJson = (JSONObject) session.getAttribute(UserServlet.USER);
+                Integer sessionUserId = sessionJson.getInt("userId");
+
+                JSONObject modifierPret = ServletUtils.getJsonFromRequest(req);
+                Integer borrowerId, lenderId;
+                boolean pret = modifierPret.getString("type").equals("pret");
+
+                Integer uId = null;
+                if(modifierPret.has("uId")){
+                    uId = modifierPret.getInt("uId");
+                }
+                lenderId = pret ? sessionUserId : uId;
+                borrowerId = pret ? uId : sessionUserId;
+
+                int tournamentID = modifierPret.getInt("tId");
+                JSONArray cardsArray = modifierPret.getJSONArray("cards");
+                for(int i = 0; i < cardsArray.length(); i++){
+                    JSONObject obj = cardsArray.getJSONObject(i);
+                    if(pret){
+                        LoanManager.deleteLender(borrowerId, lenderId, tournamentID, obj.getInt("cId"), obj.getInt("qty"));
+                    } else {
+                        LoanManager.deleteLoans(borrowerId, lenderId, tournamentID, obj.getInt("cId"), obj.getInt("qty"));
+                    }
+                }
+                resp.setStatus(HttpServletResponse.SC_OK);
+            }
+            else {
+                resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            }
 
         } catch (JSONException e) {
             e.printStackTrace();

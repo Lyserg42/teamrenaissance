@@ -198,7 +198,7 @@ app.controller('demandesCtrl', function($scope, $http, $uibModal, $log, $documen
 
         console.log(dataJSON);
 
-        $http.put("/loan", dataJSON).then(
+        $http.put("/loan?request=preter", dataJSON).then(
             function succes(response){
               $uibModalInstance.close(1);
             },
