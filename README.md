@@ -2,7 +2,7 @@
 
 # Projet Teamrenaissance
 
-> teamrenaissance.fr est un site web permettant aux participants de tournois Magic The Gathering d'organiser des échanges de cartes
+> [teamrenaissance.fr](https://teamrenaissance.fr) est un site web permettant aux participants de tournois Magic The Gathering d'organiser des échanges de cartes
 
 ![](http://www.unica-network.eu/sites/default/files/styles/university-logo-m/public/fr-paris-upmc.png)
 *Projet scolaire réalisé pour la matière DAR (Développement d'Applications Réticulaires) pour le Master 2 de STL à l'UPMC*
