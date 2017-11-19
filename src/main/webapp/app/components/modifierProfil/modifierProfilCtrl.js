@@ -10,7 +10,7 @@ app.controller('modifierProfilCtrl', function($scope, $http, $uibModal, $log, $d
     var data = {typeRequest:"getUser", uName:""};
     var dataJSON = JSON.stringify(data);
     /* app/components/profil/serveur/getUser.json */
-  	$http.post("/user", dataJSON).then(
+  	$http.post("teamrenaissance/user", dataJSON).then(
 
       function succes(response){
 
