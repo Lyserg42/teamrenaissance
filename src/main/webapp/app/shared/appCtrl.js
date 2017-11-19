@@ -5,7 +5,6 @@ app.controller('appCtrl', function($scope, $http) {
     $scope.refresh = function(){
         var data = {typeRequest:"getUser", uName:""};
         var dataJSON = JSON.stringify(data);
-        console.log(dataJSON);
         /* app/components/profil/serveur/getUser.json */
         $http.post("/user", dataJSON).then(
         function succes(response){
@@ -29,14 +28,11 @@ app.controller('appCtrl', function($scope, $http) {
         $http.post("/user", $scope.dataJSON).then(
             function succes(response){
                 $scope.isConnected = false;
-                console.log("deconnexion reussie");
             },
             function echec(response){
                 if(response.status === -1){
-                    console.log("deconnexion ratee : impossible de contacter le serveur");
                 }
                 else{
-                    console.log("deconnexion ratee : erreur serveur");
                 }
             }
         );

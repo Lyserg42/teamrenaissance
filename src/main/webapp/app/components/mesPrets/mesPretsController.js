@@ -216,7 +216,6 @@ app.controller('modalInstCtrlPrets', function ($scope, $http, $uibModalInstance,
     $scope.ok = function () {
         var data = {tId:$scope.modal.tId, uId:$scope.modal.uId, type:$scope.type, cards:$scope.modifIds};
         var dataJSON = JSON.stringify(data);
-        console.log(dataJSON);
 
         $http.put("/loan?request=modifier",dataJSON).then(
             function succes(response){

@@ -37,7 +37,6 @@ app.controller('emprunterCtrl', function($scope, $http, $uibModal, $log, $docume
     $scope.refresh();
 
     $scope.suggestCardName = function(){
-        console.log("hello");
     };
 
     $scope.validerFormulaire = function(){
@@ -45,7 +44,6 @@ app.controller('emprunterCtrl', function($scope, $http, $uibModal, $log, $docume
         var isValid = true;
 
         if (typeof $scope.selectedTournament == 'undefined') {
-            console.log("Tournoi non selectionne");
             $scope.tournoiNonSelectionne = true;
             isValid = false;
         }
@@ -83,7 +81,6 @@ app.controller('emprunterCtrl', function($scope, $http, $uibModal, $log, $docume
             var data = {tId:$scope.selectedTournament.tId, cards:cardListObjects};
             var dataJSON = JSON.stringify(data);
 
-            console.log(data);
             $http.post("/loan", dataJSON).then(
                 function succes(response){
                     $scope.open();

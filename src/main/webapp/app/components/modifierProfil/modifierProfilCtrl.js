@@ -108,11 +108,9 @@ app.controller('modifierProfilCtrl', function($scope, $http, $uibModal, $log, $d
 
     modalInstance.result.then(
       function () {
-			 console.log("Succes");
       }, 
       function () {
         $log.info('modal-component dismissed at: ' + new Date());
-        $scope.fermerConfirmation();
       });
     };
 
@@ -151,8 +149,6 @@ app.controller('modalInstCtrlProfil', function ($scope, $http, $uibModalInstance
 
 
 		$scope.dataJSON = JSON.stringify($scope.data);
-
-		console.log($scope.dataJSON);
   
 	  $http.post("/user", $scope.dataJSON).then(
         function succes(response){

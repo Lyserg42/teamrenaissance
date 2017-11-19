@@ -10,15 +10,10 @@ app.controller('connexionCtrl', function($scope, $http, $route) {
         var data = {typeRequest:"connexion", login: $scope.login, password: $scope.password};
         var dataJSON = JSON.stringify(data);
 
-        console.log(dataJSON);
-
       	$http.post("/user", dataJSON).then(
             function success(response){
                 $scope.refresh();
                 $scope.ouvrirSuccesConnexion();
-                console.log("succes");
-                console.log(response.status);
-          		console.log(response.data);
             },
             function error(response){
                 $scope.refresh();
@@ -29,9 +24,6 @@ app.controller('connexionCtrl', function($scope, $http, $route) {
                 else{
                     $scope.raisonEchecConnexion = "Impossible de contacter le serveur.";
                 }
-                console.log("erreur");
-                console.log(response.status);
-                console.log(response.data);
             }
         );
         
