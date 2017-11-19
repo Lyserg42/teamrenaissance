@@ -31,7 +31,7 @@ public class ServletUtils {
             JSONObject jsonObject =  new JSONObject(sb.toString());
             return jsonObject;
         } catch (JSONException e) {
-            throw new IOException("Error parsing JSON request string");
+            throw new IOException("Error parsing JSON request string : " + sb.toString());
         }
     }
 }

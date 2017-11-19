@@ -48,7 +48,7 @@ public class LoanServlet extends HttpServlet {
 
                 for (Tournament tournament : tournaments) {
                     JSONObject tournamentJson = new JSONObject();
-                    tournamentJson.put("tID", tournament.getTournamentID());
+                    tournamentJson.put("tId", tournament.getTournamentID());
                     tournamentJson.put("tName", tournament.getName());
                     tournamentJson.put("date", tournament.getDate());
 
@@ -78,7 +78,7 @@ public class LoanServlet extends HttpServlet {
                     if (lentCards.length() != 0 || borrowedCards.length() != 0 || demands.length() != 0) {
                         JSONObject tournamentJson = new JSONObject();
 
-                        tournamentJson.put("tID", tournament.getTournamentID());
+                        tournamentJson.put("tId", tournament.getTournamentID());
                         tournamentJson.put("tName", tournament.getName());
                         tournamentJson.put("date", tournament.getDate());
 
@@ -195,9 +195,9 @@ public class LoanServlet extends HttpServlet {
             for(int i = 0; i < cardsArray.length(); i++){
                 JSONObject obj = cardsArray.getJSONObject(i);
                 if(emprunt){
-                    LoanManager.deleteLoans(borrowerId, lenderId, tournamentID, obj.getInt("cId"), obj.getInt("newQty"));
+                    LoanManager.deleteLoans(borrowerId, lenderId, tournamentID, obj.getInt("cId"), obj.getInt("qty"));
                 } else {
-                    LoanManager.deleteLender(borrowerId, lenderId, tournamentID, obj.getInt("cId"), obj.getInt("newQty"));
+                    LoanManager.deleteLender(borrowerId, lenderId, tournamentID, obj.getInt("cId"), obj.getInt("qty"));
                 }
             }
             resp.setStatus(HttpServletResponse.SC_OK);
@@ -217,7 +217,6 @@ public class LoanServlet extends HttpServlet {
     @Override
     protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try {
-            System.out.println("*** PUT ****");
             //gets the connected user
             HttpSession session = req.getSession(false);
             if(session == null){

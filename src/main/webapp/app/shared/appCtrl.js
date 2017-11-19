@@ -11,7 +11,7 @@ app.controller('appCtrl', function($scope, $http) {
         var dataJSON = JSON.stringify(data);
         console.log(dataJSON);
         /* app/components/profil/serveur/getUser.json */
-        $http.post("/teamrenaissance/user", dataJSON).then(
+        $http.post("/user", dataJSON).then(
         function succes(response){
             $scope.isConnected = true;
             $scope.avatar = response.data.avatar;

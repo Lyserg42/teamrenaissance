@@ -141,7 +141,7 @@ public class LoanManager {
         for (User user : resultMap.keySet()) {
             JSONObject loan = new JSONObject();
             loan.put("uName", user.getUsername());
-            loan.put("uID", user.getUserID());
+            loan.put("uId", user.getUserID());
 
             //create the JSON array of cards
             JSONArray cards = new JSONArray();
@@ -151,7 +151,7 @@ public class LoanManager {
                 cardJson.put("qty", line[2]);
                 Card card = (Card)line[1];
                 cardJson.put("cName", card.getName());
-                cardJson.put("cID", card.getCardID());
+                cardJson.put("cId", card.getCardID());
                 //add the json card to the cards array
                 cards.put(cardJson);
             }
@@ -200,7 +200,7 @@ public class LoanManager {
                 cardJson.put("qty", line[1]);
                 Card card = (Card)line[0];
                 cardJson.put("cName", card.getName());
-                cardJson.put("cID", card.getCardID());
+                cardJson.put("cId", card.getCardID());
                 //add the json card to the demands array
                 demands.put(cardJson);
             }
