@@ -28,6 +28,7 @@ app.controller('appCtrl', function($scope, $http) {
         $http.post("/user", $scope.dataJSON).then(
             function succes(response){
                 $scope.isConnected = false;
+                $scope.refresh();
             },
             function echec(response){
                 if(response.status === -1){
