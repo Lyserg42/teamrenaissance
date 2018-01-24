@@ -5,12 +5,11 @@ import fr.teamrenaissance.dar.managers.UserManager;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+import javax.servlet.http.*;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Date;
+import java.util.Enumeration;
 
 import org.json.JSONObject;
 
@@ -31,6 +30,8 @@ public class UserServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
+
         try{
 
            JSONObject obj = new JSONObject();
@@ -48,7 +49,7 @@ public class UserServlet extends HttpServlet {
                obj = UserManager.newUser(name,firstname,email,
                username,password, "",DEFAULT_AVATAR,
                        "","",
-                       "","","","");
+                       "","","","", "");
 
 
                if(!obj.get("newuser").equals("succes")){
@@ -94,7 +95,7 @@ public class UserServlet extends HttpServlet {
                 String uName = request.getString("uName");
                 if(uName.equals("")){
                   userSession=  req.getSession(false);
-                  if(userSession== null){
+                  if(userSession == null){
                       resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
                   }
                   else{
@@ -136,6 +137,7 @@ public class UserServlet extends HttpServlet {
                     String dciNumber = request.getString("dciNumber");
                     String fb = request.getString("facebook");
                     String tw = request.getString("twitter");
+                    String ds= request.getString("discord");
                     String city = request.getString("city");
                     String zipCode = request.getString("zipCode");
                     if(UserManager.isEqualsPassword(username,password)) {
@@ -144,7 +146,7 @@ public class UserServlet extends HttpServlet {
                         }
                         obj = UserManager.setUserProfil(name, firstname, email, username,
                                 password, address, avatar, dciNumber, phoneNumber,
-                                fb, tw, city, zipCode);
+                                fb, tw, ds, city, zipCode);
                         if(obj.has("setProfilFailed")){
                             resp.setContentType("application/json");
                             resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);

@@ -74,7 +74,6 @@ public class LoanManager {
             List<Object[]> result = query.getResultList();
 
             tx.commit();
-
             return transformToJsonArray(result);
 
         } catch (JSONException e){
@@ -152,6 +151,7 @@ public class LoanManager {
                 Card card = (Card)line[1];
                 cardJson.put("cName", card.getName());
                 cardJson.put("cId", card.getCardID());
+                cardJson.put("img", card.getPicture());
                 //add the json card to the cards array
                 cards.put(cardJson);
             }
@@ -201,6 +201,7 @@ public class LoanManager {
                 Card card = (Card)line[0];
                 cardJson.put("cName", card.getName());
                 cardJson.put("cId", card.getCardID());
+                cardJson.put("img", card.getPicture());
                 //add the json card to the demands array
                 demands.put(cardJson);
             }
@@ -236,7 +237,7 @@ public class LoanManager {
             JSONArray demands = new JSONArray();
             for(User user : users){
                 //exclude the given user
-                if(userID.isPresent() && userID.get().equals(user.getUserID())) continue;
+                //if(userID.isPresent() && userID.get().equals(user.getUserID())) continue;
 
                 JSONObject userJson = new JSONObject();
                 HashMap<Card, Integer> cards = new HashMap<>();

@@ -34,7 +34,7 @@ public class UserManager {
                                      String password, String adress,
                                      String avatar, String dciNumber,
                                      String phoneNumber, String fb,
-                                     String tw, String city,
+                                     String tw, String ds, String city,
                                      String zipCode) throws Exception {
         JSONObject obj = new JSONObject();
         if (!isValideLogin(username)) {
@@ -68,6 +68,7 @@ public class UserManager {
                                 u.setPhoneNumber(phoneNumber);
                                 u.setFacebook(fb);
                                 u.setTwitter(tw);
+                                u.setDiscord(ds);
                                 u.setCity(city);
                                 u.setZipCode(zipCode);
                                 session.save(u);
@@ -123,6 +124,7 @@ public class UserManager {
                     obj.put("phone number", u.getPhoneNumber());
                     obj.put("facebook", u.getFacebook());
                     obj.put("twitter", u.getTwitter());
+                    obj.put("discord", u.getDiscord());
                     obj.put("login", u.getUsername());
                     obj.put("city",u.getCity());
                     obj.put("zipCode",u.getZipCode());
@@ -160,6 +162,7 @@ public class UserManager {
                 obj.put("phone", u.getPhoneNumber());
                 obj.put("facebook", u.getFacebook());
                 obj.put("twitter", u.getTwitter());
+                obj.put("discord", u.getDiscord());
                 obj.put("uName", u.getUsername());
                 obj.put("city",u.getCity());
                 obj.put("zipCode",u.getZipCode());
@@ -180,7 +183,7 @@ public class UserManager {
                                            String password, String adress,
                                            String avatar, String dciNumber,
                                            String phoneNumber, String fb,
-                                           String tw,String city,
+                                           String tw, String ds, String city,
                                            String zipCode) throws Exception {
         JSONObject obj = new JSONObject();
         JSONObject newUserProfil = new JSONObject();
@@ -233,6 +236,8 @@ public class UserManager {
         newUserProfil.put("facebook",fb);
         u.setTwitter(tw);
         newUserProfil.put("twitter",tw);
+        u.setDiscord(ds);
+        newUserProfil.put("discord",ds);
         u.setCity(city);
         newUserProfil.put("city",city);
         u.setZipCode(zipCode);

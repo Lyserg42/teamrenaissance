@@ -11,7 +11,7 @@ public class SetUserProfil {
             obj = UserManager.setUserProfil("hellal","sarra","sarra_hellal@hotmail.com",
                     "Sarra","Kiuiui7uip","ZZZ",
                     "https://wamiz.com/uploads/images/shutterstock_322496870.jpg","",
-                    "1236445","yyyyyy","","","");
+                    "1236445","yyyyyy","","","","");
 
         } catch (Exception e) {
             e.printStackTrace();

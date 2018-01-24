@@ -30,6 +30,7 @@ public class User {
     private String phoneNumber;
     private String facebook;
     private String twitter;
+    private String discord;
     private String city;
     private String zipCode;
 
@@ -44,7 +45,7 @@ public class User {
 
 
     public User(String n, String p, String ps, String m, String pass, String ad, String av, String dci, String tel,
-                String fb, String tw, String city,String zipCode){
+                String fb, String tw, String ds, String city,String zipCode){
         this.name=n;
         this.firstname=p;
         this.username=ps;
@@ -56,6 +57,7 @@ public class User {
         this.phoneNumber = tel;
         this.facebook = fb;
         this.twitter = tw;
+        this.discord = ds;
         this.city = city;
         this.zipCode = zipCode;
     }
@@ -203,6 +205,17 @@ public class User {
         this.twitter = twitter;
     }
 
+    @Column(name = "discord", length = URL_LENGTH, nullable = true)
+    public String getDiscord() {
+        return discord;
+    }
+
+    public void setDiscord(String discord) throws Exception {
+        if(discord != null && discord.length() > URL_LENGTH)
+            throw new Exception("L'URL du compte Discord est limitée à "+URL_LENGTH+" caractères.");
+        this.discord = discord;
+    }
+
     @OneToMany(mappedBy = "lender", fetch = FetchType.LAZY)
     public Set<Loan> getLenderLoans() {
         return lenderLoans;
@@ -248,7 +261,7 @@ public class User {
     public String toString(){
         return "{"+userID+" "+ name+" "+firstname+" "+username+" "
         +email+" "+password+" "+address+" "+avatar+" "+dciNumber+" "
-        +phoneNumber+" "+facebook+" "+ twitter+"}";
+        +phoneNumber+" "+facebook+" "+ twitter+" "+discord+"}";
 
     }
 }

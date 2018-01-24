@@ -143,6 +143,7 @@ app.controller('modalInstCtrlProfil', function ($scope, $http, $uibModalInstance
             dciNumber:$scope.profil.DCI,
             facebook:$scope.profil.facebook,
             twitter:$scope.profil.twitter,
+            discord:$scope.profil.discord,
             password:$scope.password,
             newPassword:$scope.profil.newPassword};
 

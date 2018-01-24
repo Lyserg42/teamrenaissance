@@ -20,8 +20,11 @@ app.controller('demandesCtrl', function($scope, $http, $uibModal, $log, $documen
                On peut la garder mais ca peut poser probleme dans le cas ou le nouveau pret remplit exactement toutes les demandes restantes pour un tournoi*/
             $scope.selectFiltreTournois = "Tous les tournois";
 
+
+            var data = {typeRequest:"demandes"};
+            var dataJSON = JSON.stringify(data);
             /* app/components/demandes/demandes.json */
-            $http.get("/loan?request=demandes").then(
+            $http.post("/loan",dataJSON).then(
               function succes(response){
 
                 $scope.loading = false;

@@ -10,7 +10,7 @@ public class NewUser {
         try {
             obj = UserManager.newUser("hellal","sarra","sarra_hellal@hotmail.com",
                     "Sarra","Kiuiui7uip",
-                    "rue des alouettes","","","","","","fontenay","94120");
+                    "rue des alouettes","","","","","","fontenay", "","94120");
         } catch (Exception e) {
             e.printStackTrace();
         }
